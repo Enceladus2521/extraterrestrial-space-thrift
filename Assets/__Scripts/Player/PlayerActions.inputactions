@@ -15,6 +15,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "Dash",
+                    "type": "Button",
+                    "id": "1fbfddbe-9485-4004-ae14-cac2ae8bf02d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Look",
                     "type": "Value",
                     "id": "ad6eaa82-1a32-414d-9db9-58614fb87890",
@@ -206,6 +215,17 @@
                 },
                 {
                     "name": "",
+                    "id": "66809147-cda5-4964-9e01-a1422ffe7df5",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KBM",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "fe321a29-e48f-4ba1-badd-aeadb58e9371",
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
@@ -234,6 +254,28 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Reload",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f2037732-d9e2-4268-881e-cd2fdfd0fa47",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KBM",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "69355d41-e3d0-4854-838e-92b3223faa85",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

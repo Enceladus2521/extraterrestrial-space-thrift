@@ -8,12 +8,13 @@ public class PlayerSpawnManager : MonoBehaviour
 {
     
     
-    private void OnPlayerConnected()
+    public void OnPlayerConnected()
     {
-        
+        //Deactivate Main Camera
+        Camera.main.gameObject.SetActive(false);
     }
 
-    private void OnPlayerDisconnected()
+    public void OnPlayerDisconnected()
     {
         
     }

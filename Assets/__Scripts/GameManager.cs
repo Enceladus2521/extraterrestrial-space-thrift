@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Application.targetFrameRate = 60;
+
+        return;
         playerManager = new PlayerManager(playerPrefab);
         spaceshipManager = new SpaceshipManager(spaceshipPrefab);
 
