@@ -15,12 +15,14 @@ public class PlayerMovementController : MonoBehaviour
 
     private Vector2 moveVector;
 
+    
+
+    Rigidbody rb;
 
 
 
 
-
-    private CharacterController _characterController;
+    
 
     /// <summary>
     /// LateUpdate is called every frame, if the Behaviour is enabled.
@@ -29,23 +31,27 @@ public class PlayerMovementController : MonoBehaviour
     
     private void Awake()
     {
-        _characterController = GetComponent<CharacterController>();
+        rb = GetComponent<Rigidbody>();
         curentPlayerMovementSpeed = PlayerMovementSpeed;
     }
 
     private void LateUpdate()
     {
-        if (!_characterController.isGrounded)
-        {
-            _characterController.Move(Vector3.down * 9.81f * Time.deltaTime);
-        }
+        //move player forward in direction of input
+        Vector3 movementVector = new Vector3(moveVector.x, 0, moveVector.y);
+        transform.Translate(movementVector * curentPlayerMovementSpeed * Time.deltaTime, Space.World);
+       
+
+
+       
+
+        
+
     }
 
     public void ReciveMoveInput(Vector2 inputVector)
-    {
-        Vector3 movementVector = new Vector3(inputVector.x, 0, inputVector.y);
-        moveVector = movementVector;
-        _characterController.Move(movementVector * curentPlayerMovementSpeed * Time.deltaTime);
+    {       
+        moveVector = inputVector;        
     }
 
     public void ReciveDash()
