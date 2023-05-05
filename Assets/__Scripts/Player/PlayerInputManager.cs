@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(PlayerMovementController))]
+[RequireComponent(typeof(PlayerInput))]
 public class PlayerInputManager : MonoBehaviour
 {
     PlayerMovementController _playerMovementController;
@@ -10,7 +12,7 @@ public class PlayerInputManager : MonoBehaviour
 
     private void Awake()
     {
-        _playerMovementController = GetComponent<PlayerMovementController>();
+        _playerMovementController = GetComponent<PlayerMovementController>();        
     }
 
     public void OnMove(InputValue value)
@@ -22,7 +24,15 @@ public class PlayerInputManager : MonoBehaviour
     public void OnDash()
     {   
         _playerMovementController.ReciveDash();
-    }    
+    }   
+
+    public void OnLook(InputValue value)
+    {
+        Vector2 inputVector = value.Get<Vector2>();
+        _playerMovementController.ReciveLookInput(inputVector);
+    } 
+
+    
 
 
 }
