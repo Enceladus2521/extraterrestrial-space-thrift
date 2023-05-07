@@ -5,14 +5,17 @@ using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerMovementController))]
 [RequireComponent(typeof(PlayerInput))]
+[RequireComponent(typeof(PlayerAnimationController))]
 public class PlayerInputManager : MonoBehaviour
 {
     PlayerMovementController _playerMovementController;
+    PlayerAnimationController _playerAnimationController;
     
 
     private void Awake()
     {
-        _playerMovementController = GetComponent<PlayerMovementController>();        
+        _playerMovementController = GetComponent<PlayerMovementController>();    
+        _playerAnimationController = GetComponent<PlayerAnimationController>();    
     }
 
     public void OnMove(InputValue value)
@@ -24,6 +27,7 @@ public class PlayerInputManager : MonoBehaviour
     public void OnDash()
     {   
         _playerMovementController.ReciveDash();
+
     }   
 
     public void OnLook(InputValue value)

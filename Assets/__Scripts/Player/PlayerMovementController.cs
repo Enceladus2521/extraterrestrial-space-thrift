@@ -6,9 +6,11 @@ using UnityEngine.InputSystem;
 
 
 
-[RequireComponent(typeof(Rigidbody))]
+
 [RequireComponent(typeof(PlayerInputManager))]
 [RequireComponent(typeof(PlayerInput))]
+[RequireComponent(typeof(PlayerAnimationController))]
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerMovementController : MonoBehaviour
 {
 
@@ -32,23 +34,14 @@ public class PlayerMovementController : MonoBehaviour
 
     private Camera myCam;
 
+    public bool isGrounded = false;
+
 
 
     public bool isContoller;
 
-
-
     Rigidbody rb;
 
-
-
-
-
-
-    /// <summary>
-    /// LateUpdate is called every frame, if the Behaviour is enabled.
-    /// It is called after all Update functions have been called.
-    /// </summary>
 
     private void Awake()
     {
@@ -63,6 +56,8 @@ public class PlayerMovementController : MonoBehaviour
 
     private void LateUpdate()
     {
+        isGrounded = CheckIsGrounded();
+        rb.useGravity = !isGrounded;
         MovePlayer();
 
         RotatePlayer();
@@ -70,10 +65,20 @@ public class PlayerMovementController : MonoBehaviour
     }
 
     private void MovePlayer()
-    {
+    {      
+
         //move player forward in direction of input
-        Vector3 movementVector = new Vector3(moveVector.x, 0, moveVector.y);
-        transform.Translate(movementVector * curentPlayerMovementSpeed * Time.deltaTime, Space.World);
+        Vector2 movementVector = new Vector2(moveVector.x, moveVector.y);        
+        
+        Vector2 moveVelocity = movementVector * curentPlayerMovementSpeed;
+
+        rb.velocity = new Vector3(moveVelocity.x, rb.velocity.y, moveVelocity.y);
+
+        if(isGrounded)
+        {
+            rb.velocity = new Vector3(moveVelocity.x, 0, moveVelocity.y);
+        }
+               
     }
 
     private void RotatePlayer()
@@ -86,12 +91,11 @@ public class PlayerMovementController : MonoBehaviour
             
             if (lookVector3.magnitude > 0.1f)
             {
-                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookVector3), ControllerAimSmoothing);
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookVector3), ControllerAimSmoothing);             
             }
 
-
         }
-        //rotate player in direction of mouse if !isContoller
+        //rotate player in direction of mouse raycasthit on world y = 0 plane if !isContoller
         else
         {
             Ray ray = myCam.ScreenPointToRay(Mouse.current.position.ReadValue());
@@ -109,6 +113,21 @@ public class PlayerMovementController : MonoBehaviour
     }
 
 
+    private bool CheckIsGrounded()
+    {
+        //check if player is grounded
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1.1f))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+        
+    }
+
 
     private void OnDeviceChange(PlayerInput pi)
     {
@@ -122,7 +141,7 @@ public class PlayerMovementController : MonoBehaviour
     }
     public void ReciveMoveInput(Vector2 inputVector)
     {
-        moveVector = inputVector;
+        moveVector = inputVector;        
     }
 
     public void ReciveDash()
