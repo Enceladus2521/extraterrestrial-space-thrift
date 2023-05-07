@@ -14,11 +14,15 @@ public class PlayerMovementController : MonoBehaviour
 
     [SerializeField] private float PlayerMovementSpeed = 10f;
     private float curentPlayerMovementSpeed;
+
+
+
+    [SerializeField] bool isDashEnabled = true;
     [Range(1, 5)]
     [SerializeField] private float PlayerDashSpeed = 2f;
-
     [SerializeField] private float PlayerDashDuration = 1f;
     [SerializeField] private float PlayerDashCooldown = 1f;
+    private bool isDashing = false;
 
 
     [SerializeField] private float ControllerAimSmoothing = 0.1f;
@@ -123,6 +127,7 @@ public class PlayerMovementController : MonoBehaviour
 
     public void ReciveDash()
     {
+        if(!isDashing && isDashEnabled)
         StartCoroutine(Dash());
     }
 
@@ -133,12 +138,13 @@ public class PlayerMovementController : MonoBehaviour
 
     IEnumerator Dash()
     {
+        isDashing = true;
         //dash in direction of movement
         curentPlayerMovementSpeed = PlayerMovementSpeed * PlayerDashSpeed;
         yield return new WaitForSeconds(PlayerDashDuration);
         curentPlayerMovementSpeed = PlayerMovementSpeed;
         yield return new WaitForSeconds(PlayerDashCooldown);
-
+        isDashing = false;
     }
 
 
