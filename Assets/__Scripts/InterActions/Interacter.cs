@@ -96,6 +96,10 @@ public class Interacter : MonoBehaviour
         {
             return;
         }
+
+        //hide interact canvas
+        Destroy(InteractCanvasInstance);
+
         foreach (UnityEvent e in events)
         {
             e.Invoke();
