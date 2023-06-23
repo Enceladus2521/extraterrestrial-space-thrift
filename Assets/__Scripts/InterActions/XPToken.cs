@@ -63,18 +63,14 @@ public class XPToken : MonoBehaviour
             yield return null;
         }
 
+        //add xp to player
+        closestPlayer.GetComponent<PlayerStats>().AddExperience(amount);
+
         Destroy(gameObject);
     }
 
     
 
     
-    private void OnCollisionEnter(Collision other)
-    {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            other.gameObject.GetComponent<PlayerStats>().AddExperience(amount);
-            Destroy(gameObject);
-        }
-    }
+    
 }
