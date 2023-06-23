@@ -780,13 +780,80 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2052100006, guid: 745ad3802cc619545b9618554302101f, type: 3}
-      propertyPath: m_Constraints
-      value: 84
-      objectReference: {fileID: 0}
-    - target: {fileID: 2052100006, guid: 745ad3802cc619545b9618554302101f, type: 3}
-      propertyPath: m_Interpolate
+    - target: {fileID: 2689786828991264819, guid: 745ad3802cc619545b9618554302101f,
+        type: 3}
+      propertyPath: isDashEnabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2689786828991264819, guid: 745ad3802cc619545b9618554302101f,
+        type: 3}
+      propertyPath: PlayerDashSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2689786828991264819, guid: 745ad3802cc619545b9618554302101f,
+        type: 3}
+      propertyPath: PlayerAcceleration
+      value: 4.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 2689786828991264819, guid: 745ad3802cc619545b9618554302101f,
+        type: 3}
+      propertyPath: PlayerDashCooldown
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2689786828991264819, guid: 745ad3802cc619545b9618554302101f,
+        type: 3}
+      propertyPath: PlayerDashDuration
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2689786828991264819, guid: 745ad3802cc619545b9618554302101f,
+        type: 3}
+      propertyPath: PlayerAccelerationCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2689786828991264819, guid: 745ad3802cc619545b9618554302101f,
+        type: 3}
+      propertyPath: PlayerAccelerationCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2689786828991264819, guid: 745ad3802cc619545b9618554302101f,
+        type: 3}
+      propertyPath: PlayerAccelerationCurve.m_Curve.Array.data[0].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2689786828991264819, guid: 745ad3802cc619545b9618554302101f,
+        type: 3}
+      propertyPath: PlayerAccelerationCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2689786828991264819, guid: 745ad3802cc619545b9618554302101f,
+        type: 3}
+      propertyPath: PlayerAccelerationCurve.m_Curve.Array.data[0].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2689786828991264819, guid: 745ad3802cc619545b9618554302101f,
+        type: 3}
+      propertyPath: PlayerAccelerationCurve.m_Curve.Array.data[1].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2689786828991264819, guid: 745ad3802cc619545b9618554302101f,
+        type: 3}
+      propertyPath: PlayerAccelerationCurve.m_Curve.Array.data[0].outSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2689786828991264819, guid: 745ad3802cc619545b9618554302101f,
+        type: 3}
+      propertyPath: PlayerAccelerationCurve.m_Curve.Array.data[1].outSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2689786828991264819, guid: 745ad3802cc619545b9618554302101f,
+        type: 3}
+      propertyPath: PlayerAccelerationCurve.m_Curve.Array.data[0].tangentMode
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 2689786828991264819, guid: 745ad3802cc619545b9618554302101f,
+        type: 3}
+      propertyPath: PlayerAccelerationCurve.m_Curve.Array.data[1].tangentMode
+      value: 34
       objectReference: {fileID: 0}
     - target: {fileID: 3076183660154099313, guid: 745ad3802cc619545b9618554302101f,
         type: 3}

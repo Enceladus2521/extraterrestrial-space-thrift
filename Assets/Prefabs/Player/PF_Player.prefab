@@ -101,6 +101,7 @@ MonoBehaviour:
   PlayerDashDuration: 0.1
   PlayerDashCooldown: 3
   ControllerAimSmoothing: 0.05
+  isGrounded: 0
   isContoller: 0
 --- !u!114 &6213552429584386689
 MonoBehaviour:
@@ -117,6 +118,7 @@ MonoBehaviour:
   playerModel: {fileID: 5756979625455787606}
   XVel: 0
   ZVel: 0
+  playerRotationOffset: 0
 --- !u!54 &2052100006
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -130,8 +132,8 @@ Rigidbody:
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
+  m_Interpolate: 1
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!136 &2052100005
 CapsuleCollider:

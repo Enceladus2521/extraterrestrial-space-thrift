@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 
 
 
-
 [RequireComponent(typeof(PlayerInputManager))]
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(PlayerAnimationController))]
@@ -14,7 +13,11 @@ using UnityEngine.InputSystem;
 public class PlayerMovementController : MonoBehaviour
 {
 
-    [SerializeField] private float PlayerMovementSpeed = 10f;
+    [SerializeField] private float PlayerMovementSpeed = 10f;   
+    
+    [Range(0, 5)]
+    [SerializeField] private float PlayerAcceleration = 1f;
+    
     private float curentPlayerMovementSpeed;
 
 
@@ -22,7 +25,7 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField] bool isDashEnabled = true;
     [Range(1, 5)]
     [SerializeField] private float PlayerDashSpeed = 2f;
-    [SerializeField] private float PlayerDashDuration = 1f;
+    [SerializeField] private float PlayerDashDuration = 1f;    
     [SerializeField] private float PlayerDashCooldown = 1f;
     private bool isDashing = false;
 
@@ -31,6 +34,9 @@ public class PlayerMovementController : MonoBehaviour
 
     private Vector2 moveVector;
     private Vector2 lookVector;
+
+    
+    public Vector3 moveVelocity;
 
     private Camera myCam;
 
@@ -70,14 +76,22 @@ public class PlayerMovementController : MonoBehaviour
         //move player forward in direction of input
         Vector2 movementVector = new Vector2(moveVector.x, moveVector.y);        
         
-        Vector2 moveVelocity = movementVector * curentPlayerMovementSpeed;
+        Vector2 moveVelocity2 = movementVector * curentPlayerMovementSpeed;
+ 
 
-        rb.velocity = new Vector3(moveVelocity.x, rb.velocity.y, moveVelocity.y);
+        //slowly add move velocity to player
+        moveVelocity = Vector3.Lerp(moveVelocity, new Vector3(moveVelocity2.x, rb.velocity.y, moveVelocity2.y), PlayerAcceleration * Time.deltaTime);
+
+        rb.velocity = new Vector3(moveVelocity.x, rb.velocity.y, moveVelocity.z);
+
 
         if(isGrounded)
         {
-            rb.velocity = new Vector3(moveVelocity.x, 0, moveVelocity.y);
+            rb.velocity = new Vector3(moveVelocity.x, 0, moveVelocity.z);
         }
+
+        
+        
                
     }
 

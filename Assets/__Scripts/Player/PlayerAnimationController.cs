@@ -19,14 +19,16 @@ public class PlayerAnimationController : MonoBehaviour
     [SerializeField] GameObject playerModel;
 
     public float XVel;
+
+    public float YVel;
     public float ZVel;
 
     public float playerRotationOffset = 0f;
 
-    Rigidbody rb;
+    
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        
         playerMovementController = GetComponent<PlayerMovementController>();
         StartCoroutine(GetPlayerModel());
     }
@@ -40,12 +42,17 @@ public class PlayerAnimationController : MonoBehaviour
         playerRotationOffset = transform.rotation.eulerAngles.y;
 
         //get velocity from character controller
-        XVel = rb.velocity.x;
-        ZVel = rb.velocity.z;
+        XVel = GetComponent<PlayerMovementController>().moveVelocity.x;
+        YVel = GetComponent<PlayerMovementController>().moveVelocity.y;
+        ZVel = GetComponent<PlayerMovementController>().moveVelocity.z;
+
 
         Vector2 Velocitys = new Vector2(XVel, ZVel);
         //update XVel and ZVel to be relative to player rotation
-        Vector2 rotatedVelocity = Quaternion.Euler(0, -playerRotationOffset, 0) * Velocitys;
+
+        Vector2 rotatedVelocity = new Vector2(Velocitys.x * Mathf.Cos(-playerRotationOffset * Mathf.Deg2Rad) + Velocitys.y * Mathf.Sin(-playerRotationOffset * Mathf.Deg2Rad),
+            Velocitys.y * Mathf.Cos(-playerRotationOffset * Mathf.Deg2Rad) - Velocitys.x * Mathf.Sin(-playerRotationOffset * Mathf.Deg2Rad));
+        
         XVel = rotatedVelocity.x;
         ZVel = rotatedVelocity.y;       
 
