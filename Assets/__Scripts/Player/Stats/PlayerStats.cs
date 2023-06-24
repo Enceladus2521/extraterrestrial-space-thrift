@@ -86,13 +86,14 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
-
+    [EButton("Update Stats")]
     public void UpdateStats()
     {
         maxHealth = (int)(baseHealth * Mathf.Pow(healthMultiplier, level));
         maxArmor = (int)(baseArmor * Mathf.Pow(armorMultiplier, level));
         damagemultiplier = damagemultiplier * Mathf.Pow(damagemultiplierMultiplier, level);
         maxAmmo = (int)(baseAmmo * Mathf.Pow(ammoMultiplier, level));
+        CalculateRequiredExperience();
 
     }
 

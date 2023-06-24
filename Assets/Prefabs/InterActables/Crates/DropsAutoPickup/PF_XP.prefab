@@ -151,18 +151,18 @@ MonoBehaviour:
   colorGradient:
     serializedVersion: 2
     key0: {r: 0.08550537, g: 1, b: 0, a: 1}
-    key1: {r: 0, g: 0.6366434, b: 1, a: 1}
-    key2: {r: 0.21774197, g: 0, b: 1, a: 0}
-    key3: {r: 1, g: 0.80645645, b: 0, a: 0}
-    key4: {r: 1, g: 0, b: 0, a: 0}
+    key1: {r: 0.035695788, g: 0.7883333, b: 0.58253163, a: 1}
+    key2: {r: 0, g: 0.6366434, b: 1, a: 0}
+    key3: {r: 0.21774197, g: 0, b: 1, a: 0}
+    key4: {r: 1, g: 0.80645645, b: 0, a: 0}
     key5: {r: 1, g: 0, b: 0, a: 0}
     key6: {r: 0, g: 0, b: 0, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
     ctime0: 0
-    ctime1: 19853
-    ctime2: 34310
-    ctime3: 49537
-    ctime4: 65535
+    ctime1: 11565
+    ctime2: 19853
+    ctime3: 34310
+    ctime4: 49537
     ctime5: 65535
     ctime6: 0
     ctime7: 0
@@ -175,7 +175,7 @@ MonoBehaviour:
     atime6: 0
     atime7: 0
     m_Mode: 0
-    m_NumColorKeys: 5
+    m_NumColorKeys: 6
     m_NumAlphaKeys: 2
 --- !u!96 &6683505696316142706
 TrailRenderer:

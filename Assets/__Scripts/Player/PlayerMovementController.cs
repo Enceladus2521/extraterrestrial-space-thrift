@@ -13,7 +13,9 @@ using UnityEngine.InputSystem;
 public class PlayerMovementController : MonoBehaviour
 {
 
-    [SerializeField] private float PlayerMovementSpeed = 10f;   
+    [SerializeField] private float PlayerMovementSpeed = 10f;  
+
+    [SerializeField] private float PlayerSprintMultiplier = 1.4f; 
     
     [Range(0, 5)]
     [SerializeField] private float PlayerAcceleration = 1f;
@@ -41,6 +43,8 @@ public class PlayerMovementController : MonoBehaviour
     private Camera myCam;
 
     public bool isGrounded = false;
+
+    public bool isSprinting = false;
 
 
 
@@ -76,7 +80,7 @@ public class PlayerMovementController : MonoBehaviour
         //move player forward in direction of input
         Vector2 movementVector = new Vector2(moveVector.x, moveVector.y);        
         
-        Vector2 moveVelocity2 = movementVector * curentPlayerMovementSpeed;
+        Vector2 moveVelocity2 = movementVector * curentPlayerMovementSpeed * (isSprinting ? PlayerSprintMultiplier : 1);
  
 
         //slowly add move velocity to player
@@ -167,6 +171,11 @@ public class PlayerMovementController : MonoBehaviour
     public void ReciveDeviceChange(bool isController)
     {
         this.isContoller = isController;
+    }
+
+    public void ReciveSprintInput(bool isSprinting)
+    {
+        this.isSprinting = isSprinting;
     }
 
     IEnumerator Dash()

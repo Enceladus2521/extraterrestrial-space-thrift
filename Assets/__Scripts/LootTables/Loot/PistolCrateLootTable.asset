@@ -27,11 +27,11 @@ MonoBehaviour:
     probability: 10
   RarityTrails:
   - {fileID: 1962596557147680709, guid: f5eb74f88244c814382eefe9afda6b6a, type: 3}
-  - {fileID: 1962596557147680709, guid: f5eb74f88244c814382eefe9afda6b6a, type: 3}
-  - {fileID: 1962596557147680709, guid: f5eb74f88244c814382eefe9afda6b6a, type: 3}
-  - {fileID: 1962596557147680709, guid: f5eb74f88244c814382eefe9afda6b6a, type: 3}
-  - {fileID: 1962596557147680709, guid: f5eb74f88244c814382eefe9afda6b6a, type: 3}
-  - {fileID: 1962596557147680709, guid: f5eb74f88244c814382eefe9afda6b6a, type: 3}
+  - {fileID: 1962596557147680709, guid: 8c706774a7e605746b46f755906062cd, type: 3}
+  - {fileID: 1962596557147680709, guid: 0799bbdd55a369f4a97e08788837324a, type: 3}
+  - {fileID: 1962596557147680709, guid: a828ea595ebe22948b06f6327d065637, type: 3}
+  - {fileID: 1962596557147680709, guid: 9ba71c23e49e82f49a762c166cc3b0b4, type: 3}
+  - {fileID: 1962596557147680709, guid: 145db5116f9b7004584ae02bdac23483, type: 3}
   LootTables:
   - name: comon
     loots:

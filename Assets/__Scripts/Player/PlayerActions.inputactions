@@ -15,6 +15,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "Sprint",
+                    "type": "Value",
+                    "id": "27f3a6a9-187a-4526-a2a7-15301f7149a9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "Dash",
                     "type": "Button",
                     "id": "1fbfddbe-9485-4004-ae14-cac2ae8bf02d",
@@ -33,21 +42,21 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Shoot",
-                    "type": "Value",
+                    "name": "ShootStart",
+                    "type": "Button",
                     "id": "474e4b4f-8d9f-4dd7-994d-e8a446394652",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
+                    "interactions": "Press",
+                    "initialStateCheck": false
                 },
                 {
-                    "name": "Aim",
+                    "name": "ShootStop",
                     "type": "Button",
-                    "id": "c1934ec4-bb49-4a4a-87ad-37a4fed92a9b",
+                    "id": "6b45316a-a716-4896-b3e9-ee5d1f2b795d",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Press(behavior=1)",
                     "initialStateCheck": false
                 },
                 {
@@ -165,7 +174,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KBM",
-                    "action": "Shoot",
+                    "action": "ShootStart",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -176,29 +185,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Controller",
-                    "action": "Shoot",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "47f2de04-dc6a-4572-8fbc-d54f4a8d7696",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KBM",
-                    "action": "Aim",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "48d82956-dd7d-4ccb-99a5-de025e761c5d",
-                    "path": "<Gamepad>/leftTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Controller",
-                    "action": "Aim",
+                    "action": "ShootStart",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -249,7 +236,7 @@
                 {
                     "name": "",
                     "id": "f2037732-d9e2-4268-881e-cd2fdfd0fa47",
-                    "path": "<Keyboard>/shift",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "KBM",
@@ -265,6 +252,50 @@
                     "processors": "",
                     "groups": "Controller",
                     "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3fe94412-070e-4b4d-9312-31da8f532bb0",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KBM",
+                    "action": "ShootStop",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7f736159-1de6-48bb-ae55-5c9c63a59c89",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
+                    "action": "ShootStop",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c75fe971-9888-4e09-a18b-d3f2d20398d7",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KBM",
+                    "action": "Sprint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b77e88f5-a30b-411f-bbc6-e2d3f676583d",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
+                    "action": "Sprint",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
