@@ -26,7 +26,7 @@ public class Interacter : MonoBehaviour
     private GameObject InteractCanvasInstance;
     [SerializeField] private string InteractText = "Press F or X to interact";
 
-    [SerializeField] private Vector3 CanvasOffset;
+    [SerializeField] private Vector3 CanvasOffset= new Vector3(0, 2f, 0);
 
     private void Start()
     {
