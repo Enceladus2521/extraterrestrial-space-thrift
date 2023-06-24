@@ -349,7 +349,7 @@ MonoBehaviour:
   interactRange: 1.5
   interactOffset: {x: 0, y: 0.71, z: 0}
   events:
-  - m_PersistentCalls:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5499494012417752965}
         m_TargetAssemblyTypeName: DoorController, Assembly-CSharp
