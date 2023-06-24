@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e0fbfec1cca89a45a4efaf8ca735d70, type: 3}
+  m_Name: LongRifleCrateLootTable
+  m_EditorClassIdentifier: 
+  probabilitys:
+  - name: comon
+    probability: 50
+  - name: Uncommon
+    probability: 300
+  - name: rare
+    probability: 100
+  - name: epic
+    probability: 60
+  - name: legendary
+    probability: 30
+  - name: mythic
+    probability: 10
+  RarityTrails:
+  - {fileID: 1962596557147680709, guid: f5eb74f88244c814382eefe9afda6b6a, type: 3}
+  - {fileID: 1962596557147680709, guid: f5eb74f88244c814382eefe9afda6b6a, type: 3}
+  - {fileID: 1962596557147680709, guid: f5eb74f88244c814382eefe9afda6b6a, type: 3}
+  - {fileID: 1962596557147680709, guid: f5eb74f88244c814382eefe9afda6b6a, type: 3}
+  - {fileID: 1962596557147680709, guid: f5eb74f88244c814382eefe9afda6b6a, type: 3}
+  - {fileID: 1962596557147680709, guid: f5eb74f88244c814382eefe9afda6b6a, type: 3}
+  LootTables:
+  - name: comon
+    loots:
+    - loot: {fileID: 5722448691214944898, guid: 90080332bd97bf34fbd341fe6ceda8dd,
+        type: 3}
+      probability: 10
+  - name: uncommon
+    loots:
+    - loot: {fileID: 1818088191277850, guid: 2511cb1fb2483184baa8421de342583c, type: 3}
+      probability: 10
+  - name: rare
+    loots:
+    - loot: {fileID: 1229852396956260, guid: 19e9fca8edcedfc44a353cd37710a26b, type: 3}
+      probability: 10
+  - name: epic
+    loots:
+    - loot: {fileID: 1030350487227030, guid: 0307cd246d4570c4789574a47218175c, type: 3}
+      probability: 10
+  - name: legendary
+    loots:
+    - loot: {fileID: 1359835491869086, guid: 6d37e5149681c3a43b22cf0d68e6311a, type: 3}
+      probability: 10
+  - name: mythic
+    loots:
+    - loot: {fileID: 1247444303257178, guid: 128067c17e4280846b19b85d9d5f3aaa, type: 3}
+      probability: 10

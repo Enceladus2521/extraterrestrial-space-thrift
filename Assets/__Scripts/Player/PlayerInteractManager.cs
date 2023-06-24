@@ -12,7 +12,7 @@ public class PlayerInteractManager : MonoBehaviour
         foreach (GameObject e in interactables)
         {
             e.GetComponent<Interacter>().Interact();
-            Debug.Log("Interacted with " + e.name);
+            //Debug.Log("Interacted with " + e.name);
         }
     }
 

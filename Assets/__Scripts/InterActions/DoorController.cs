@@ -7,7 +7,7 @@ using UnityEngine.Animations;
 public class DoorController : MonoBehaviour
 {
 
-    [SerializeField] private bool isOpen = false;
+    public bool isOpen = false;
     public bool isLocked = false;
 
      public float autoCloseTime;
