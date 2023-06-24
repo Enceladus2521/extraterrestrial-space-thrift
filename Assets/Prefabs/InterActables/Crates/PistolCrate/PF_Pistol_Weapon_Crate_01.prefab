@@ -1,5 +1,67 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &80386620
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 80386621}
+  m_Layer: 0
+  m_Name: LootEmitter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &80386621
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 80386620}
+  m_LocalRotation: {x: -0.44791645, y: -0, z: -0, w: 0.8940755}
+  m_LocalPosition: {x: 0, y: 0.283, z: -0.052}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6778231511247392690}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: -53.22, y: 0, z: 0}
+--- !u!1 &1440342191
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1440342192}
+  m_Layer: 0
+  m_Name: LootTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1440342192
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1440342191}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.767, z: 0.477}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6778231511247392690}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6781191829382570446
 GameObject:
   m_ObjectHideFlags: 0
@@ -99,6 +161,7 @@ GameObject:
   - component: {fileID: 6782127403988484862}
   - component: {fileID: 6782127403988484851}
   - component: {fileID: 6782127403988484861}
+  - component: {fileID: 1089604795}
   m_Layer: 0
   m_Name: PF_Pistol_Weapon_Crate_01
   m_TagString: Untagged
@@ -119,6 +182,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6778068853772752858}
+  - {fileID: 80386621}
+  - {fileID: 1440342192}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -232,7 +297,7 @@ MonoBehaviour:
   interactRange: 1
   interactOffset: {x: 0, y: 0, z: 0}
   events:
-  - m_PersistentCalls:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6782127403988484861}
         m_TargetAssemblyTypeName: AnimStarter, Assembly-CSharp
@@ -243,6 +308,18 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1089604795}
+        m_TargetAssemblyTypeName: LootTable, Assembly-CSharp
+        m_MethodName: SpawnLoot
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 1.1
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
@@ -260,3 +337,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 531317b1ceba7524d9ff8075fc52b09f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1089604795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6781292966255158772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8c3bc2f56896cf46a94150c9e873450, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomLevel: 1
+  minLoot: 1
+  maxLoot: 2
+  LootEmitter: {fileID: 80386620}
+  LootTarget: {fileID: 1440342191}
+  SpawnForce: 10
+  RandomRotationAmount: 5
+  lootTableObj: {fileID: 11400000, guid: fd041495307c65a4496a9627b1e35cb0, type: 2}

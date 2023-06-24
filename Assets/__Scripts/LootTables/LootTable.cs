@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class LootTable : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class LootTable : MonoBehaviour
     [SerializeField] LootTableObj lootTableObj;
 
 
+    
 
 
 
@@ -63,6 +65,8 @@ public class LootTable : MonoBehaviour
             return;
         }
 
+
+
         //get random rarity
         int rarityIndex = ChanceIndexReturn(CreatePropList(lootTableObj.probabilitys));
 
@@ -71,7 +75,7 @@ public class LootTable : MonoBehaviour
 
         GameObject loot = lootTableObj.LootTables[rarityIndex].loots[lootIndex].loot;
         GameObject trail = lootTableObj.RarityTrails[rarityIndex];
-        GameObject lootObject = Instantiate(loot, LootEmitter.transform.position, Quaternion.identity);
+        GameObject lootObject = Instantiate(loot, LootEmitter.transform.position, LootEmitter.transform.rotation);
         GameObject trailObject = Instantiate(trail, lootObject.transform.position, Quaternion.identity);
         trailObject.transform.SetParent(lootObject.transform);
 
@@ -97,8 +101,8 @@ public class LootTable : MonoBehaviour
         if (LootEmitter != null)
         {
             Gizmos.color = Color.red;
-            //draw line starting at emitter and going in the the emitters forward direction
-            Gizmos.DrawLine(LootEmitter.transform.position, LootEmitter.transform.position + LootEmitter.transform.forward * 1f);
+            //draw line from emitter to target
+            Gizmos.DrawLine(LootEmitter.transform.position, LootTarget.transform.position);
         }
     }
 

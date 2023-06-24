@@ -21,7 +21,7 @@ public class Interacter : MonoBehaviour
     [SerializeField] private Vector3 interactOffset;
 
     //list of unity events that can be triggered
-    [SerializeField] private List<UnityEvent> events;
+    public UnityEvent events;
     
     private GameObject InteractCanvasInstance;
     [SerializeField] private string InteractText = "Press F or X to interact";
@@ -53,10 +53,7 @@ public class Interacter : MonoBehaviour
 
             if (AutoTrigger)
             {
-                foreach (UnityEvent e in events)
-                {
-                    e.Invoke();
-                }
+                events.Invoke();
                 Interacted = true;
                 return;
             }
@@ -100,10 +97,8 @@ public class Interacter : MonoBehaviour
         //hide interact canvas
         Destroy(InteractCanvasInstance);
 
-        foreach (UnityEvent e in events)
-        {
-            e.Invoke();
-        }
+        //trigger events
+        events.Invoke();
         Interacted = true;
     }
 

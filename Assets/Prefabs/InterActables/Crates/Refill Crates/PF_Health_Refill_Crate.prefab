@@ -131,7 +131,7 @@ MonoBehaviour:
   interactRange: 1.5
   interactOffset: {x: 0, y: 0, z: 0}
   events:
-  - m_PersistentCalls:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1399278959800218513}
         m_TargetAssemblyTypeName: PickUpInteraction, Assembly-CSharp

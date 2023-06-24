@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 856709424}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.026, z: 0.996}
+  m_LocalPosition: {x: 0, y: 1.676, z: 0.996}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -73,7 +73,6 @@ GameObject:
   - component: {fileID: 2056945272339942054}
   - component: {fileID: 2086075709896758402}
   - component: {fileID: 2078060329884768602}
-  - component: {fileID: 2045602432124063868}
   m_Layer: 0
   m_Name: SM_Prop_Locker_01_Door_01
   m_TagString: Untagged
@@ -146,19 +145,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &2045602432124063868
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2053881637419317040}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.613695, y: 2.0039816, z: 0.09746033}
-  m_Center: {x: 0.28196138, y: 0.07723045, z: 0.035710752}
 --- !u!1 &2054673786063008456
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,7 +310,7 @@ MonoBehaviour:
   interactRange: 1.5
   interactOffset: {x: 0, y: 0.79, z: 0}
   events:
-  - m_PersistentCalls:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2054954024541750797}
         m_TargetAssemblyTypeName: AnimStarter, Assembly-CSharp

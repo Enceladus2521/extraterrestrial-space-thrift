@@ -1,5 +1,67 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &414064206
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 414064207}
+  m_Layer: 0
+  m_Name: LootEmitter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &414064207
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 414064206}
+  m_LocalRotation: {x: -0.4834773, y: -0, z: -0, w: 0.87535685}
+  m_LocalPosition: {x: 0, y: 0.224, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 699678266070331026}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: -57.825, y: 0, z: 0}
+--- !u!1 &1951510169
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1951510170}
+  m_Layer: 0
+  m_Name: LootTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1951510170
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1951510169}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.017, z: 0.522}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 699678266070331026}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &702179567035343630
 GameObject:
   m_ObjectHideFlags: 0
@@ -99,6 +161,7 @@ GameObject:
   - component: {fileID: 701326574165932262}
   - component: {fileID: 701326574165932263}
   - component: {fileID: 701326574165932264}
+  - component: {fileID: 1885591846}
   m_Layer: 0
   m_Name: PF_Pistol_Weapon_Crate_02
   m_TagString: Untagged
@@ -113,12 +176,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 702473465635759550}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 11.527838, y: 0, z: -3.241602}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 696757560042502624}
+  - {fileID: 414064207}
+  - {fileID: 1951510170}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -243,7 +308,7 @@ MonoBehaviour:
   interactRange: 1
   interactOffset: {x: 0, y: 0, z: 0}
   events:
-  - m_PersistentCalls:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 701326574165932263}
         m_TargetAssemblyTypeName: AnimStarter, Assembly-CSharp
@@ -257,5 +322,37 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1885591846}
+        m_TargetAssemblyTypeName: LootTable, Assembly-CSharp
+        m_MethodName: SpawnLoot
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 1.1
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   InteractText: Press F or X to interact
   CanvasOffset: {x: 0, y: 2, z: 0}
+--- !u!114 &1885591846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 702473465635759550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8c3bc2f56896cf46a94150c9e873450, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomLevel: 1
+  minLoot: 1
+  maxLoot: 2
+  LootEmitter: {fileID: 414064206}
+  LootTarget: {fileID: 1951510169}
+  SpawnForce: 10
+  RandomRotationAmount: 5
+  lootTableObj: {fileID: 11400000, guid: fd041495307c65a4496a9627b1e35cb0, type: 2}

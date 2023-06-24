@@ -161,7 +161,7 @@ MonoBehaviour:
   interactRange: 1.5
   interactOffset: {x: 0, y: 0, z: 0}
   events:
-  - m_PersistentCalls:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8238770363492808085}
         m_TargetAssemblyTypeName: AnimStarter, Assembly-CSharp
