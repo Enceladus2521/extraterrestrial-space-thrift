@@ -15,20 +15,7 @@ public class LootTable : MonoBehaviour
     [SerializeField] int SpawnForce = 20;
     [SerializeField] int RandomRotationAmount = 15;
 
-
-
-
     [SerializeField] LootTableObj lootTableObj;
-
-
-    
-
-
-
-
-
-
-
 
     public void SpawnLoot(float delay = 1f)
     {
@@ -66,7 +53,6 @@ public class LootTable : MonoBehaviour
         }
 
 
-
         //get random rarity
         int rarityIndex = ChanceIndexReturn(CreatePropList(lootTableObj.probabilitys));
 
@@ -79,8 +65,23 @@ public class LootTable : MonoBehaviour
         GameObject trailObject = Instantiate(trail, lootObject.transform.position, Quaternion.identity);
         trailObject.transform.SetParent(lootObject.transform);
 
-        //add Rigidbody
-        Rigidbody rb = lootObject.AddComponent<Rigidbody>();
+        //add Rigidbodyif not already present
+        Rigidbody rb = null;
+        if (lootObject.GetComponent<Rigidbody>() == null)
+        {
+            rb = lootObject.AddComponent<Rigidbody>();
+        }
+        else
+        {
+            rb = lootObject.GetComponent<Rigidbody>();
+        }
+
+        //check if Loot Has Weapon Component
+        if (lootObject.GetComponent<Weapon>() != null)
+        {
+            //set weapon level and rarity 
+            lootObject.GetComponent<Weapon>().SetIndividualWeaponData(new IndividualWeaponData(roomLevel,0,rarityIndex));
+        }
 
         //push loot in direction of target with random force
         rb.AddForce((LootTarget.transform.position - LootEmitter.transform.position).normalized * Random.Range(SpawnForce / 2, SpawnForce), ForceMode.Impulse);

@@ -63,6 +63,35 @@ public class PlayerInputManager : MonoBehaviour
         //_weaponController.ShootEnd();
     }
     
+    private void OnHot1()
+    {        
+        _weaponController.CycleWeapon(0);
+    }
 
+    private void OnHot2()
+    {        
+        _weaponController.CycleWeapon(1);
+    }
+
+    private void OnHot3()
+    {        
+        _weaponController.CycleWeapon(2);
+    }
+
+    private void OnUpC()
+    {        
+        _weaponController.CycleWeaponUp();
+    }
+
+    private void OnDownC()
+    {        
+        _weaponController.CycleWeaponDown();
+    }
+
+    private void OnDropWeapon()
+    {        
+        _weaponController.DropWeapon();
+    }
+    
 
 }

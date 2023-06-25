@@ -32,9 +32,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private int baseArmor = 100;
     [SerializeField] private float armorMultiplier = 1.9f;
 
-    [Header("Damage")]
-    [SerializeField] private float damagemultiplier = 1f;
-    [SerializeField] private float damagemultiplierMultiplier = 1.9f;
+  
 
 
     [Header("Ammo")]
@@ -90,8 +88,7 @@ public class PlayerStats : MonoBehaviour
     public void UpdateStats()
     {
         maxHealth = (int)(baseHealth * Mathf.Pow(healthMultiplier, level));
-        maxArmor = (int)(baseArmor * Mathf.Pow(armorMultiplier, level));
-        damagemultiplier = damagemultiplier * Mathf.Pow(damagemultiplierMultiplier, level);
+        maxArmor = (int)(baseArmor * Mathf.Pow(armorMultiplier, level));        
         maxAmmo = (int)(baseAmmo * Mathf.Pow(ammoMultiplier, level));
         CalculateRequiredExperience();
 

@@ -9,11 +9,31 @@ public class PlayerInteractManager : MonoBehaviour
 
     private void OnInteract()
     {
-        foreach (GameObject e in interactables)
+        //find closest interactable that is not AutoTrigger
+        GameObject closestInteractable = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (GameObject interactable in interactables)
         {
-            e.GetComponent<Interacter>().Interact();
-            //Debug.Log("Interacted with " + e.name);
+            if (!interactable.GetComponent<Interacter>().AutoTrigger)
+            {
+                float distance = Vector3.Distance(transform.position, interactable.transform.position);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestInteractable = interactable;
+                }
+            }
         }
+
+        //interact with closest interactable
+        if (closestInteractable != null)
+        {
+            closestInteractable.GetComponent<Interacter>().Interact(this.gameObject);
+        }
+
+        //remove closest interactable from list
+        interactables.Remove(closestInteractable);
     }
 
     public void AddEvent(GameObject e)
@@ -25,4 +45,6 @@ public class PlayerInteractManager : MonoBehaviour
     {
         interactables.Remove(e);
     }
+
+    
 }

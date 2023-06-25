@@ -12,7 +12,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerAnimationController : MonoBehaviour
 {
-    [SerializeField] private WeaponType currentWeaponType;
+    public WeaponType currentWeaponType;
     
     public enum WeaponType
     {

@@ -46,21 +46,26 @@ MonoBehaviour:
       probability: 10
   - name: uncommon
     loots:
-    - loot: {fileID: 1818088191277850, guid: 2511cb1fb2483184baa8421de342583c, type: 3}
+    - loot: {fileID: 6137622589621463267, guid: a5b6a8fcc6e298d47a596ddbf06f6008,
+        type: 3}
       probability: 10
   - name: rare
     loots:
-    - loot: {fileID: 1229852396956260, guid: 19e9fca8edcedfc44a353cd37710a26b, type: 3}
+    - loot: {fileID: 3622148381374028997, guid: 0da6efb6071811e4482db2c270ee79ea,
+        type: 3}
       probability: 10
   - name: epic
     loots:
-    - loot: {fileID: 1030350487227030, guid: 0307cd246d4570c4789574a47218175c, type: 3}
+    - loot: {fileID: 6137622589621463267, guid: a5b6a8fcc6e298d47a596ddbf06f6008,
+        type: 3}
       probability: 10
   - name: legendary
     loots:
-    - loot: {fileID: 1359835491869086, guid: 6d37e5149681c3a43b22cf0d68e6311a, type: 3}
+    - loot: {fileID: 3622148381374028997, guid: 0da6efb6071811e4482db2c270ee79ea,
+        type: 3}
       probability: 10
   - name: mythic
     loots:
-    - loot: {fileID: 1247444303257178, guid: 128067c17e4280846b19b85d9d5f3aaa, type: 3}
+    - loot: {fileID: 6137622589621463267, guid: a5b6a8fcc6e298d47a596ddbf06f6008,
+        type: 3}
       probability: 10
