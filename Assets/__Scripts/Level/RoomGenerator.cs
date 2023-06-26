@@ -2,12 +2,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+
+
 public class RoomGenerator : MonoBehaviour
 {
     public List<GameObject> wallTypes;
     public List<GameObject> floorTypes;
     public List<GameObject> singleDoorTypes;
     public List<GameObject> doubleDoorTypes;
+    
+    public List<GameObject> interactableTypes;
+
     public int gridSize = 5;
 
     [Range(1, 100)]
@@ -19,6 +24,19 @@ public class RoomGenerator : MonoBehaviour
     public bool hasDoorDown = false;
     public bool hasDoorRight = false;
     public bool hasDoorLeft = false;
+
+    public int offsetX = 0;
+    public int offsetY = 0;
+
+    public enum RoomType
+    {
+        Start,
+        Boss,
+        Medic,
+        Shop
+    }
+    
+    public RoomType roomType = RoomType.Start;
 
     public enum WallType
     {
@@ -44,33 +62,41 @@ public class RoomGenerator : MonoBehaviour
     {
         GenerateFloor(gizmos);
         GenerateWalls(gizmos);
+        GenerateInteractables(gizmos);
     }
+
+    void GenerateInteractables(bool gizmos = false)
+    {
+       
+    }
+
 
     void GenerateFloor(bool gizmos = false)
     {
         Color darkGray = new Color(0.05f, 0.05f, 0.05f);
         // Generate the floor tiles
-        for (int x = 0; x < width * gridSize; x += gridSize)
+        for (int x = 0; x < width; x++)
         {
-            for (int y = 0; y < height * gridSize; y += gridSize)
+            for (int y = 0; y < height; y++)
             {
                 GameObject floorPrefab = floorTypes[Random.Range(0, floorTypes.Count)];
-                Vector3 position = new Vector3(x, 0, y );
+                Vector3 position = new Vector3((x + offsetX) * gridSize, 0, (y + offsetY) * gridSize);
                 Quaternion rotation = Quaternion.identity;
 
                 if (gizmos)
                 {
                     Vector3 scale = new Vector3(gridSize, 1f, gridSize);
-                    position += new Vector3(- gridSize / 2f, 0, gridSize / 2f);
+                    position += new Vector3(-gridSize / 2f, 0, gridSize / 2f);
                     DrawGizmos(position, darkGray, scale, rotation);
                 }
                 else
-                {
+                {   
                     Instantiate(floorPrefab, position, rotation);
                 }
             }
         }
     }
+
 
     WallType? GetWallType(Vector2Int position)
     {
@@ -121,7 +147,7 @@ public class RoomGenerator : MonoBehaviour
         {
             for (int y = -1; y <= height; y++)
             {
-                Vector2Int gridPosition = new Vector2Int(x * gridSize, y * gridSize);
+                Vector2Int gridPosition = new Vector2Int((x + offsetX) * gridSize, (y + offsetY) * gridSize);
                 Vector2Int position = new Vector2Int(x, y);
 
                 Vector3 pos = new Vector3(gridPosition.x, 0, gridPosition.y) + new Vector3(-gridSize / 2f, 0, gridSize / 2f);
@@ -135,7 +161,7 @@ public class RoomGenerator : MonoBehaviour
                     string text = wallType.Value == WallType.Left? "Left" : (wallType.Value == WallType.Right? "Right" : (wallType.Value == WallType.Top? "Top" : "Bottom"));
                     text = x + ", " + y + "\n" + text; 
                     // Draw the text gizmo at the position of the GameObject
-                    Handles.Label(pos + new Vector3(-2, 0, 0), text);
+                    Handles.Label(pos + new Vector3(-1, 2, 0), text);
                 }
 
                 switch (wallType.Value)
@@ -156,7 +182,7 @@ public class RoomGenerator : MonoBehaviour
 
                 if (IsDoor(position, wallType.Value))
                 {
-                    GenerateDoor(pos, wallType.Value, gizmos);
+                    GenerateDoor(pos, wallType.Value, position, gizmos);
                 }
                 else
                 {
@@ -166,35 +192,69 @@ public class RoomGenerator : MonoBehaviour
         }
     }
 
-    void GenerateDoor(Vector3 position, WallType wallType, bool gizmos = false)
+    void GenerateDoor(Vector3 pos, WallType wallType, Vector2Int position, bool gizmos = false)
     {
         GameObject doorPrefab = singleDoorTypes[Random.Range(0, singleDoorTypes.Count)];
         Quaternion doorRotation = Quaternion.identity;
-        Vector3 doorPosition = position;
-        Vector3 doorScale = new Vector3(1f, gridSize, gridSize);
+        Vector3 doorPosition = pos;
+        Vector3 doorScale = new Vector3(gridSize, gridSize, 1f);
+
+        switch (wallType)
+        {
+            case WallType.Left:
+                doorRotation = Quaternion.Euler(new Vector3(0, 90, 0));
+                break;
+            case WallType.Right:
+                doorRotation = Quaternion.Euler(new Vector3(0, -90, 0));
+                break;
+            case WallType.Top:
+                doorRotation = Quaternion.Euler(new Vector3(0, 180, 0));
+                break;
+            case WallType.Bottom:
+                break;
+            default:
+                Debug.LogError("Unknown wall type");
+                break;
+        }
 
         if (gizmos)
         {  
-            switch (wallType)
-            {
-                case WallType.Left:
-                    break;
-                case WallType.Right:
-                    break;
-                case WallType.Top:
-                    doorScale = new Vector3(gridSize, gridSize, 1f);
-                    break;
-                case WallType.Bottom:
-                    doorScale = new Vector3(gridSize, gridSize, 1f);
-                    break;
-                default:
-                    Debug.LogError("Unknown wall type");
-                    break;
-            }
             DrawGizmos(doorPosition, Color.red, doorScale, doorRotation);
         }
         else
         {
+            int centerPosX = width / 2;
+            int centerPosY = height / 2;
+                
+            if ( height % 2 == 0 || width % 2 == 0){
+                if (wallType == WallType.Left || wallType == WallType.Right)
+                    if (height % 2 == 0 && (position.y == (centerPosY)))
+                    {
+                        if (wallType == WallType.Left)
+                            doorPosition += new Vector3(0, 0, -2 * gridSize + (gridSize / 2));
+                        if (wallType == WallType.Right)
+                            doorPosition += new Vector3(0, 0, gridSize / 2 );
+                        doorPrefab = doubleDoorTypes[Random.Range(0, doubleDoorTypes.Count)];
+                    }
+                    else 
+                    {
+                        return;
+                    }
+                else if (wallType == WallType.Top || wallType == WallType.Bottom)
+                    if (width % 2 == 0 && (position.x == centerPosX))
+                    {
+                        if (wallType == WallType.Top)
+                            doorPosition += new Vector3(-2 * gridSize + (gridSize / 2), 0, 0);
+                        if (wallType == WallType.Bottom)
+                            doorPosition += new Vector3(gridSize / 2 , 0, 0);
+                        doorPrefab = doubleDoorTypes[Random.Range(0, doubleDoorTypes.Count)];
+                    }
+                    else
+                    {
+                        return;
+                    }
+            }
+
             Instantiate(doorPrefab, doorPosition, doorRotation);
         }
     }
@@ -205,19 +265,20 @@ public class RoomGenerator : MonoBehaviour
         Quaternion wallRotation = Quaternion.identity;
         Vector3 wallPosition = position;
 
-        Vector3 wallScale = new Vector3(1f, gridSize, gridSize);
+        Vector3 wallScale = new Vector3(gridSize, gridSize, 1f);
 
         switch (wallType)
         {
             case WallType.Left:
+                wallRotation = Quaternion.Euler(new Vector3(0, 90, 0));
                 break;
             case WallType.Right:
+                wallRotation = Quaternion.Euler(new Vector3(0, -90, 0));
                 break;
             case WallType.Top:
-                wallScale = new Vector3(gridSize, gridSize, 1f);
+                wallRotation = Quaternion.Euler(new Vector3(0, 180, 0));
                 break;
             case WallType.Bottom:
-                wallScale = new Vector3(gridSize, gridSize, 1f);
                 break;
             default:
                 Debug.LogError("Unknown wall type");
@@ -230,6 +291,24 @@ public class RoomGenerator : MonoBehaviour
         }
         else
         {
+            switch (wallType)
+            {
+                case WallType.Top:
+                    wallPosition += new Vector3(-gridSize / 2f, 0, 0);
+                    break;
+                case WallType.Bottom:
+                    wallPosition += new Vector3( gridSize / 2f, 0, 0);
+                    break;
+                case WallType.Left:
+                    wallPosition += new Vector3(0, 0, -gridSize / 2f);
+                    break;
+                case WallType.Right:
+                    wallPosition += new Vector3(0, 0, gridSize / 2f);
+                    break;
+                default:
+                    wallPosition += new Vector3(0, 0, 0);
+                    break;
+            }
             Instantiate(wallPrefab, wallPosition, wallRotation);
         }
     }

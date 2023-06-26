@@ -63,7 +63,7 @@ Transform:
   m_GameObject: {fileID: 4806589984447475723}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4809532601056772137}
@@ -181,6 +181,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AutoTrigger: 1
   InteractOnce: 0
+  Player: {fileID: 0}
   interactRange: 2
   interactOffset: {x: 0, y: 0.87, z: 0}
   events:
