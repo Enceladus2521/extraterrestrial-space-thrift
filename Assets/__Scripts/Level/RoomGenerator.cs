@@ -2,7 +2,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+[System.Serializable]
+public class RoomConfig
+{
+    public RoomGenerator.RoomType roomType;
+    public Vector2Int offset;
+    public bool hasDoorUp;
+    public bool hasDoorDown;
+    public bool hasDoorRight;
+    public bool hasDoorLeft;
+    public int width;
+    public int height;
 
+    public RoomConfig Empty() => new RoomConfig
+    {
+        roomType = RoomGenerator.RoomType.Start,
+        offset = Vector2Int.zero,
+        hasDoorUp = false,
+        hasDoorDown = false,
+        hasDoorRight = false,
+        hasDoorLeft = false,
+        width = 1,
+        height = 1
+    };
+}
 
 public class RoomGenerator : MonoBehaviour
 {
@@ -32,6 +55,7 @@ public class RoomGenerator : MonoBehaviour
     {
         Start,
         Boss,
+        Basic,
         Medic,
         Shop
     }
@@ -49,54 +73,29 @@ public class RoomGenerator : MonoBehaviour
 
     void Start()
     {
-        GenerateRoom();
+        // GenerateRoom();
     }
 
-    void GenerateRoom()
+    public void Generate(bool gizmos = false, RoomConfig config = null)
     {
-        GenerateFloor();
-        GenerateWalls();
+        // Check if a custom configuration is provided
+        if (config == null)
+        {
+            // If no configuration is provided, use the Empty() method of RoomConfig
+            config = new RoomConfig().Empty();
+        }
+
+        int offsetX = -(width / 2) * gridSize;
+        int offsetY = -(height / 2) * gridSize;
+        GenerateFloor(offsetX, offsetY, gizmos);
+        GenerateWalls(offsetX, offsetY, gizmos);
+        GenerateInteractables(offsetX, offsetY, gizmos);
     }
 
-    public void Generate(bool gizmos = false)
-    {
-        GenerateFloor(gizmos);
-        GenerateWalls(gizmos);
-        GenerateInteractables(gizmos);
-    }
-
-    void GenerateInteractables(bool gizmos = false)
+    void GenerateInteractables(int offsetX, int offsetY, bool gizmos = false)
     {
        
     }
-
-
-    void GenerateFloor(bool gizmos = false)
-    {
-        Color darkGray = new Color(0.05f, 0.05f, 0.05f);
-        // Generate the floor tiles
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < height; y++)
-            {
-                GameObject floorPrefab = floorTypes[Random.Range(0, floorTypes.Count)];
-                Vector3 position = new Vector3((x + offsetX) * gridSize, 0, (y + offsetY) * gridSize);
-                Quaternion rotation = Quaternion.identity;
-
-                if (gizmos)
-                {
-                    Vector3 scale = new Vector3(gridSize, 1f, gridSize);
-                    position += new Vector3(-gridSize / 2f, 0, gridSize / 2f);
-                    DrawGizmos(position, darkGray, scale, rotation);
-                }
-                else
-                {   
-                    Instantiate(floorPrefab, position, rotation);
-                }
-            }
-        }
-    }
-
 
     WallType? GetWallType(Vector2Int position)
     {
@@ -141,7 +140,7 @@ public class RoomGenerator : MonoBehaviour
         return false;
     }
 
-    void GenerateWalls(bool gizmos = false)
+    void GenerateWalls(int offsetX, int offsetY, bool gizmos = false)
     {
         for (int x = -1; x <= width; x++)
         {
@@ -186,7 +185,7 @@ public class RoomGenerator : MonoBehaviour
                 }
                 else
                 {
-                    GenerateWall(pos, wallType.Value, gizmos);
+                    GenerateWall(pos, wallType.Value, position, gizmos);
                 }
             }
         }
@@ -255,15 +254,48 @@ public class RoomGenerator : MonoBehaviour
                     }
             }
 
-            Instantiate(doorPrefab, doorPosition, doorRotation);
+            if (!Application.isPlaying) return;
+            GameObject doorInstance = Instantiate(doorPrefab, doorPosition, doorRotation);
+            doorInstance.transform.SetParent(transform);
+            doorInstance.name = $"Door_{position.x}_{position.y}";
         }
     }
 
-    void GenerateWall(Vector3 position, WallType wallType, bool gizmos = false)
+
+    void GenerateFloor(int offsetX, int offsetY, bool gizmos = false)
+    {
+        Color darkGray = new Color(0.05f, 0.05f, 0.05f);
+        // Generate the floor tiles
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                GameObject floorPrefab = floorTypes[Random.Range(0, floorTypes.Count)];
+                Vector3 position = new Vector3((x + offsetX) * gridSize, 0, (y + offsetY) * gridSize);
+                Quaternion rotation = Quaternion.identity;
+
+                if (gizmos)
+                {
+                    Vector3 scale = new Vector3(gridSize, 1f, gridSize);
+                    position += new Vector3(-gridSize / 2f, 0, gridSize / 2f);
+                    DrawGizmos(position, darkGray, scale, rotation);
+                }
+                else
+                {   
+                    if (!Application.isPlaying) return;
+                    GameObject floorInstance = Instantiate(floorPrefab, position, rotation);
+                    floorInstance.transform.SetParent(transform);
+                    floorInstance.name = $"Floor_{x}_{y}";
+                }
+            }
+        }
+    }
+
+    void GenerateWall(Vector3 pos, WallType wallType, Vector2Int position, bool gizmos = false)
     {
         GameObject wallPrefab = wallTypes[Random.Range(0, wallTypes.Count)];
         Quaternion wallRotation = Quaternion.identity;
-        Vector3 wallPosition = position;
+        Vector3 wallPosition = pos;
 
         Vector3 wallScale = new Vector3(gridSize, gridSize, 1f);
 
@@ -309,7 +341,10 @@ public class RoomGenerator : MonoBehaviour
                     wallPosition += new Vector3(0, 0, 0);
                     break;
             }
-            Instantiate(wallPrefab, wallPosition, wallRotation);
+            if (!Application.isPlaying) return;
+            GameObject wallInstance = Instantiate(wallPrefab, wallPosition, wallRotation);
+            wallInstance.transform.SetParent(transform);
+            wallInstance.name = $"Wall_{position.x}_{position.y}";
         }
     }
 
