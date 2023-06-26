@@ -10,23 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 47fd8c4480ad2484c87f257d102db949, type: 3}
-  m_Name: SMG_03
+  m_Name: PF_Wep_Launcher_01
   m_EditorClassIdentifier: 
-  weaponType: 0
-  weaponName: SMG_03
-  weaponPrefab: {fileID: 0}
-  weaponPositionOffset: {x: 0, y: 0, z: 0}
-  weaponRotationOffset: {x: 0, y: 0, z: 0}
-  weaponScaleOffset: {x: 1, y: 1, z: 1}
-  weaponDamage: 4
-  weaponRange: 10
-  weaponFireRate: 0.1
-  weaponReloadTime: 2
-  weaponMagSize: 15
-  ammoCostPerShot: 1
+  weaponType: 4
+  weaponOffset: 0
+  weaponName: PF_Wep_Launcher_01
+  weaponPrefab: {fileID: 6137622589621463267, guid: a5b6a8fcc6e298d47a596ddbf06f6008,
+    type: 3}
+  defaultPositionOffset: {x: 0, y: 0, z: 0}
+  defaultRotationOffset: {x: 0, y: 0, z: 0}
+  defaultScaleOffset: {x: 1, y: 1, z: 1}
+  customPositionOffset: {x: 0, y: 0, z: 0}
+  customRotationOffset: {x: 0, y: 0, z: 0}
+  customScaleOffset: {x: 1, y: 1, z: 1}
+  weaponDamage: 0
+  weaponRange: 0
+  weaponFireRate: 0
+  weaponReloadTime: 0
+  weaponMagSize: 0
+  ammoCostPerShot: 0
   bulletPrefab: {fileID: 0}
-  canRicochet: 1
-  ricochetAmount: 1
+  canRicochet: 0
+  ricochetAmount: 0
   laserPrefab: {fileID: 0}
   canBurn: 0
   burnDps: 0
@@ -38,7 +43,6 @@ MonoBehaviour:
   sniperPrefab: {fileID: 0}
   canPierce: 0
   pierceAmount: 0
-  ProjetileWeapon: 0
   projectilePrefab: {fileID: 0}
   projectileSpeed: 0
   projectileLifeTime: 0

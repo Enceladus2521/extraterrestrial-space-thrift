@@ -10,11 +10,10 @@ using TMPro;
 public class Interacter : MonoBehaviour
 {
 
-    [SerializeField] private bool AutoTrigger = false;
+    public bool AutoTrigger = false;
+    public bool InteractOnce = false;
 
-    
-
-    [SerializeField] private bool InteractOnce = false;
+    [HideInInspector] public GameObject Player;
 
     private bool Interacted = false;
     [SerializeField] private float interactRange = 1f;
@@ -22,11 +21,11 @@ public class Interacter : MonoBehaviour
 
     //list of unity events that can be triggered
     public UnityEvent events;
-    
+
     private GameObject InteractCanvasInstance;
     [SerializeField] private string InteractText = "Press F or X to interact";
 
-    [SerializeField] private Vector3 CanvasOffset= new Vector3(0, 2f, 0);
+    [SerializeField] private Vector3 CanvasOffset = new Vector3(0, 2f, 0);
 
     private void Start()
     {
@@ -39,20 +38,41 @@ public class Interacter : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
-
         if (other.CompareTag("Player"))
         {
 
             if (Interacted && InteractOnce)
             {
+                //disable sphere collider
+                GetComponent<SphereCollider>().enabled = false;
+
+                //disable this script
+                enabled = false;
+
+
                 return;
             }
-            
+
 
 
             if (AutoTrigger)
             {
+                //find closest player
+                GameObject closestPlayer = null;
+                float closestDistance = Mathf.Infinity;
+                foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
+                {
+                    float distance = Vector3.Distance(transform.position, player.transform.position);
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        closestPlayer = player;
+                    }
+                }
+
+                Player = closestPlayer;
+
+
                 events.Invoke();
                 Interacted = true;
                 return;
@@ -87,12 +107,14 @@ public class Interacter : MonoBehaviour
     }
 
 
-    public void Interact()
+    public void Interact(GameObject player)
     {
         if (Interacted && InteractOnce)
         {
             return;
         }
+
+        Player = player;
 
         //hide interact canvas
         Destroy(InteractCanvasInstance);
@@ -102,10 +124,22 @@ public class Interacter : MonoBehaviour
         Interacted = true;
     }
 
-    
+    public void SetInteractText(string text)
+    {
+        InteractText = text;
+    }
+
+
     private void OnDestroy()
     {
         Destroy(InteractCanvasInstance);
+    }
+
+
+    private void OnEnable()
+    {
+        //enable sphere collider
+        GetComponent<SphereCollider>().enabled = true;
     }
 
 

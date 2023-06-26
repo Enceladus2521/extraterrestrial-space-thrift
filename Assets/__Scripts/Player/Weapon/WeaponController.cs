@@ -8,12 +8,24 @@ public class WeaponController : MonoBehaviour
     [SerializeField] private WeaponObj weapon00;
     [SerializeField] private WeaponObj weapon01;
     [SerializeField] private WeaponObj weapon02;
+
+    public IndividualWeaponData[] weaponData = new IndividualWeaponData[3];
+
     [SerializeField] private WeaponObj defaultWeapon;
+
+    [Range(0, 3)]
+    [SerializeField] private float weaponPickUpCooldown = 0.5f;
+    private bool canPickup = true;
+
+    [Range(0, 3)]
+    [SerializeField] private float weaponCycleCooldown = 0.2f;
+    private bool canCycle = true;
 
     [Header("Hand")]
     [SerializeField] private Transform hand;
 
-    [SerializeField] int unEquipForce = 10;
+    [Range(0, 10)]
+    [SerializeField] int unEquipForce = 3;
 
     [SerializeField] int currentWeaponNumber = 0;
 
@@ -24,119 +36,83 @@ public class WeaponController : MonoBehaviour
 
     private void Start()
     {
-        weapon00 = defaultWeapon;
-        currentWeapon = defaultWeapon;
-        EquipWeapon(0);
+        if (defaultWeapon != null)
+        {
+            PickUpWeapon(defaultWeapon, new IndividualWeaponData(0, 0, 0));
+        }
     }
 
     public void CycleWeapon(int weaponNumber)
     {
-        if (weaponNumber > 2 || weaponNumber < 0)
-        {
-            Debug.LogWarning("Weapon number out of range");
-            return;
-        }
+        //delay between weapon cycles
+        if (canCycle) StartCoroutine(CycleWeaponCooldown());
+        else return;
 
-
-        //check if weapon is null
-        //if not null, equip weapon
-        //if null dont equip weapon
+        UnEquipWeapon();
 
         switch (weaponNumber)
         {
             case 0:
                 if (weapon00 != null)
                 {
-                    EquipWeapon(0);
                     currentWeapon = weapon00;
-                    currentWeaponNumber = 0;
+                    EquipWeapon(0);
                 }
+                currentWeaponNumber = 0;
                 break;
             case 1:
                 if (weapon01 != null)
                 {
-                    EquipWeapon(1);
                     currentWeapon = weapon01;
-                    currentWeaponNumber = 1;
+                    EquipWeapon(1);
                 }
+                currentWeaponNumber = 1;
                 break;
             case 2:
                 if (weapon02 != null)
                 {
-                    EquipWeapon(2);
                     currentWeapon = weapon02;
-                    currentWeaponNumber = 2;
+                    EquipWeapon(2);
                 }
+                currentWeaponNumber = 2;
                 break;
         }
     }
 
     public void CycleWeaponUp()
     {
-        //check if weapon is null
-        //if not null, equip weapon
-        //if null dont equip weapon
+        //delay between weapon cycles
+        if (!canCycle) return;
 
         switch (currentWeaponNumber)
         {
             case 0:
-                if (weapon01 != null)
-                {
-                    EquipWeapon(1);
-                    currentWeapon = weapon01;
-                    currentWeaponNumber = 1;
-                }
+                CycleWeapon(1);
                 break;
             case 1:
-                if (weapon02 != null)
-                {
-                    EquipWeapon(2);
-                    currentWeapon = weapon02;
-                    currentWeaponNumber = 2;
-                }
+                CycleWeapon(2);
                 break;
             case 2:
-                if (weapon00 != null)
-                {
-                    EquipWeapon(0);
-                    currentWeapon = weapon00;
-                    currentWeaponNumber = 0;
-                }
+                CycleWeapon(0);
                 break;
         }
     }
 
     public void CycleWeaponDown()
     {
-        //check if weapon is null
-        //if not null, equip weapon
-        //if null dont equip weapon
+        //delay between weapon cycles
+        if (!canCycle) return;
 
         switch (currentWeaponNumber)
         {
             case 0:
-                if (weapon02 != null)
-                {
-                    EquipWeapon(2);
-                    currentWeapon = weapon02;
-                    currentWeaponNumber = 2;
-                }
+                CycleWeapon(2);
                 break;
             case 1:
-                if (weapon00 != null)
-                {
-                    EquipWeapon(0);
-                    currentWeapon = weapon00;
-                    currentWeaponNumber = 0;
-                }
+                CycleWeapon(0);
                 break;
             case 2:
-                if (weapon01 != null)
-                {
-                    EquipWeapon(1);
-                    currentWeapon = weapon01;
-                    currentWeaponNumber = 1;
-                }
+                CycleWeapon(1);
                 break;
         }
     }
@@ -151,96 +127,224 @@ public class WeaponController : MonoBehaviour
         return currentWeaponNumber;
     }
 
-    public void PickUpWeapon(WeaponObj weapon)
+    public bool PickUpWeapon(WeaponObj weapon, IndividualWeaponData weaponData)
     {
-        //check if weapon is null
-        //if null, set weapon to current weapon and equip
-        //if not null, drop current weapon, set weapon to current weapon and equip
+        //start cooldown
+        if (canPickup) StartCoroutine(PickUpWeaponCooldown());
+        else return false;
 
-        if (weapon00 == null)
+        //returns if weapon is null
+        if (weapon == null) return false;
+
+
+        DropWeapon();
+
+        switch (currentWeaponNumber)
         {
-            weapon00 = weapon;
-            EquipWeapon(0);
-            currentWeapon = weapon00;
-            currentWeaponNumber = 0;
+            case 0:
+                weapon00 = weapon;
+                currentWeapon = weapon00;
+                break;
+            case 1:
+                weapon01 = weapon;
+                currentWeapon = weapon01;
+                break;
+            case 2:
+                weapon02 = weapon;
+                currentWeapon = weapon02;
+                break;
         }
-        else if (weapon01 == null)
-        {
-            weapon01 = weapon;
-            EquipWeapon(1);
-            currentWeapon = weapon01;
-            currentWeaponNumber = 1;
-        }
-        else if (weapon02 == null)
-        {
-            weapon02 = weapon;
-            EquipWeapon(2);
-            currentWeapon = weapon02;
-            currentWeaponNumber = 2;
-        }
-        else
-        {
-            DropWeapon(currentWeaponNumber);
-            switch (currentWeaponNumber)
-            {
-                case 0:
-                    weapon00 = weapon;
-                    EquipWeapon(0);
-                    currentWeapon = weapon00;
-                    currentWeaponNumber = 0;
-                    break;
-                case 1:
-                    weapon01 = weapon;
-                    EquipWeapon(1);
-                    currentWeapon = weapon01;
-                    currentWeaponNumber = 1;
-                    break;
-                case 2:
-                    weapon02 = weapon;
-                    EquipWeapon(2);
-                    currentWeapon = weapon02;
-                    currentWeaponNumber = 2;
-                    break;
-            }
-        }
+
+        EquipWeapon(currentWeaponNumber);
+        SaveNewWeaponData(currentWeaponNumber, weaponData);
+
+        return true;
 
     }
 
-    private void DropWeapon(int weaponNumber)
+    public void DropWeapon()
     {
-        Destroy(currentWeaponInstance);
-        GameObject oldWeapon = Instantiate(weapon00.weaponPrefab, transform.position, transform.rotation);
+        //returns if weapon is null
+        if (currentWeapon == null) return;
+
+
+        GameObject oldWeapon = null;
+        oldWeapon = currentWeaponInstance;
+        //unparent weapon
         oldWeapon.transform.parent = null;
 
-        //add rigidbody and force to old weapon
-        oldWeapon.AddComponent<Rigidbody>();
+        //add rigidbody if there is none and force to old weapon
+        if (oldWeapon.GetComponent<Rigidbody>() == null)
+        {
+            oldWeapon.AddComponent<Rigidbody>();
+        }
+        oldWeapon.GetComponent<Rigidbody>().isKinematic = false;
         oldWeapon.GetComponent<Rigidbody>().AddForce(transform.forward * unEquipForce, ForceMode.Impulse);
+
+
+        //enable collider on old weapon
+        oldWeapon.GetComponent<Collider>().enabled = true;
+
+        //enable Interacter on old weapon
+        if (oldWeapon.GetComponent<Interacter>() != null)
+        {
+            oldWeapon.GetComponent<Interacter>().enabled = true;
+        }
+
+        //set oldweapon weapon data to weapon data list at weapon number
+        oldWeapon.GetComponent<Weapon>().SetIndividualWeaponData(weaponData[currentWeaponNumber]);
+
+        //add rarity trail to old weapon
+        GameObject rarityTrail = null;
+        switch ((int)weaponData[currentWeaponNumber].rarity)
+        {
+            case 0:
+                rarityTrail = Instantiate(Resources.Load("autoLoad/PF_ComonTrail")) as GameObject;
+                break;
+            case 1:
+                rarityTrail = Instantiate(Resources.Load("autoLoad/PF_UnComonTrail")) as GameObject;
+                break;
+            case 2:
+                rarityTrail = Instantiate(Resources.Load("autoLoad/PF_RareTrail")) as GameObject;
+                break;
+            case 3:
+                rarityTrail = Instantiate(Resources.Load("autoLoad/PF_EpicTrail")) as GameObject;
+                break;
+            case 4:
+                rarityTrail = Instantiate(Resources.Load("autoLoad/PF_LegendaryTrail")) as GameObject;
+                break;
+            case 5:
+                rarityTrail = Instantiate(Resources.Load("autoLoad/PF_MysticTrail")) as GameObject;
+                break;
+            default:
+                rarityTrail = Instantiate(Resources.Load("autoLoad/PF_ComonTrail")) as GameObject;
+                break;
+        }
+
+        //set rarity trail as child of old weapon
+        rarityTrail.transform.parent = oldWeapon.transform;
+        //reset rarity trail position
+        rarityTrail.transform.localPosition = Vector3.zero;
+
+        // set weapon data to null
+        weaponData[currentWeaponNumber] = null;
+
+        //set current weapon to null
+        currentWeapon = null;
+        
+        currentWeaponInstance = null;
+
+        switch (currentWeaponNumber)
+        {
+            case 0:
+                weapon00 = null;
+                break;
+            case 1:
+                weapon01 = null;
+                break;
+            case 2:
+                weapon02 = null;
+                break;
+        }
+
     }
 
     public void EquipWeapon(int weaponNumber)
     {
+        GameObject weaponPrefab = null;
+
+        switch (weaponNumber)
+        {
+            case 0:
+                weaponPrefab = weapon00.weaponPrefab;
+                break;
+            case 1:
+                weaponPrefab = weapon01.weaponPrefab;
+                break;
+            case 2:
+                weaponPrefab = weapon02.weaponPrefab;
+                break;
+            default:
+                weaponPrefab = null;
+                break;
+        }
+
+        if (weaponPrefab != null)
+        {
+            //instantiates weapon prefab as child of hand
+            GameObject weapon = Instantiate(weaponPrefab, hand.transform.position, hand.transform.rotation);
+            weapon.transform.parent = hand;
+
+
+            //sets weapon offset based on weapon offset type
+            switch ((int)currentWeapon.weaponOffset)
+            {
+                case 0:
+                    weapon.transform.localPosition = currentWeapon.defaultPositionOffset;
+                    weapon.transform.localRotation = Quaternion.Euler(currentWeapon.defaultRotationOffset);
+                    weapon.transform.localScale = currentWeapon.defaultScaleOffset;
+                    break;
+
+                case 1:
+                    weapon.transform.localPosition = currentWeapon.customPositionOffset;
+                    weapon.transform.localRotation = Quaternion.Euler(currentWeapon.customRotationOffset);
+                    weapon.transform.localScale = currentWeapon.customScaleOffset;
+                    break;
+
+            }
+
+            currentWeaponInstance = weapon;
+
+            //disable all collider on weapon
+            Collider[] colliders = currentWeaponInstance.GetComponentsInChildren<Collider>();
+            foreach (Collider collider in colliders)
+            {
+                collider.enabled = false;
+            }
+
+            //if rigidbody on weapon, disable rigidbody
+            if (currentWeaponInstance.GetComponent<Rigidbody>() != null)
+            {
+                currentWeaponInstance.GetComponent<Rigidbody>().isKinematic = true;
+            }
+
+            //disable Interacter on weapon
+            if (currentWeaponInstance.GetComponent<Interacter>() != null)
+            {
+                currentWeaponInstance.GetComponent<Interacter>().enabled = false;
+            }
+        }
+
+
+    }
+
+    private void SaveNewWeaponData(int weaponNumber, IndividualWeaponData data)
+    {
+        //sets weapon data to weapon data list at weapon number
+        weaponData[weaponNumber] = data;
+    }
+    public void UnEquipWeapon()
+    {
         if (currentWeaponInstance != null)
         {
             Destroy(currentWeaponInstance);
+            currentWeapon = null;
         }
-
-        //instantiates weapon prefab and sets it as child of hand
-        //sets weapon as current weapon
-        GameObject weapon = Instantiate(currentWeapon.weaponPrefab, hand.transform.position, hand.transform.rotation);
-        weapon.transform.parent = hand;
-        weapon.transform.localPosition = currentWeapon.weaponPositionOffset;
-        weapon.transform.localRotation = Quaternion.Euler(currentWeapon.weaponRotationOffset);
-        weapon.transform.localScale = currentWeapon.weaponScaleOffset;
-
-        currentWeaponInstance = weapon;
     }
 
-    public void UnEquipWeapon()
+    IEnumerator PickUpWeaponCooldown()
     {
-        Destroy(currentWeaponInstance);
-        currentWeapon = null;
+        canPickup = false;
+        yield return new WaitForSeconds(weaponPickUpCooldown);
+        canPickup = true;
     }
 
+    IEnumerator CycleWeaponCooldown()
+    {
+        canCycle = false;
+        yield return new WaitForSeconds(weaponCycleCooldown);
+        canCycle = true;
+    }
 
     public void Reload()
     {

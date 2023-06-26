@@ -21,12 +21,29 @@ public class WeaponObj : ScriptableObject
         Electric = 7        
     };
 
+    public WeaponOffset weaponOffset;
+    public enum WeaponOffset
+    {
+        defaultWeaponOffset = 0,
+        customWeaponOffset = 1        
+    };
+
     [Header("Weapon Info")]
     public string weaponName;
     public GameObject weaponPrefab;
-    public Vector3 weaponPositionOffset;
-    public Vector3 weaponRotationOffset;
-    public Vector3 weaponScaleOffset = Vector3.one;
+
+
+
+    [Header("Weapon Offset")]
+
+    [HideInInspector] public Vector3 defaultPositionOffset = new Vector3(0, 0, 0);
+    [HideInInspector] public Vector3 defaultRotationOffset = new Vector3(0, 0, 0);
+    [HideInInspector] public Vector3 defaultScaleOffset = new Vector3(1, 1, 1);   
+
+
+    public Vector3 customPositionOffset;
+    public Vector3 customRotationOffset;
+    public Vector3 customScaleOffset = Vector3.one;
 
 
 
@@ -66,8 +83,7 @@ public class WeaponObj : ScriptableObject
 
 
     
-    [Header("Projectile Ammo")]
-    public bool ProjetileWeapon;
+    [Header("Projectile Ammo")]    
     public GameObject projectilePrefab;
     public float projectileSpeed;
     public float projectileLifeTime; 
