@@ -140,14 +140,17 @@ public class PlayerMovementController : MonoBehaviour
     {
         //check if player is grounded
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1.1f))
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.1f))
         {
-            return true;
+            //draw gizmo
+            Debug.DrawRay(transform.position, Vector3.down * hit.distance, Color.yellow);
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("ground"))
+            {
+                return true;
+            }
         }
-        else
-        {
-            return false;
-        }
+        return false;
+        
         
     }
 

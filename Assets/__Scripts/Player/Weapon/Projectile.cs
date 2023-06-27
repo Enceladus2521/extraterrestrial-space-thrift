@@ -153,13 +153,10 @@ public class Projectile : MonoBehaviour
         StopAllCoroutines();
         if (explosionPrefab != null)
         {
-            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+            GameObject explo = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+            explo.GetComponent<Explosion>().SetExplosionData(damage,knockbackForce,burnDps,burnDuration,explosionRadius,explosionDamageFallOff);
         }
-        //TODo Add burn effect
-
-        //Todo Add knockback effect
-
-        //Todo Do damage to enemies in radius
+        
 
         Destroy(gameObject);
     }

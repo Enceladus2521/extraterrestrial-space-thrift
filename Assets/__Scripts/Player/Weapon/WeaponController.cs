@@ -155,9 +155,9 @@ public class WeaponController : MonoBehaviour
                 currentWeapon = weapon02;
                 break;
         }
-
-        EquipWeapon(currentWeaponNumber);
         SaveNewWeaponData(currentWeaponNumber, weaponData);
+        EquipWeapon(currentWeaponNumber);
+        
 
         return true;
 
@@ -169,6 +169,7 @@ public class WeaponController : MonoBehaviour
         if (currentWeapon == null) return;
 
         currentWeaponInstance.GetComponent<Weapon>().SetEquipped(false);
+        
 
         GameObject oldWeapon = null;
         oldWeapon = currentWeaponInstance;
@@ -187,6 +188,12 @@ public class WeaponController : MonoBehaviour
         //enable collider on old weapon
         oldWeapon.GetComponent<Collider>().enabled = true;
 
+        //get Meshcollider and set trigger to false
+        if (oldWeapon.GetComponent<MeshCollider>() != null)
+        {
+            oldWeapon.GetComponent<MeshCollider>().isTrigger = false;
+        }
+
         //enable Interacter on old weapon
         if (oldWeapon.GetComponent<Interacter>() != null)
         {
@@ -194,6 +201,7 @@ public class WeaponController : MonoBehaviour
         }
 
         //set oldweapon weapon data to weapon data list at weapon number
+        weaponData[currentWeaponNumber] = new IndividualWeaponData(weaponData[currentWeaponNumber].level, currentWeaponInstance.GetComponent<Weapon>().GetAmmoInClip(), (int)weaponData[currentWeaponNumber].rarity);
         oldWeapon.GetComponent<Weapon>().SetIndividualWeaponData(weaponData[currentWeaponNumber]);
 
         //add rarity trail to old weapon
@@ -278,6 +286,8 @@ public class WeaponController : MonoBehaviour
             GameObject weapon = Instantiate(weaponPrefab, hand.transform.position, hand.transform.rotation);
             weapon.transform.parent = hand;
             weapon.GetComponent<Weapon>().SetEquipped(true);
+            weapon.GetComponent<Weapon>().SetAmmoInClip(weaponData[weaponNumber].ammoInClip, weaponData[weaponNumber].level);
+
 
             //sets weapon offset based on weapon offset type
             switch ((int)currentWeapon.weaponOffset)
@@ -338,6 +348,8 @@ public class WeaponController : MonoBehaviour
     {
         if (currentWeaponInstance != null)
         {
+            currentWeaponInstance.GetComponent<Weapon>().SetEquipped(false);
+            weaponData[currentWeaponNumber] = new IndividualWeaponData(weaponData[currentWeaponNumber].level, currentWeaponInstance.GetComponent<Weapon>().GetAmmoInClip(), (int)weaponData[currentWeaponNumber].rarity);
             Destroy(currentWeaponInstance);
             currentWeapon = null;
         }
@@ -382,3 +394,12 @@ public class WeaponController : MonoBehaviour
         }
     }
 }
+public enum Rarity
+    {
+        Common = 0,
+        Uncommon = 1,
+        Rare = 2,
+        Epic = 3,
+        Legendary = 4,
+        Mythic = 5
+    }

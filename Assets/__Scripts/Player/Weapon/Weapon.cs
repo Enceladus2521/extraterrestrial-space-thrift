@@ -98,14 +98,59 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    
+    private void Start()
+    {
+        if(weaponObj != null)
+        {
+            if ((int)weaponObj.weaponType == (int)WeaponObj.WeaponType.Sword)
+            {                
+                MeshFilter meshFilter = GetComponentInChildren<MeshFilter>();
+                SpawnSwordDamageDealer(meshFilter);
+            }
+            else if ((int)weaponObj.weaponType == (int)WeaponObj.WeaponType.GreatSword)
+            {
+                MeshFilter meshFilter = GetComponentInChildren<MeshFilter>();
+                SpawnSwordDamageDealer(meshFilter);
+            }
+
+            
+        }
+    }
+
+
+    private void SpawnSwordDamageDealer(MeshFilter meshFilter)
+    {
+        GameObject newDamageDealer = new GameObject("DamageDealer");
+        //set as child of weapon
+        newDamageDealer.transform.SetParent(transform);
+        //add mesh filter
+        newDamageDealer.AddComponent<MeshFilter>().mesh = meshFilter.mesh;
+        //add mesh collider
+        newDamageDealer.AddComponent<MeshCollider>().sharedMesh = newDamageDealer.GetComponent<MeshFilter>().mesh;
+
+        //dont do concave
+        newDamageDealer.GetComponent<MeshCollider>().convex = true;       
+        
+        //set as trigger
+        newDamageDealer.GetComponent<MeshCollider>().isTrigger = true;
+
+        //add damage dealer script
+        SwordDamageDealer damageDealer = newDamageDealer.AddComponent<SwordDamageDealer>();
+        
+    }
+
 
     private void Update()
     {
         if (player == null) return;
         if (!isEquiped) return;
 
-        //rotate weapon to look at PlayerMovemntController.PlayerLookPosition
-        transform.LookAt(player.GetComponent<PlayerMovementController>().PlayerLookPosition());
+        if ((int)weaponObj.weaponType == 5 || (int)weaponObj.weaponType == 6)
+        {
+            //-_- dont touch this it works            
+        }
+        else transform.LookAt(player.GetComponent<PlayerMovementController>().PlayerLookPosition());
 
 
         //check if not enough ammo to shoot
@@ -163,7 +208,11 @@ public class Weapon : MonoBehaviour
         CoolDown(); //start cooldown
         hasRelesedTrigger = false; //set hasRelesedTrigger to false
 
-        if (weaponObj.ammoPrefab != null) ShootProjectile();
+        if ((int)weaponObj.weaponType == 5 || (int)weaponObj.weaponType == 6)
+        {
+            //-_- dont touch this it works
+        }
+        else if (weaponObj.ammoPrefab != null) ShootProjectile();
         else ShootRaycast();
 
         //play animation
@@ -248,7 +297,7 @@ public class Weapon : MonoBehaviour
         if (weaponObj.tracerPrefab != null)
         {
             GameObject tracer = Instantiate(weaponObj.tracerPrefab, tracerStartPoint, Quaternion.identity);
-            Debug.Log("TracerData: StartPos: " + tracerStartPoint + " EndPos: " + hitObject);
+            // Debug.Log("TracerData: StartPos: " + tracerStartPoint + " EndPos: " + hitObject);
             tracer.GetComponent<BulletTracer>().SetStartAndEndPos(tracerStartPoint, hitObject, weaponObj.tracerColor);
         }
     }
@@ -257,17 +306,14 @@ public class Weapon : MonoBehaviour
     {
         if (hitEffectPrefab != null) Instantiate(hitEffectPrefab, hit.point, Quaternion.LookRotation(hit.normal));
 
+        if (weaponObj.explosionPrefab == null) AddKnockback(hit, direction); //do knockback if no explosion
 
+        Explode(hit, damage);
         //on enemy hit
         if (!hit.collider.gameObject.CompareTag("enemy")) return;
 
         Debug.Log("Hit Enemy");
-        //Todo: damage enemy
-
-        AddKnockback(hit, direction);
-
-
-        Explode(hit);
+        //Todo: damage enemy          
 
         //Todo: add burn to enemy spawn burn effect Prefab and child it to enemy set data for burn effect
 
@@ -280,21 +326,17 @@ public class Weapon : MonoBehaviour
         //do knockback
         if (hit.collider.gameObject.GetComponent<Rigidbody>() != null)
         {
+
             hit.collider.gameObject.GetComponent<Rigidbody>().AddForce(direction * weaponObj.knockbackForce, ForceMode.Impulse);
         }
     }
 
-    private void Explode(RaycastHit hit)
+    private void Explode(RaycastHit hit, float damage)
     {
         if (weaponObj.explosionPrefab == null) return;
         GameObject explosion = Instantiate(weaponObj.explosionPrefab, hit.point, Quaternion.identity);
-        //Todo: add explosion damage
 
-        //TODo Add burn effect
-
-        //Todo Add knockback effect
-
-        //Todo Do damage to enemies in radius
+        explosion.GetComponent<Explosion>().SetExplosionData(damage, weaponObj.knockbackForce, weaponObj.burnDps, weaponObj.burnDuration, weaponObj.explosionRadius, weaponObj.explosionDamageFallOff);
     }
     #endregion
 
@@ -343,10 +385,31 @@ public class Weapon : MonoBehaviour
 
         }
     }
-
-
     #endregion
 
+
+
+    
+
+    public void OnSliceHit(GameObject hitObject)
+    {
+        //if hit object is enemy
+        if (hitObject.CompareTag("enemy"))
+        {
+            //Todo: damage enemy
+
+            //Todo: add burn to enemy spawn burn effect Prefab and child it to enemy set data for burn effect
+        }
+
+        if (hitEffectPrefab != null) Instantiate(hitEffectPrefab, hitObject.transform.position, Quaternion.LookRotation(hitObject.transform.forward));
+
+        //if explosion prefab is not null, instantiate explosion prefab at hit object position
+        if (weaponObj.explosionPrefab != null) Instantiate(weaponObj.explosionPrefab, hitObject.transform.position, Quaternion.identity);
+        else if (hitObject.GetComponent<Rigidbody>() != null)
+        {
+            if (weaponObj.knockbackForce > 0) hitObject.GetComponent<Rigidbody>().AddForce(transform.forward * weaponObj.knockbackForce, ForceMode.Impulse);
+        }
+    }
 
     private Vector3 CalculateSpread()
     {
@@ -383,6 +446,12 @@ public class Weapon : MonoBehaviour
 
     public IEnumerator Reload(float timeTillAutoReload = 0)
     {
+        if (player.GetComponent<PlayerStats>().GetAmmo() < weaponClipSize - ammoInClip)
+        {
+            Debug.Log("Not enough ammo to reload");
+            //Todo: no more ammo on player
+            yield break;
+        }
         isPreloading = true;
         yield return new WaitForSeconds(timeTillAutoReload);
 
@@ -399,6 +468,19 @@ public class Weapon : MonoBehaviour
     {
         this.player = player;
     }
+
+    public void SetAmmoInClip(int ammoInClip, int level)
+    {
+        this.ammoInClip = ammoInClip;
+        this.weaponLevel = level;
+    }
+
+    public int GetAmmoInClip()
+    {
+        return ammoInClip;
+    }
+
+
 
 
 
@@ -465,12 +547,12 @@ public class Weapon : MonoBehaviour
     {
         this.isEquiped = equipped;
 
-        if(!equipped && lowAmmoIndicator)
+        if (!equipped && lowAmmoIndicator)
         {
             Destroy(lowAmmoIndicatorObj);
             lowAmmoIndicator = false;
         }
-        
+
     }
 
 

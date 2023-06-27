@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47fd8c4480ad2484c87f257d102db949, type: 3}
   m_Name: PF_Laser_Pistol_01
   m_EditorClassIdentifier: 
-  weaponType: 0
-  weaponName: LaserPistol_01
+  weaponType: 1
+  weaponName: Laser_Pistol_01
   weaponPrefab: {fileID: 3622148381374028997, guid: 0da6efb6071811e4482db2c270ee79ea,
     type: 3}
-  weaponOffset: 1
+  weaponOffset: 0
   defaultPositionOffset: {x: 0.149, y: 0.035, z: -0.061}
   defaultRotationOffset: {x: 32.843, y: 107.173, z: -77.405}
   defaultScaleOffset: {x: 1, y: 1, z: 1}
@@ -25,39 +25,41 @@ MonoBehaviour:
   customScaleOffset: {x: 1, y: 1, z: 1}
   FullAuto: 0
   autoReload: 0
-  weaponFireRate: 0
+  weaponFireRate: 0.1
   projectilesPerShot: 1
   weaponDamage: 5
   weaponRange: 100
   weaponReloadTime: 0.5
-  weaponClipSize: 1
+  weaponClipSize: 8
   ammoCostPerShot: 1
-  spreadIncreasePerShot: 0.1
+  spreadIncreasePerShot: 0.05
   minSpread: 0
-  maxSpread: 0
-  recoilRecoveryRate: 0.1
-  recoilRecoveryDelay: 0.3
+  maxSpread: 0.2
+  recoilRecoveryRate: 0.05
+  recoilRecoveryDelay: 0.1
   ammoPrefab: {fileID: 0}
   muzzleFlashPrefab: {fileID: 0}
   muzzleFlashScale: {x: 1, y: 1, z: 1}
-  hitEffectPrefab: {fileID: 0}
+  hitEffectPrefab: {fileID: 3357757399141271759, guid: 719e86b331f051741a8d2b593c1b41e0,
+    type: 3}
   hitEffectScale: {x: 1, y: 1, z: 1}
   shootSound: {fileID: 0}
   reloadSound: {fileID: 0}
   emptySound: {fileID: 0}
-  knockbackForce: 0
+  knockbackForce: 10
   burnDps: 0
   burnDuration: 0
   explosionPrefab: {fileID: 0}
   explosionRadius: 0
   explosionDamageFallOff: 0.7
-  tracerPrefab: {fileID: 0}
-  tracerColor: {fileID: 0}
-  piercingAmount: 0
+  tracerPrefab: {fileID: 8050274072530162843, guid: 72242ada63513024d82ab3cfccfbfd97,
+    type: 3}
+  tracerColor: {fileID: 2100000, guid: b8f7c7679e8e40b40a297a32b3d3ba49, type: 2}
+  piercingAmount: 1
   piercingDamageFallOff: 0.7
   lifeTime: 5
   sticky: 0
-  explodeOnImpact: 0
+  explodeOnImpact: 1
   bounceAmount: 0
   trailPrefab: {fileID: 0}
   projectileMovementType: 0

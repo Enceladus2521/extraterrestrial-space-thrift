@@ -161,6 +161,11 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
+    public int GetAmmo()
+    {
+        return ammo;
+    }
+
     public float GetHealth()
     {
         return health;
