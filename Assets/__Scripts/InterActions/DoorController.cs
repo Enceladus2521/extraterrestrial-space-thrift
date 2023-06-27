@@ -62,4 +62,9 @@ public class DoorController : MonoBehaviour
         GetComponent<Animation>().Play();
         
     }
+
+    public void ToggleDoorLockState(bool Locked)
+    {
+        isLocked = Locked;
+    }
 }
