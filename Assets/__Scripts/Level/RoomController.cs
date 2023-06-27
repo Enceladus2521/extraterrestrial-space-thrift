@@ -5,51 +5,55 @@ using UnityEditor;
 [System.Serializable]
 public class RoomConfig
 {
-    public RoomGenerator.RoomType roomType;
-    public Vector2Int offset;
-    public bool hasDoorUp;
-    public bool hasDoorDown;
-    public bool hasDoorRight;
-    public bool hasDoorLeft;
+    public float gridSize;
+    public RoomController.RoomType roomType;
+    public Vector2 offset;
     public int width;
     public int height;
+    public int seed;
+    public Transform transform;
+    public List<DoorConfig> doorConfigs = new List<DoorConfig>();
 
     public RoomConfig Empty() => new RoomConfig
     {
-        roomType = RoomGenerator.RoomType.Start,
-        offset = Vector2Int.zero,
-        hasDoorUp = false,
-        hasDoorDown = false,
-        hasDoorRight = false,
-        hasDoorLeft = false,
+        roomType = RoomController.RoomType.Start,
+        offset = Vector2.zero,
         width = 1,
-        height = 1
+        height = 1,
+        gridSize = 5,
+        transform = null,
+        seed = 42,
+        doorConfigs = new List<DoorConfig>()
     };
 }
 
-public class RoomGenerator : MonoBehaviour
+[System.Serializable]
+public class DoorConfig
+{
+    public RoomController.WallType attachedWall;
+    public bool isConnected;
+}
+
+public class RoomController : MonoBehaviour
 {
     public List<GameObject> wallTypes;
     public List<GameObject> floorTypes;
     public List<GameObject> singleDoorTypes;
     public List<GameObject> doubleDoorTypes;
-    
     public List<GameObject> interactableTypes;
 
-    public int gridSize = 5;
+    public float gridSize = 5f;
 
     [Range(1, 100)]
     public int width = 2;
     [Range(1, 100)]
     public int height = 2;
+    public int seed = 42;
 
-    public bool hasDoorUp = false;
-    public bool hasDoorDown = false;
-    public bool hasDoorRight = false;
-    public bool hasDoorLeft = false;
+    public List<DoorConfig> doorConfigs = new List<DoorConfig>();
 
-    public int offsetX = 0;
-    public int offsetY = 0;
+    public Vector2 offset = Vector2.zero;
+    Vector2 absOffset = Vector2.zero;
 
     public enum RoomType
     {
@@ -60,6 +64,7 @@ public class RoomGenerator : MonoBehaviour
         Shop
     }
     
+    public AnchorType anchorType = AnchorType.Bottom;
     public RoomType roomType = RoomType.Start;
 
     public enum WallType
@@ -70,48 +75,127 @@ public class RoomGenerator : MonoBehaviour
         Bottom
     }
 
+    public enum AnchorType
+    {
+        Bottom,
+        Center
+    }
+
+    public RoomConfig roomConfig()
+    {
+        RoomConfig roomConfig = new RoomConfig();
+        roomConfig.width = width;
+        roomConfig.height = height;
+        roomConfig.offset = offset;
+        roomConfig.roomType = roomType;
+        roomConfig.doorConfigs = doorConfigs;
+        roomConfig.transform = transform;
+        roomConfig.gridSize = gridSize;
+        roomConfig.seed = seed;
+        return roomConfig;
+
+    }
 
     void Start()
     {
+        Random.InitState(seed);
         // GenerateRoom();
     }
 
-    public void Generate(bool gizmos = false, RoomConfig config = null)
+    public void UpdateConfig(RoomConfig config)
     {
-        // Check if a custom configuration is provided
         if (config == null)
         {
             // If no configuration is provided, use the Empty() method of RoomConfig
             config = new RoomConfig().Empty();
         }
 
-        int offsetX = -(width / 2) * gridSize;
-        int offsetY = -(height / 2) * gridSize;
-        GenerateFloor(offsetX, offsetY, gizmos);
-        GenerateWalls(offsetX, offsetY, gizmos);
-        GenerateInteractables(offsetX, offsetY, gizmos);
+        width = config.width;
+        height = config.height;
+        offset = config.offset;
+        gridSize = config.gridSize;
+        roomType = config.roomType;
+        doorConfigs = config.doorConfigs;
+        transform.position = config.transform.position;
+        seed = config.seed;
+        
     }
 
-    void GenerateInteractables(int offsetX, int offsetY, bool gizmos = false)
-    {
-       
+    public void Generate(bool gizmos = false)
+    {        
+
+        if (anchorType == AnchorType.Center)
+            absOffset = offset + new Vector2(
+                - (width - 2) / 2f,
+                - height / 2f
+            );
+            
+        GenerateFloor(gizmos);
+        GenerateWalls(gizmos);
+        GenerateInteractables(gizmos);
     }
 
-    WallType? GetWallType(Vector2Int position)
+
+    void GenerateInteractables(bool gizmos = false)
+        {
+            // Calculate the number of interactables based on the room's size
+            int interactableCount = width * height / 10; // Adjust this value as needed
+
+            // Spread interactables randomly across the room
+            for (int i = 0; i < interactableCount; i++)
+            {
+                // Randomly select an interactable prefab
+                GameObject interactablePrefab = interactableTypes[Random.Range(0, interactableTypes.Count)];
+
+                // Randomly calculate the position within the room
+                float x = Random.Range(1, width - 1) + absOffset.x;
+                float y = Random.Range(1, height -1) + absOffset.y;
+                Vector3 absPosition = new Vector3(x * gridSize, 0, y * gridSize) + transform.position;
+
+                if (gizmos)
+                {
+                    // Draw interactable gizmos
+                    DrawGizmos(absPosition, Color.yellow, Vector3.one, Quaternion.identity);
+                }
+                else
+                {
+                    // Instantiate and place the interactable prefab
+                    GameObject interactableInstance = Instantiate(interactablePrefab, absPosition, Quaternion.identity);
+                    interactableInstance.transform.SetParent(transform);
+                    interactableInstance.name = $"Interactable_{x}_{y}";
+                }
+            }
+        }
+
+    WallType? GetWallType(Vector2Int gridPosition)
     {
-        if (position.x == -1 && position.y >= 0 && position.y < height)
+        if (gridPosition.x == -1 && gridPosition.y >= 0 && gridPosition.y < height)
             return WallType.Left;
 
-        if (position.x == width && position.y >= 0 && position.y < height)
+        if (gridPosition.x == width && gridPosition.y >= 0 && gridPosition.y < height)
             return WallType.Right;
 
-        if (position.y == -1 && position.x >= 0 && position.x < width)
+        if (gridPosition.y == -1 && gridPosition.x >= 0 && gridPosition.x < width)
             return WallType.Bottom;
 
-        if (position.y == height && position.x >= 0 && position.x < width)
+        if (gridPosition.y == height && gridPosition.x >= 0 && gridPosition.x < width)
             return WallType.Top;
 
         return null;
+    }
+
+    bool hasDoorOnSide(WallType wallType)
+    {
+        bool hasDoor = false;
+
+        for (int i = 0; i < doorConfigs.Count; i++)
+        {
+            if (doorConfigs[i].attachedWall == wallType)
+                hasDoor = true;
+        }
+
+        return hasDoor;
+
     }
 
     bool IsDoor(Vector2Int position, WallType wallType)
@@ -119,83 +203,85 @@ public class RoomGenerator : MonoBehaviour
         int centerPosX = width / 2;
         int centerPosY = height / 2;
 
+        bool hasDoor = hasDoorOnSide(wallType);
+
         if (position.y >= 0 && position.y < height)
         {
             if (position.x == -1 && wallType == WallType.Left)
-                return (hasDoorLeft && (position.y == centerPosY ||(height % 2 == 0 && position.y == centerPosY - 1)));
+                return (hasDoor && (position.y == centerPosY ||(height % 2 == 0 && position.y == centerPosY - 1)));
 
             if (position.x == width && wallType == WallType.Right)
-                return (hasDoorRight && (position.y == centerPosY || (height % 2 == 0 && position.y == centerPosY - 1 )));
+                return (hasDoor && (position.y == centerPosY || (height % 2 == 0 && position.y == centerPosY - 1 )));
         }
 
         if (position.x >= 0 && position.x < width)
         {
             if (position.y == -1 && wallType == WallType.Bottom)
-                return (hasDoorDown && (position.x == centerPosX || (width % 2 == 0 && position.x == centerPosX - 1)));
+                return (hasDoor && (position.x == centerPosX || (width % 2 == 0 && position.x == centerPosX - 1)));
 
             if (position.y == height && wallType == WallType.Top)
-                return (hasDoorUp && (position.x == centerPosX || (width % 2 == 0 && position.x == centerPosX - 1 )));
+                return (hasDoor && (position.x == centerPosX || (width % 2 == 0 && position.x == centerPosX - 1 )));
         }
 
         return false;
     }
 
-    void GenerateWalls(int offsetX, int offsetY, bool gizmos = false)
+    void GenerateWalls(bool gizmos = false)
     {
         for (int x = -1; x <= width; x++)
         {
             for (int y = -1; y <= height; y++)
             {
-                Vector2Int gridPosition = new Vector2Int((x + offsetX) * gridSize, (y + offsetY) * gridSize);
-                Vector2Int position = new Vector2Int(x, y);
+                Vector3 absPosition = new Vector3(((float)x + (float)absOffset.x) * gridSize - gridSize / 2f, 0, ((float)y + (float)absOffset.y) * gridSize + gridSize / 2f);
+                absPosition += transform.position;
+                Vector2Int gridPosition = new Vector2Int(x, y);
 
-                Vector3 pos = new Vector3(gridPosition.x, 0, gridPosition.y) + new Vector3(-gridSize / 2f, 0, gridSize / 2f);
-                WallType? wallType = GetWallType(position);
+                WallType? wallType = GetWallType(gridPosition);
                 
 
                 if (!wallType.HasValue) continue;
 
                 if (gizmos) {
-                    DrawGizmos(pos, Color.blue, new Vector3(1f, 1f, 1f), Quaternion.identity);
+                    DrawGizmos(absPosition, Color.blue, new Vector3(1f, 1f, 1f), Quaternion.identity);
                     string text = wallType.Value == WallType.Left? "Left" : (wallType.Value == WallType.Right? "Right" : (wallType.Value == WallType.Top? "Top" : "Bottom"));
                     text = x + ", " + y + "\n" + text; 
-                    // Draw the text gizmo at the position of the GameObject
-                    Handles.Label(pos + new Vector3(-1, 2, 0), text);
+                    // Draw the text gizmo at the gridPosition of the GameObject
+                    Handles.Label(absPosition + new Vector3(-1, 2, 0), text);
                 }
 
                 switch (wallType.Value)
                 {
                     case WallType.Left:
-                        pos += new Vector3(gridSize / 2f, 0, 0);
+                        absPosition += new Vector3(gridSize / 2f, 0, 0);
                         break;
                     case WallType.Right:
-                        pos -= new Vector3(gridSize / 2f, 0, 0);
+                        absPosition -= new Vector3(gridSize / 2f, 0, 0);
                         break;
                     case WallType.Bottom:
-                        pos += new Vector3(0, 0, gridSize / 2f);
+                        absPosition += new Vector3(0, 0, gridSize / 2f);
                         break;
                     case WallType.Top:
-                        pos -= new Vector3(0, 0, gridSize / 2f);
+                        absPosition -= new Vector3(0, 0, gridSize / 2f);
                         break;
                 }
 
-                if (IsDoor(position, wallType.Value))
+                if (IsDoor(gridPosition, wallType.Value))
                 {
-                    GenerateDoor(pos, wallType.Value, position, gizmos);
+                    GenerateDoor(absPosition, wallType.Value, gridPosition, gizmos);
                 }
                 else
                 {
-                    GenerateWall(pos, wallType.Value, position, gizmos);
+                    GenerateWall(absPosition, wallType.Value, gridPosition, gizmos);
                 }
             }
         }
     }
 
-    void GenerateDoor(Vector3 pos, WallType wallType, Vector2Int position, bool gizmos = false)
+    void GenerateDoor(Vector3 absPosition, WallType wallType, Vector2Int gridPosition, bool gizmos = false)
     {
         GameObject doorPrefab = singleDoorTypes[Random.Range(0, singleDoorTypes.Count)];
         Quaternion doorRotation = Quaternion.identity;
-        Vector3 doorPosition = pos;
+        Vector3 doorPosition = absPosition;
         Vector3 doorScale = new Vector3(gridSize, gridSize, 1f);
 
         switch (wallType)
@@ -227,7 +313,7 @@ public class RoomGenerator : MonoBehaviour
                 
             if ( height % 2 == 0 || width % 2 == 0){
                 if (wallType == WallType.Left || wallType == WallType.Right)
-                    if (height % 2 == 0 && (position.y == (centerPosY)))
+                    if (height % 2 == 0 && (gridPosition.y == (centerPosY)))
                     {
                         if (wallType == WallType.Left)
                             doorPosition += new Vector3(0, 0, -2 * gridSize + (gridSize / 2));
@@ -240,7 +326,7 @@ public class RoomGenerator : MonoBehaviour
                         return;
                     }
                 else if (wallType == WallType.Top || wallType == WallType.Bottom)
-                    if (width % 2 == 0 && (position.x == centerPosX))
+                    if (width % 2 == 0 && (gridPosition.x == centerPosX))
                     {
                         if (wallType == WallType.Top)
                             doorPosition += new Vector3(-2 * gridSize + (gridSize / 2), 0, 0);
@@ -257,12 +343,12 @@ public class RoomGenerator : MonoBehaviour
             if (!Application.isPlaying) return;
             GameObject doorInstance = Instantiate(doorPrefab, doorPosition, doorRotation);
             doorInstance.transform.SetParent(transform);
-            doorInstance.name = $"Door_{position.x}_{position.y}";
+            doorInstance.name = $"Door_{gridPosition.x}_{gridPosition.y}";
         }
     }
 
 
-    void GenerateFloor(int offsetX, int offsetY, bool gizmos = false)
+    void GenerateFloor(bool gizmos = false)
     {
         Color darkGray = new Color(0.05f, 0.05f, 0.05f);
         // Generate the floor tiles
@@ -271,19 +357,20 @@ public class RoomGenerator : MonoBehaviour
             for (int y = 0; y < height; y++)
             {
                 GameObject floorPrefab = floorTypes[Random.Range(0, floorTypes.Count)];
-                Vector3 position = new Vector3((x + offsetX) * gridSize, 0, (y + offsetY) * gridSize);
+                Vector3 absPosition = new Vector3((x + absOffset.x) * gridSize, 0, (y + absOffset.y) * gridSize);
+                absPosition += transform.position;
                 Quaternion rotation = Quaternion.identity;
 
                 if (gizmos)
                 {
                     Vector3 scale = new Vector3(gridSize, 1f, gridSize);
-                    position += new Vector3(-gridSize / 2f, 0, gridSize / 2f);
-                    DrawGizmos(position, darkGray, scale, rotation);
+                    absPosition += new Vector3(-gridSize / 2f, 0, gridSize / 2f);
+                    DrawGizmos(absPosition, darkGray, scale, rotation);
                 }
                 else
                 {   
                     if (!Application.isPlaying) return;
-                    GameObject floorInstance = Instantiate(floorPrefab, position, rotation);
+                    GameObject floorInstance = Instantiate(floorPrefab, absPosition, rotation);
                     floorInstance.transform.SetParent(transform);
                     floorInstance.name = $"Floor_{x}_{y}";
                 }
@@ -291,11 +378,11 @@ public class RoomGenerator : MonoBehaviour
         }
     }
 
-    void GenerateWall(Vector3 pos, WallType wallType, Vector2Int position, bool gizmos = false)
+    void GenerateWall(Vector3 absPosition, WallType wallType, Vector2Int gridPosition, bool gizmos = false)
     {
         GameObject wallPrefab = wallTypes[Random.Range(0, wallTypes.Count)];
         Quaternion wallRotation = Quaternion.identity;
-        Vector3 wallPosition = pos;
+        Vector3 wallPosition = absPosition;
 
         Vector3 wallScale = new Vector3(gridSize, gridSize, 1f);
 
@@ -344,20 +431,22 @@ public class RoomGenerator : MonoBehaviour
             if (!Application.isPlaying) return;
             GameObject wallInstance = Instantiate(wallPrefab, wallPosition, wallRotation);
             wallInstance.transform.SetParent(transform);
-            wallInstance.name = $"Wall_{position.x}_{position.y}";
+            wallInstance.name = $"Wall_{gridPosition.x}_{gridPosition.y}";
         }
     }
 
-    void DrawGizmos(Vector3 position, Color color, Vector3 scale, Quaternion rotation)
+    void DrawGizmos(Vector3 absPosition, Color color, Vector3 scale, Quaternion rotation)
     {
         Gizmos.color = color;
-        Gizmos.matrix = Matrix4x4.TRS(position, rotation, scale);
+        Gizmos.matrix = Matrix4x4.TRS(absPosition, rotation, scale);
         Gizmos.DrawCube(Vector3.zero, Vector3.one);
         Gizmos.matrix = Matrix4x4.identity;
     }
 
     void OnDrawGizmos()
     {
+        Random.InitState(seed);
         Generate(gizmos: true);
+
     }
 }
