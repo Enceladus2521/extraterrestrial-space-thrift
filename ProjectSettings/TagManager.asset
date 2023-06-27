@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ground
   - Camera
+  - enemy
   layers:
   - Default
   - TransparentFX
@@ -23,16 +24,16 @@ TagManager:
   - Player4
   - 
   - 
+  - AutoPickUp
+  - 
+  - ground
+  - wall
   - 
   - 
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - enemy
   - 
   - 
   - 

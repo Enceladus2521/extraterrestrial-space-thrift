@@ -12,42 +12,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47fd8c4480ad2484c87f257d102db949, type: 3}
   m_Name: PF_Laser_Pistol_01
   m_EditorClassIdentifier: 
-  weaponType: 1
-  weaponOffset: 0
-  weaponName: PF_Laser_Pistol_01
+  weaponType: 0
+  weaponName: LaserPistol_01
   weaponPrefab: {fileID: 3622148381374028997, guid: 0da6efb6071811e4482db2c270ee79ea,
     type: 3}
-  defaultPositionOffset: {x: 0, y: 0, z: 0}
-  defaultRotationOffset: {x: 0, y: 0, z: 0}
+  weaponOffset: 1
+  defaultPositionOffset: {x: 0.149, y: 0.035, z: -0.061}
+  defaultRotationOffset: {x: 32.843, y: 107.173, z: -77.405}
   defaultScaleOffset: {x: 1, y: 1, z: 1}
   customPositionOffset: {x: 0, y: 0, z: 0}
   customRotationOffset: {x: 0, y: 0, z: 0}
   customScaleOffset: {x: 1, y: 1, z: 1}
-  weaponDamage: 0
-  weaponRange: 0
+  FullAuto: 0
+  autoReload: 0
   weaponFireRate: 0
-  weaponReloadTime: 0
-  weaponMagSize: 0
-  ammoCostPerShot: 0
-  bulletPrefab: {fileID: 0}
-  canRicochet: 0
-  ricochetAmount: 0
-  laserPrefab: {fileID: 0}
-  canBurn: 0
+  projectilesPerShot: 1
+  weaponDamage: 5
+  weaponRange: 100
+  weaponReloadTime: 0.5
+  weaponClipSize: 1
+  ammoCostPerShot: 1
+  spreadIncreasePerShot: 0.1
+  minSpread: 0
+  maxSpread: 0
+  recoilRecoveryRate: 0.1
+  recoilRecoveryDelay: 0.3
+  ammoPrefab: {fileID: 0}
+  muzzleFlashPrefab: {fileID: 0}
+  muzzleFlashScale: {x: 1, y: 1, z: 1}
+  hitEffectPrefab: {fileID: 0}
+  hitEffectScale: {x: 1, y: 1, z: 1}
+  shootSound: {fileID: 0}
+  reloadSound: {fileID: 0}
+  emptySound: {fileID: 0}
+  knockbackForce: 0
   burnDps: 0
-  shotgunPrefab: {fileID: 0}
-  shotgunPellets: 0
-  shotgunSpreadAngle: 0
-  canNockBack: 0
-  knockBackForce: 0
-  sniperPrefab: {fileID: 0}
-  canPierce: 0
-  pierceAmount: 0
-  projectilePrefab: {fileID: 0}
-  projectileSpeed: 0
-  projectileLifeTime: 0
+  burnDuration: 0
+  explosionPrefab: {fileID: 0}
   explosionRadius: 0
-  electricPrefab: {fileID: 0}
-  electricChainAmount: 0
-  electricChainRange: 0
-  electricChainDamageFallOff: 0.7
+  explosionDamageFallOff: 0.7
+  tracerPrefab: {fileID: 0}
+  tracerColor: {fileID: 0}
+  piercingAmount: 0
+  piercingDamageFallOff: 0.7
+  lifeTime: 5
+  sticky: 0
+  explodeOnImpact: 0
+  bounceAmount: 0
+  trailPrefab: {fileID: 0}
+  projectileMovementType: 0
+  constantForce: 0
+  impulseForce: 0
+  gravityMultiplier: 1

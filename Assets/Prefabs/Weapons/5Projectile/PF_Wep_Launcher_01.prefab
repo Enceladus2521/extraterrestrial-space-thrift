@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3938338714717433434
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8831217803066221333}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8831217803066221333
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3938338714717433434}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.223, z: 1.332}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6140786876301146115}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6137500361488293057
 GameObject:
   m_ObjectHideFlags: 0
@@ -119,6 +150,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6135917228493079913}
+  - {fileID: 8831217803066221333}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -228,6 +260,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponObj: {fileID: 11400000, guid: 18d9129b35c080d49a1e8b7a9edbc48e, type: 2}
+  barrelTip: {fileID: 8831217803066221333}
+  timeTillAutoReload: 1
+  individualWeaponData:
+    level: 0
+    ammoInClip: 0
+    rarity: 0
+  shooting: 0
+  reloading: 0
+  isPreloading: 0
+  ammoInClip: 0
+  currentRecoil: 0
 --- !u!114 &6136534585244022404
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,7 +284,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AutoTrigger: 0
-  InteractOnce: 1
+  InteractOnce: 0
   Player: {fileID: 0}
   interactRange: 1
   interactOffset: {x: 0, y: 0, z: 0}

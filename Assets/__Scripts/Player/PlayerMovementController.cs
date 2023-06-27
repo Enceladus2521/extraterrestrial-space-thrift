@@ -92,11 +92,16 @@ public class PlayerMovementController : MonoBehaviour
         if(isGrounded)
         {
             rb.velocity = new Vector3(moveVelocity.x, 0, moveVelocity.z);
-        }
-
-        
+        } 
         
                
+    }
+
+    public Vector3 PlayerLookPosition()
+    {        
+        Vector3 pos5infront = transform.position + transform.forward * 5f;
+        Vector3 pos5infront1up = new Vector3(pos5infront.x, pos5infront.y + 1.5f, pos5infront.z);
+        return pos5infront1up;        
     }
 
     private void RotatePlayer()

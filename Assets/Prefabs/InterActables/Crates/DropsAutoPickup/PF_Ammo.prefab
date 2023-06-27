@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5722384464066463496}
   - component: {fileID: 5722384464066463497}
   - component: {fileID: 5722384464066463511}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: PF_Ammo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -128,6 +128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AutoTrigger: 1
   InteractOnce: 1
+  Player: {fileID: 0}
   interactRange: 4
   interactOffset: {x: 0, y: 0, z: 0}
   events:

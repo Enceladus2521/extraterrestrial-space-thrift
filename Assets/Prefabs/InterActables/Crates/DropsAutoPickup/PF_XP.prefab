@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6683505696316142704}
   - component: {fileID: 6683505696316142705}
   - component: {fileID: 6683505696316142706}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: PF_XP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,6 +114,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AutoTrigger: 1
   InteractOnce: 1
+  Player: {fileID: 0}
   interactRange: 4
   interactOffset: {x: 0, y: 0, z: 0}
   events:

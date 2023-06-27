@@ -53,14 +53,14 @@ public class PlayerInputManager : MonoBehaviour
     public void OnShootStart()
     {
         //Todo: Start shooting
-        //_weaponController.ShootStart();
+        _weaponController.ShootStart();
         
     }
 
     public void OnShootStop()
     {
         //Todo: Stop shooting
-        //_weaponController.ShootEnd();
+        _weaponController.ShootEnd();
     }
     
     private void OnHot1()

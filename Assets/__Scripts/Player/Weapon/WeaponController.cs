@@ -32,6 +32,7 @@ public class WeaponController : MonoBehaviour
     [SerializeField] private WeaponObj currentWeapon;
 
     [SerializeField] private GameObject currentWeaponInstance;
+    private Weapon currentWeaponScript;
 
 
     private void Start()
@@ -167,6 +168,7 @@ public class WeaponController : MonoBehaviour
         //returns if weapon is null
         if (currentWeapon == null) return;
 
+        currentWeaponInstance.GetComponent<Weapon>().SetEquipped(false);
 
         GameObject oldWeapon = null;
         oldWeapon = currentWeaponInstance;
@@ -231,7 +233,7 @@ public class WeaponController : MonoBehaviour
 
         //set current weapon to null
         currentWeapon = null;
-        
+
         currentWeaponInstance = null;
 
         switch (currentWeaponNumber)
@@ -271,10 +273,11 @@ public class WeaponController : MonoBehaviour
 
         if (weaponPrefab != null)
         {
+            
             //instantiates weapon prefab as child of hand
             GameObject weapon = Instantiate(weaponPrefab, hand.transform.position, hand.transform.rotation);
             weapon.transform.parent = hand;
-
+            weapon.GetComponent<Weapon>().SetEquipped(true);
 
             //sets weapon offset based on weapon offset type
             switch ((int)currentWeapon.weaponOffset)
@@ -313,6 +316,14 @@ public class WeaponController : MonoBehaviour
             {
                 currentWeaponInstance.GetComponent<Interacter>().enabled = false;
             }
+
+            //set player and player
+            if (currentWeaponInstance.GetComponent<Weapon>() != null)
+            {
+                currentWeaponScript = currentWeaponInstance.GetComponent<Weapon>();
+                currentWeaponScript.SetPlayer(gameObject);
+                currentWeaponScript.LoadWeaponData();
+            }
         }
 
 
@@ -348,13 +359,26 @@ public class WeaponController : MonoBehaviour
 
     public void Reload()
     {
-        if (currentWeapon != null)
-        {
-            //TODO:  reload 
+        if (currentWeapon != null && currentWeaponScript.CanReload())
+        {            
             GetComponent<PlayerAnimationController>().ReciveReload();
-
-
+            StartCoroutine(currentWeaponScript.Reload());
         }
     }
 
+    public void ShootStart()
+    {
+        if (currentWeaponInstance != null)
+        {            
+            currentWeaponScript.SetShooting(true);
+        }
+    }
+
+    public void ShootEnd()
+    {
+        if (currentWeaponInstance != null)
+        {
+            currentWeaponScript.SetShooting(false);
+        }
+    }
 }
