@@ -41,7 +41,7 @@ public class MapController : MonoBehaviour
         Debug.Log("ClearMap");
         roomConfigs = new List<Room>();
         lastRoomPosition = Vector3.zero;
-        // delete all roomsGenerated gameobjects
+        // delete all roomsGenerated game objects
         foreach (RoomController room in roomsGenerated)
         {
             DestroyImmediate(room.gameObject);

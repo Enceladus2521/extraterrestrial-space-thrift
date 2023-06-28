@@ -312,8 +312,10 @@ public class Weapon : MonoBehaviour
         //on enemy hit
         if (!hit.collider.gameObject.CompareTag("enemy")) return;
 
-        Debug.Log("Hit Enemy");
-        //Todo: damage enemy          
+
+        // try to get EntityController
+        EntityController enemy = hit.collider.gameObject.GetComponent<EntityController>();
+        if (enemy != null) enemy.TakeDamage(damage);
 
         //Todo: add burn to enemy spawn burn effect Prefab and child it to enemy set data for burn effect
 

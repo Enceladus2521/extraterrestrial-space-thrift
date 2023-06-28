@@ -9,7 +9,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1955359842664828, guid: 0673712eb017e12429d3a9274660b92c, type: 3}
       propertyPath: m_Name
-      value: SM_Prop_Drone_01
+      value: SM_Prop_Drone_01 Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 1955359842664828, guid: 0673712eb017e12429d3a9274660b92c, type: 3}
+      propertyPath: m_TagString
+      value: enemy
       objectReference: {fileID: 0}
     - target: {fileID: 4634033696643614, guid: 0673712eb017e12429d3a9274660b92c, type: 3}
       propertyPath: m_RootOrder
@@ -79,7 +83,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1732545811
+--- !u!114 &2237122268416087509
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -88,7 +92,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8766976142266897041}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8245c2bab255c5075b8921f5272bb48a, type: 3}
+  m_Script: {fileID: 11500000, guid: 63561b72e8958f799894211b8db06b5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stats: {fileID: 11400000, guid: ff8aece9b91843ddbb358271cac931d5, type: 2}
+  entityStats: {fileID: 11400000, guid: 3b4e13daa40a3b01dbe5a89f8eb6f1fd, type: 2}

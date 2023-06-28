@@ -12,11 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f50b658039c6e430c80b6e05a83de36e, type: 3}
   m_Name: Drone
   m_EditorClassIdentifier: 
-  speed: 3
-  canFly: 1
-  flyingAltitude: 1
-  canShoot: 1
-  shootingDamage: 5
-  hasMelee: 0
-  meleeDamage: 0
-  maintainsDistance: 1
+  movementStats:
+    maxSpeed: 0
+    speed: 2
+    flyingAltitude: 1
+    maintainDistance: 2.65
+    viewAngle: 90
+    turnSpeed: 2.05
+    viewRange: 10
+    isStunned: 0
+  combatStats:
+    canShoot: 1
+    shootingDamage: 5
+    hasMelee: 0
+    meleeDamage: 0
+    projectile: {fileID: 0}
+  healthStats:
+    maxHealth: 10.22
+    healthRegenerationRate: 0
+    health: 0
+    armor: 0
+    isAlive: 0
+  inventoryStats:
+    maxCapacity: 0
+    currentCapacity: 0

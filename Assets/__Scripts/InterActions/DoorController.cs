@@ -70,7 +70,6 @@ public class DoorController : MonoBehaviour
         }
 
         isOpen = true;
-        Debug.Log("Open Door");
 
         // Play open animation
         doorAnimation.clip = openAnimation;
@@ -96,7 +95,6 @@ public class DoorController : MonoBehaviour
     public void CloseDoor()
     {
         isOpen = false;
-        Debug.Log("Close Door");
 
         // Play close animation
         doorAnimation.clip = closeAnimation;

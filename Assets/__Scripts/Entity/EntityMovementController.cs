@@ -1,23 +1,28 @@
 using UnityEngine;
-using System.Collections.Generic;
 
-public class EntityMovementController : MonoBehaviour
+public class EntityMovementController
 {
-    public EntityStats stats;
+    private EntityController entityController;
+    private MovementStats stats;
     private Rigidbody rb;
     private Transform target;
+    private CapsuleCollider capsuleCollider;
 
-    private void Start()
+    public EntityMovementController(EntityController entityController, MovementStats stats)
     {
-        rb = GetComponent<Rigidbody>();
-        FindClosestPlayer();
+        this.entityController = entityController;
+        this.stats = stats;
+        rb = entityController.GetComponent<Rigidbody>();
+        capsuleCollider = entityController.GetComponent<CapsuleCollider>();
+        AdjustColliderHeight();
     }
 
-    private void Update()
+    public void Update()
     {
         if (target != null)
         {
-            if (stats.canFly)
+            // Implement movement logic here based on the stats and target
+            if (stats.flyingAltitude > 0f)
             {
                 Fly();
             }
@@ -26,7 +31,7 @@ public class EntityMovementController : MonoBehaviour
                 MoveToTarget();
             }
 
-            if (stats.maintainsDistance)
+            if (stats.maintainDistance > 0f)
             {
                 MaintainDistance();
             }
@@ -39,9 +44,17 @@ public class EntityMovementController : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    public void FixedUpdate()
     {
         MoveEntity();
+    }
+
+    private void MoveEntity()
+    {
+        if (target == null) return;
+        Vector3 moveDirection = target.position - rb.position;
+        Vector3 velocity = moveDirection.normalized * stats.speed;
+        rb.velocity = velocity;
     }
 
     private void MoveToTarget()
@@ -55,6 +68,17 @@ public class EntityMovementController : MonoBehaviour
     {
         Vector3 newPosition = new Vector3(rb.position.x, stats.flyingAltitude, rb.position.z);
         rb.position = newPosition;
+        AdjustColliderHeight();
+    }
+
+    private void AdjustColliderHeight()
+    {
+        if (capsuleCollider != null)
+        {
+            float desiredHeight = stats.flyingAltitude * 2f;
+            capsuleCollider.height = desiredHeight;
+            capsuleCollider.center = new Vector3(0f, desiredHeight * 0.5f, 0f);
+        }
     }
 
     private void LookAtTarget()
@@ -67,45 +91,46 @@ public class EntityMovementController : MonoBehaviour
     private void MaintainDistance()
     {
         float currentDistance = Vector3.Distance(rb.position, target.position);
-        if (currentDistance < stats.distance)
+        if (currentDistance < stats.maintainDistance)
         {
             // Move away from the target
             Vector3 moveDirection = (rb.position - target.position).normalized;
-            rb.position += moveDirection * (stats.distance - currentDistance);
+            rb.position += moveDirection * (stats.maintainDistance - currentDistance);
         }
     }
 
-    private void MoveEntity()
+    private void FindClosestPlayer()
     {
-        if (target == null) return;
-        Vector3 moveDirection = target.position - rb.position;
-        Vector3 velocity = moveDirection.normalized * stats.speed;
-        rb.velocity = velocity;
-    }
-
-   private void FindClosestPlayer()
-{
-    List<GameObject> players = GameManager.Instance?.GameState?.getPlayers();
-    if (players != null && players.Count > 0)
-    {
-        float closestDistance = Mathf.Infinity;
-        GameObject closestPlayer = null;
-
-        foreach (GameObject player in players)
-        {
-            float distance = Vector3.Distance(transform.position, player.transform.position);
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closestPlayer = player;
-            }
-        }
-
+        Transform closestPlayer = entityController.GetClosestPlayer();
         if (closestPlayer != null)
         {
-            target = closestPlayer.transform;
+            target = closestPlayer;
+        }
+        else
+        {
+            // Handle the case when the target player is null
+            // For example, you can stop moving or perform any necessary actions
+            // You can also log a message for debugging purposes
         }
     }
-}
 
+    // Visualize the view range and view angle in the Scene view
+    private void OnDrawGizmosSelected()
+    {
+        if (stats.viewRange > 0f)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(rb.position, stats.viewRange);
+        }
+
+        if (stats.viewAngle > 0f)
+        {
+            Vector3 leftDir = Quaternion.Euler(0f, -stats.viewAngle * 0.5f, 0f) * rb.transform.forward;
+            Vector3 rightDir = Quaternion.Euler(0f, stats.viewAngle * 0.5f, 0f) * rb.transform.forward;
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawRay(rb.position, leftDir * stats.viewRange);
+            Gizmos.DrawRay(rb.position, rightDir * stats.viewRange);
+        }
+    }
 }
