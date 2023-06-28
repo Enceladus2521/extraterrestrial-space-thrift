@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 695f75a614288854db1ac9267184f961, type: 3}
+  m_Name: Basic
+  m_EditorClassIdentifier: Assembly-CSharp::RoomInternal
+  wallTypes:
+  - {fileID: 1814321836418854, guid: 81b74d56cb4f9a54dad9ce387b742bcd, type: 3}
+  floorTypes:
+  - {fileID: 1459748652104686, guid: 3ecb939ff436ba84295af759ce0365a6, type: 3}
+  singleDoorTypes:
+  - {fileID: 4806589984447475723, guid: ba23d7fec517400439f97e3c170f7933, type: 3}
+  doubleDoorTypes:
+  - {fileID: 1533665238825324, guid: f503f34f626ff76b19a5499514822e37, type: 3}
+  interactableTypes:
+  - {fileID: 5722448691214944898, guid: 90080332bd97bf34fbd341fe6ceda8dd, type: 3}
+  - {fileID: 4021108159534978569, guid: 80f2de443d84ad94aa2637f29230e6e3, type: 3}
+  - {fileID: 7882638954089525130, guid: e874ab73de444d4419de2087868b2e2d, type: 3}
+  - {fileID: 6781292966255158772, guid: ea7bd2bbff30d75439551fb4dc43b5a1, type: 3}
+  - {fileID: 871929964373942017, guid: c25006333a67d644fbff0fe21568e4be, type: 3}
+  - {fileID: 9066321273246494692, guid: 4ad571bd921274d4891a48ec702ee28d, type: 3}

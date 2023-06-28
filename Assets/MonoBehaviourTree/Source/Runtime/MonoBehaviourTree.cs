@@ -41,7 +41,7 @@ namespace MBT
             Node[] nodes = GetComponents<Node>();
             if(masterTree == this)
             {
-                // Create lists with capicity
+                // Create lists with capacity
                 executionStack = new List<Node>(8);
                 executionLog = new List<Node>(nodes.Length);
                 // Set start node when tree is created first time
@@ -97,7 +97,7 @@ namespace MBT
             int nodeIndex = abortingNode.runtimePriority - 1;
             // Sanity check
             if (abortingNode != executionLog[nodeIndex]) {
-                Debug.LogWarning("Priority of node does not match with exectuion log");
+                Debug.LogWarning("Priority of node does not match with execution log");
             }
             // Abort nodes in log
             ResetNodesTo(abortingNode, true);
@@ -299,7 +299,7 @@ namespace MBT
                 if (transform.parent == null || parent.gameObject != transform.parent.gameObject)
                 {
                     // parent = null;
-                    Debug.LogWarning("Parent tree should be also parent of this gameobject.", this.gameObject);
+                    Debug.LogWarning("Parent tree should be also parent of this game object.", this.gameObject);
                 }
             }
         }

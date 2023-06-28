@@ -7,8 +7,6 @@ public class MapConfig
     public int maxHeight;
     public int maxWidth;
     public int seed;
-    [Range(1, 100)]
-    public int rooms;
 }
 
 public class MapController : MonoBehaviour
@@ -19,97 +17,156 @@ public class MapController : MonoBehaviour
     public MapConfig mapConfig;
 
     [SerializeField]
-    List<RoomConfig> roomConfigs = new List<RoomConfig>();
+    List<Room> roomConfigs = new List<Room>();
 
+    [SerializeField]
+    List<RoomController> roomsGenerated = new List<RoomController>();
+
+    [SerializeField]
+    public float roomGenerationDistance = 0.5f;
+
+    private Vector3 lastRoomPosition = Vector2.zero;
+    private GameObject map = null;
 
     void Start()
     {
+        map = new GameObject("Map");
+        Random.InitState(mapConfig.seed);
         UnityEngine.Random.InitState(mapConfig.seed);
-        GenerateRoomConfigs();
-        GenerateMap();
+        GenerateNewRoomConfig();
     }
 
-
-    private void GenerateRoomConfigs()
+    private void ClearMap()
     {
-        RoomConfig currentRoom = initialRoom.roomConfig(    );
-        roomConfigs.Clear();
-        roomConfigs.Add(currentRoom);
-        GenerateRoomsRecursive(currentRoom);
+        Debug.Log("ClearMap");
+        roomConfigs = new List<Room>();
+        lastRoomPosition = Vector3.zero;
+        // delete all roomsGenerated gameobjects
+        foreach (RoomController room in roomsGenerated)
+        {
+            DestroyImmediate(room.gameObject);
+        }
+        roomsGenerated = new List<RoomController>();
+        DestroyImmediate(map);
+        map = null;
     }
 
     private void GenerateMap()
     {
-        GameObject map = new GameObject("Map");
-
-        // Generate Childrens for Initial Room
-        for (int i = 0; i < mapConfig.rooms; i++)
+        for (int i = 0; i < roomConfigs.Count; i++)
         {
-            RoomConfig localRoomConfig = roomConfigs[i];
-            GameObject room = Instantiate(localRoomConfig.transform.gameObject);
-            room.transform.parent = map.transform;
-            room.name = localRoomConfig.roomType.ToString() + " (" + localRoomConfig.offset.x + ", " + localRoomConfig.offset.y + ")";       
-            // room.AddComponent<RoomController>();
-
-            RoomController roomController = room.GetComponent<RoomController>();
-            roomController.UpdateConfig(localRoomConfig);
-            roomController.Generate();
-
-            // roomConfigs.Add(RoomController.roomConfig());
-        
-                // Instantiate(roomConfigs[i].transform);
+            GenerateRoom(roomConfigs[i]);
         }
     }
 
-    private void GenerateRoomsRecursive(RoomConfig currentRoom)
+    private void UpdateMap()
     {
 
-        float spacingBetweenRooms = 0; 
-
-        if (roomConfigs.Count >= mapConfig.rooms)
+        if (roomsGenerated.Count < roomConfigs.Count)
+        {   
+            GenerateRoom(roomConfigs[roomsGenerated.Count]);
             return;
-        List<DoorConfig> unconnectedDoors = GetUnconnectedDoors(currentRoom);
+        }
+
+        if (roomsGenerated.Count > roomConfigs.Count)
+        {
+            Debug.LogWarning("Generated Room: " + roomsGenerated.Count + " / " + roomConfigs.Count);
+            ClearMap();
+            GenerateRoom(roomConfigs[0]);
+            return;
+        }
+    }
+
+    void GenerateRoom(Room localRoomConfig)
+    {
+        GameObject room = Instantiate(localRoomConfig.transform.gameObject);
+        room.transform.parent = map.transform;
+        room.name = localRoomConfig.roomType.ToString() + " (" + localRoomConfig.offset.x + ", " + localRoomConfig.offset.y + ")";
+        RoomController roomController = room.GetComponent<RoomController>();
+        roomsGenerated.Add(roomController);
+        roomController.UpdateConfig(localRoomConfig);
+        roomController.Generate();
+        lastRoomPosition = new Vector3(localRoomConfig.offset.x * localRoomConfig.gridSize, 0f, localRoomConfig.offset.y * localRoomConfig.gridSize);
+    }
+
+    private void Update()
+    {
+        Vector3 avgPlayerPos = new Vector3(0f, 0f, 0f);
+        List<GameObject> players = GameManager.Instance?.GameState?.getPlayers();
+        if (players.Count > 0){
+            for (int i = 0; i < players.Count; i++)
+            {
+                avgPlayerPos += players[i].transform.position;
+            } 
+            avgPlayerPos /= players.Count;
+        }
+
+        float distance = Vector3.Distance(avgPlayerPos, lastRoomPosition);
+
+        if (distance < (roomGenerationDistance ))
+        {
+            GenerateNewRoomConfig();
+        }
+        if (roomsGenerated.Count != roomConfigs.Count) UpdateMap();
+    }
+
+
+    private void GenerateNewRoomConfig()
+    {   
+        Room currentRoom;
+        if (roomConfigs.Count == 0) {
+            currentRoom = initialRoom.roomConfig;
+            foreach (Door door in currentRoom.doorConfigs)
+            {
+                door.isConnected = false;
+            }
+            roomConfigs.Add(currentRoom);
+        }else{
+            currentRoom = roomConfigs[roomConfigs.Count - 1];
+        }
+
+        List<Door> unconnectedDoors = GetUnconnectedDoors(currentRoom);
         if (unconnectedDoors.Count == 0)
-            return;
-        int targetRooms = mapConfig.rooms - roomConfigs.Count;
-        int roomsToGenerate = Mathf.Min(targetRooms, unconnectedDoors.Count);
-
-        for (int i = 0; i < roomsToGenerate; i++)
         {
-            RoomConfig newRoomConfig = new RoomConfig();
-            newRoomConfig.width = Random.Range(1, mapConfig.maxWidth + 1);
-            newRoomConfig.height = Random.Range(1, mapConfig.maxHeight + 1);
-            newRoomConfig.offset = new Vector3(
-                currentRoom.offset.x + currentRoom.width / 2f + newRoomConfig.width / 2f, 
-                0, 
-                currentRoom.offset.y
-            );
-            newRoomConfig.roomType = RoomController.RoomType.Basic;
-            newRoomConfig.transform = currentRoom.transform;
-            newRoomConfig.gridSize = currentRoom.gridSize;
-            newRoomConfig.seed = currentRoom.seed + i;
-            roomConfigs.Add(newRoomConfig);
-
-            DoorConfig doorLeft = new DoorConfig();
-            doorLeft.isConnected = true;
-            newRoomConfig.doorConfigs.Add(doorLeft);
-
-            DoorConfig doorRight = new DoorConfig();
-            doorRight.isConnected = true;
-            newRoomConfig.doorConfigs.Add(doorRight);
-
-            currentRoom = newRoomConfig;
-
-            GenerateRoomsRecursive(newRoomConfig);
+            Debug.Log("No Unconnected Doors");
+            return;
         }
 
+        Room newRoomConfig = new Room();
 
+        newRoomConfig.width =  Random.Range(1, mapConfig.maxWidth + 1);
+        newRoomConfig.height = Random.Range(1, mapConfig.maxHeight + 1);
+        newRoomConfig.offset = new Vector3(
+            currentRoom.offset.x + currentRoom.width / 2f + newRoomConfig.width / 2f,
+            0,
+            currentRoom.offset.y
+        );
+        newRoomConfig.roomType = Room.RoomType.Basic;
+        newRoomConfig.internalConfig = currentRoom.internalConfig;
+        newRoomConfig.transform = currentRoom.transform;
+        newRoomConfig.gridSize = currentRoom.gridSize;
+        newRoomConfig.seed = currentRoom.seed + (roomConfigs.Count + 1);
+
+        Door doorLeft = new Door();
+        doorLeft.isConnected = false;
+        doorLeft.wallType = Wall.WallType.Left;
+        newRoomConfig.doorConfigs.Add(doorLeft);
+
+        Door doorRight = new Door();
+        doorRight.isConnected = false;
+        doorRight.wallType = Wall.WallType.Right;
+        newRoomConfig.doorConfigs.Add(doorRight);
+
+
+        Room roomLeft = roomConfigs[roomConfigs.Count - 1];
+        roomConfigs.Add(newRoomConfig);
+        roomLeft.Connect(doorLeft);
     }
 
-    private List<DoorConfig> GetUnconnectedDoors(RoomConfig roomConfig)
+    private List<Door> GetUnconnectedDoors(Room roomConfig)
     {
-        List<DoorConfig> unconnectedDoors = new List<DoorConfig>();
-        foreach (DoorConfig door in roomConfig.doorConfigs)
+        List<Door> unconnectedDoors = new List<Door>();
+        foreach (Door door in roomConfig.doorConfigs)
         {
             if (!door.isConnected)
                 unconnectedDoors.Add(door);
@@ -117,28 +174,30 @@ public class MapController : MonoBehaviour
         return unconnectedDoors;
     }
 
-    private RoomConfig GetRandomRoomConfig()
+    private Room GetRandomRoomConfig()
     {
         return roomConfigs[UnityEngine.Random.Range(0, roomConfigs.Count)];
     }
 
     void OnDrawGizmos()
     {
-        foreach (RoomConfig roomConfig in roomConfigs)
+        foreach (Room roomConfig in roomConfigs)
         {
             Vector3 pos = roomConfig.transform.position;
             pos += new Vector3(roomConfig.offset.x * roomConfig.gridSize, 0, roomConfig.offset.y * roomConfig.gridSize);
-            Vector3 scale = new Vector3(roomConfig.width, 1f,  roomConfig.height) * roomConfig.gridSize;
+            Vector3 scale = new Vector3(roomConfig.width, 1f, roomConfig.height) * roomConfig.gridSize;
             Gizmos.DrawWireCube(pos, scale);
             Gizmos.color = Color.green;
-
         }
+
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(lastRoomPosition, roomGenerationDistance);
     }
 
 
     void OnValidate()
     {
-        GenerateRoomConfigs();
+        roomConfigs = new List<Room>();
     }
 
 }
