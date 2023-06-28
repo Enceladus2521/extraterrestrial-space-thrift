@@ -77,6 +77,7 @@ public class EntityMovementController : MonoBehaviour
 
     private void MoveEntity()
     {
+        if (target == null) return;
         Vector3 moveDirection = target.position - rb.position;
         Vector3 velocity = moveDirection.normalized * stats.speed;
         rb.velocity = velocity;

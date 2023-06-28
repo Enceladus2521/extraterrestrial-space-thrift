@@ -349,6 +349,10 @@ MonoBehaviour:
   autoCloseTime: 3
   openAnimation: {fileID: 7400000, guid: 02b38b22ed1bbd4478cee45b64de8462, type: 2}
   closeAnimation: {fileID: 7400000, guid: f3a3b20a7818f12478ce871b0e2a212a, type: 2}
+  openAudio: {fileID: 0}
+  closeAudio: {fileID: 0}
+  audioMixerGroup: FX
+  mixerGroup: {fileID: 0}
 --- !u!114 &7399613573009691308
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -80,6 +80,8 @@ public class MapController : MonoBehaviour
     void GenerateRoom(Room localRoomConfig)
     {
         GameObject room = Instantiate(localRoomConfig.transform.gameObject);
+        if (room == null) return;
+        if (map == null) return;
         room.transform.parent = map.transform;
         room.name = localRoomConfig.roomType.ToString() + " (" + localRoomConfig.offset.x + ", " + localRoomConfig.offset.y + ")";
         RoomController roomController = room.GetComponent<RoomController>();
@@ -93,13 +95,14 @@ public class MapController : MonoBehaviour
     {
         Vector3 avgPlayerPos = new Vector3(0f, 0f, 0f);
         List<GameObject> players = GameManager.Instance?.GameState?.getPlayers();
-        if (players.Count > 0){
-            for (int i = 0; i < players.Count; i++)
-            {
-                avgPlayerPos += players[i].transform.position;
-            } 
-            avgPlayerPos /= players.Count;
-        }
+        if (players != null)
+            if (players.Count > 0){
+                for (int i = 0; i < players.Count; i++)
+                {
+                    avgPlayerPos += players[i].transform.position;
+                } 
+                avgPlayerPos /= players.Count;
+            }
 
         float distance = Vector3.Distance(avgPlayerPos, lastRoomPosition);
 
