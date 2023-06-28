@@ -205,7 +205,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 11400000, guid: ff8aece9b91843ddbb358271cac931d5, type: 2}
-  target: {fileID: 0}
 --- !u!54 &1732545816
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -374,6 +373,18 @@ MonoBehaviour:
   roomConfigs: []
   roomsGenerated: []
   roomGenerationDistance: 42
+--- !u!114 &2588950117442425903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2588950117442425899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df02db4aecb2466ad913c336ca067f3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2965060526216484815
 PrefabInstance:
   m_ObjectHideFlags: 0
