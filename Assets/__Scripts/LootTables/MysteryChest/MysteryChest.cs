@@ -1,38 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
-public class LootTable : MonoBehaviour
+[RequireComponent(typeof(Interacter))]
+[RequireComponent(typeof(Animator))]
+public class MysteryChest : MonoBehaviour
 {
+
     public int roomLevel;
-
-    [SerializeField] int minLoot = 1, maxLoot = 5;
-
-    [SerializeField] GameObject LootEmitter;
-    [SerializeField] GameObject LootTarget;
-    [Range(0, 100)]
-    [SerializeField] int SpawnForce = 20;
-    [SerializeField] int RandomRotationAmount = 15;
-
+    [SerializeField] GameObject SpawnPoint;
     [SerializeField] LootTableObj lootTableObj;
 
-    public void SpawnLoot(float delay = 1f)
+    private void Start()
     {
-        StartCoroutine(SpawnLootCoroutine(delay));
+        //get interacter
+        Interacter interacter = GetComponent<Interacter>();
+        //clear all events
+        interacter.events.RemoveAllListeners();
+        //add loot function to events
+        interacter.events.AddListener(OpenChest);
     }
 
-    IEnumerator SpawnLootCoroutine(float delay)
+
+    public void OpenChest()
     {
-        yield return new WaitForSeconds(delay);
+        GetComponent<Animator>().SetTrigger("open");
 
-        int lootAmount = Random.Range(minLoot, maxLoot);
-
-        for (int i = 0; i < lootAmount; i++)
-        {
-            SpawnLoot();
-        }
+        //spawn loot
+        SpawnLoot();
     }
+
+
+
 
     private void SpawnLoot()
     {
@@ -42,9 +41,9 @@ public class LootTable : MonoBehaviour
             return;
         }
 
-        if (LootEmitter == null || LootTarget == null)
+        if (SpawnPoint == null)
         {
-            Debug.LogError("No LootEmitter or LootTarget assigned to LootTable.cs", this);
+            Debug.LogError("No SpawnPoint assigned to LootTable.cs", this);
             return;
         }
 
@@ -57,12 +56,17 @@ public class LootTable : MonoBehaviour
 
         GameObject loot = lootTableObj.LootTables[rarityIndex].loots[lootIndex].loot;
         GameObject trail = lootTableObj.RarityTrails[rarityIndex];
-        GameObject lootObject = Instantiate(loot, LootEmitter.transform.position, LootEmitter.transform.rotation);
+        GameObject lootObject = Instantiate(loot, SpawnPoint.transform.position, Quaternion.identity);
 
-        lootObject.transform.SetParent(transform);
+        lootObject.transform.SetParent(SpawnPoint.transform);
+
+        lootObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
+        lootObject.transform.localPosition = new Vector3(0, 0, 0);
+        
 
         GameObject trailObject = Instantiate(trail, lootObject.transform.position, Quaternion.identity);
         trailObject.transform.SetParent(lootObject.transform);
+        
 
         //add Rigidbodyif not already present
         Rigidbody rb = null;
@@ -79,33 +83,54 @@ public class LootTable : MonoBehaviour
         if (lootObject.GetComponent<Weapon>() != null)
         {
             //set weapon level and rarity 
-            lootObject.GetComponent<Weapon>().SetIndividualWeaponData(new IndividualWeaponData(roomLevel,0,rarityIndex));
+            lootObject.GetComponent<Weapon>().SetIndividualWeaponData(new IndividualWeaponData(roomLevel, 0, rarityIndex));
+            lootObject.GetComponent<Weapon>().dontDrop = true;
         }
 
-        //push loot in direction of target with random force
-        rb.AddForce((LootTarget.transform.position - LootEmitter.transform.position).normalized * Random.Range(SpawnForce / 2, SpawnForce), ForceMode.Impulse);
+        rb.isKinematic = true;
+        rb.useGravity = false;
 
-
-        //add torque
-        rb.AddTorque(new Vector3(Random.Range(-RandomRotationAmount, RandomRotationAmount), Random.Range(-RandomRotationAmount, RandomRotationAmount), Random.Range(-RandomRotationAmount, RandomRotationAmount)));
-
-        //
+        //start coroutine to check if loot has been looted
+        StartCoroutine(CheckIfLooted());
 
     }
 
-    /// <summary>
-    /// Callback to draw gizmos that are pickable and always drawn.
-    /// </summary>
-    private void OnDrawGizmos()
+    public void CloseChest()
     {
-        if (LootEmitter != null)
+        GetComponent<Animator>().SetTrigger("close");
+        //destroy loot
+        DestroyLoot();
+
+        StopAllCoroutines();
+
+        //get interacter
+        Interacter interacter = GetComponent<Interacter>();
+        interacter.SetHasInteracted(false);
+    }
+    private void DestroyLoot()
+    {
+        if (SpawnPoint.transform.childCount > 0)
         {
-            Gizmos.color = Color.red;
-            //draw line from emitter to target
-            Gizmos.DrawLine(LootEmitter.transform.position, LootTarget.transform.position);
+            Destroy(SpawnPoint.transform.GetChild(0).gameObject);
         }
     }
 
+
+    IEnumerator CheckIfLooted()
+    {
+        while (true)
+        {
+            if (SpawnPoint.transform.childCount > 0)
+            {
+                yield return new WaitForSeconds(0.1f);
+            }
+            else
+            {
+                CloseChest();
+                yield break;
+            }
+        }
+    }
     public static List<int> CreatePropList(List<Probabilitys> probabilitys)
     {
         List<int> propList = new List<int>();
@@ -129,9 +154,6 @@ public class LootTable : MonoBehaviour
 
         return propList;
     }
-
-
-
 
     public static int ChanceIndexReturn(List<int> probList)
     {
@@ -184,22 +206,10 @@ public class LootTable : MonoBehaviour
 
     }
 
-
-
-
-
     public void SetRoomLevel(int level)
     {
         roomLevel = level;
     }
 
 
-
-
-
-
-
-
 }
-
-

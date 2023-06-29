@@ -16,6 +16,8 @@ public class Weapon : MonoBehaviour
         ElecA_burn_elec = 4
     };
 
+    public bool dontDrop = false;
+
     private GameObject player;
     private bool isEquiped = false;
     [SerializeField] WeaponObj weaponObj;
@@ -552,7 +554,7 @@ public class Weapon : MonoBehaviour
 
 
         //add to player
-        if (player.GetComponent<WeaponController>().PickUpWeapon(weaponObj, individualWeaponData))
+        if (player.GetComponent<WeaponController>().PickUpWeapon(weaponObj, individualWeaponData, dontDrop))
         {
             //remove from world
             Destroy(gameObject);

@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e0fbfec1cca89a45a4efaf8ca735d70, type: 3}
+  m_Name: MysteryChestLootTable
+  m_EditorClassIdentifier: 
+  probabilitys:
+  - name: comon
+    probability: 500
+  - name: Uncommon
+    probability: 300
+  - name: rare
+    probability: 100
+  - name: epic
+    probability: 60
+  - name: legendary
+    probability: 30
+  - name: mythic
+    probability: 10
+  RarityTrails:
+  - {fileID: 1962596557147680709, guid: f5eb74f88244c814382eefe9afda6b6a, type: 3}
+  - {fileID: 1962596557147680709, guid: 8c706774a7e605746b46f755906062cd, type: 3}
+  - {fileID: 1962596557147680709, guid: 0799bbdd55a369f4a97e08788837324a, type: 3}
+  - {fileID: 1962596557147680709, guid: a828ea595ebe22948b06f6327d065637, type: 3}
+  - {fileID: 1962596557147680709, guid: 9ba71c23e49e82f49a762c166cc3b0b4, type: 3}
+  - {fileID: 1962596557147680709, guid: 145db5116f9b7004584ae02bdac23483, type: 3}
+  LootTables:
+  - name: comon
+    loots:
+    - loot: {fileID: 666215353450587718, guid: e7fc9fbf020e3d940a6e784aebe0635a, type: 3}
+      probability: 0
+    - loot: {fileID: 3622148381374028997, guid: 0da6efb6071811e4482db2c270ee79ea,
+        type: 3}
+      probability: 0
+    - loot: {fileID: 1605162731426836534, guid: 07999a32539032e43936423c13a59dcc,
+        type: 3}
+      probability: 0
+  - name: uncommon
+    loots:
+    - loot: {fileID: 8106365701564057132, guid: a246055832045db40b47dcce1c298f31,
+        type: 3}
+      probability: 10
+  - name: rare
+    loots:
+    - loot: {fileID: 7901565739026946909, guid: d156c6176323b8043be5ae83258ba786,
+        type: 3}
+      probability: 10
+  - name: epic
+    loots:
+    - loot: {fileID: 4834600400692901657, guid: 6194c1d6550d6b0439d97fc691e2a060,
+        type: 3}
+      probability: 10
+  - name: legendary
+    loots:
+    - loot: {fileID: 6137622589621463267, guid: a5b6a8fcc6e298d47a596ddbf06f6008,
+        type: 3}
+      probability: 10
+  - name: mythic
+    loots:
+    - loot: {fileID: 5500702006247532567, guid: 4c72006136388e6469fd6800a85aba96,
+        type: 3}
+      probability: 10

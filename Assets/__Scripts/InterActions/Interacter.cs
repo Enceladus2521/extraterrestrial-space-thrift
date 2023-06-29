@@ -13,6 +13,7 @@ public class Interacter : MonoBehaviour
     public bool AutoTrigger = false;
     public bool InteractOnce = false;
 
+    [SerializeField] private int interactCost = 0;
     [SerializeField] private float interactDelay = 0f;
 
     [HideInInspector] public GameObject Player;
@@ -47,17 +48,20 @@ public class Interacter : MonoBehaviour
             {
                 //disable sphere collider
                 GetComponent<SphereCollider>().enabled = false;
-
-                //disable this script
-                enabled = false;
-
                 return;
             }
+            
 
             if (interactDelay > 0) StartCoroutine(InteractDelay());
             
 
-
+            if(interactCost > 0)
+            {
+                if (other.GetComponent<PlayerStats>().GetMoney() < interactCost)
+                {
+                    return;
+                }
+            }
 
             if (AutoTrigger)
             {
@@ -101,7 +105,10 @@ public class Interacter : MonoBehaviour
     IEnumerator InteractDelay()
     {
         yield return new WaitForSeconds(interactDelay);
-        Interacted = false;        
+        Interacted = false;
+        //enable sphere collider
+        GetComponent<SphereCollider>().enabled = true;
+
     }
 
 
@@ -125,6 +132,7 @@ public class Interacter : MonoBehaviour
         }
 
         Player = player;
+        player.GetComponent<PlayerStats>().TakeMoney(interactCost);
 
         //hide interact canvas
         Destroy(InteractCanvasInstance);
@@ -138,6 +146,12 @@ public class Interacter : MonoBehaviour
     {
         InteractText = text;
     }
+
+    public void SetHasInteracted(bool value)
+    {
+        Interacted = value;
+    }
+   
 
 
     private void OnDestroy()

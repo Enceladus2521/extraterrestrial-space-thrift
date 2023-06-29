@@ -128,7 +128,7 @@ public class WeaponController : MonoBehaviour
         return currentWeaponNumber;
     }
 
-    public bool PickUpWeapon(WeaponObj weapon, IndividualWeaponData weaponData)
+    public bool PickUpWeapon(WeaponObj weapon, IndividualWeaponData weaponData2, bool dontDrop = false)
     {
         //start cooldown
         if (canPickup) StartCoroutine(PickUpWeaponCooldown());
@@ -137,8 +137,34 @@ public class WeaponController : MonoBehaviour
         //returns if weapon is null
         if (weapon == null) return false;
 
+        if (currentWeapon != null)
+        {
+            currentWeaponInstance.GetComponent<Weapon>().SetEquipped(false);
+            Destroy(currentWeaponInstance);
 
-        DropWeapon();
+
+            weaponData[currentWeaponNumber] = null;
+
+            //set current weapon to null
+            currentWeapon = null;
+
+            currentWeaponInstance = null;
+
+            switch (currentWeaponNumber)
+            {
+                case 0:
+                    weapon00 = null;
+                    break;
+                case 1:
+                    weapon01 = null;
+                    break;
+                case 2:
+                    weapon02 = null;
+                    break;
+            }
+        }
+        if (currentWeapon != null && !dontDrop) DropWeapon();
+
 
         switch (currentWeaponNumber)
         {
@@ -155,9 +181,9 @@ public class WeaponController : MonoBehaviour
                 currentWeapon = weapon02;
                 break;
         }
-        SaveNewWeaponData(currentWeaponNumber, weaponData);
+        SaveNewWeaponData(currentWeaponNumber, weaponData2);
         EquipWeapon(currentWeaponNumber);
-        
+
 
         return true;
 
@@ -169,7 +195,7 @@ public class WeaponController : MonoBehaviour
         if (currentWeapon == null) return;
 
         currentWeaponInstance.GetComponent<Weapon>().SetEquipped(false);
-        
+
 
         GameObject oldWeapon = null;
         oldWeapon = currentWeaponInstance;
@@ -281,7 +307,7 @@ public class WeaponController : MonoBehaviour
 
         if (weaponPrefab != null)
         {
-            
+
             //instantiates weapon prefab as child of hand
             GameObject weapon = Instantiate(weaponPrefab, hand.transform.position, hand.transform.rotation);
             weapon.transform.parent = hand;
@@ -372,7 +398,7 @@ public class WeaponController : MonoBehaviour
     public void Reload()
     {
         if (currentWeapon != null && currentWeaponScript.CanReload())
-        {            
+        {
             GetComponent<PlayerAnimationController>().ReciveReload();
             StartCoroutine(currentWeaponScript.Reload());
         }
@@ -381,7 +407,7 @@ public class WeaponController : MonoBehaviour
     public void ShootStart()
     {
         if (currentWeaponInstance != null)
-        {            
+        {
             currentWeaponScript.SetShooting(true);
         }
     }
@@ -395,11 +421,11 @@ public class WeaponController : MonoBehaviour
     }
 }
 public enum Rarity
-    {
-        Common = 0,
-        Uncommon = 1,
-        Rare = 2,
-        Epic = 3,
-        Legendary = 4,
-        Mythic = 5
-    }
+{
+    Common = 0,
+    Uncommon = 1,
+    Rare = 2,
+    Epic = 3,
+    Legendary = 4,
+    Mythic = 5
+}

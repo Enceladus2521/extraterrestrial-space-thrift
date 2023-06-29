@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 1603413183018116030}
   - component: {fileID: 1603413183018116024}
   m_Layer: 0
-  m_Name: PF_Wep_Alien_01
+  m_Name: PF_Wep_Alien_pistol_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
