@@ -25,12 +25,12 @@ public class PlayerInputManager : MonoBehaviour
     // on remove player
     private void OnDisable()
     {
-        GameManager.Instance.GameState.Players.Remove(gameObject);
+        GameManager.Instance?.GameState?.Players?.Remove(gameObject);
     }
 
     private void OnEnable()
     {
-        GameManager.Instance.GameState.Players.Add(gameObject);
+        GameManager.Instance?.GameState?.Players.Add(gameObject);
     }
 
     public void OnMove(InputValue value)

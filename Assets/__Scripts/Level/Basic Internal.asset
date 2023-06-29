@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 695f75a614288854db1ac9267184f961, type: 3}
-  m_Name: Basic
+  m_Name: Basic Internal
   m_EditorClassIdentifier: Assembly-CSharp::RoomInternal
   wallTypes:
   - {fileID: 1814321836418854, guid: 81b74d56cb4f9a54dad9ce387b742bcd, type: 3}
@@ -27,5 +27,5 @@ MonoBehaviour:
   - {fileID: 6781292966255158772, guid: ea7bd2bbff30d75439551fb4dc43b5a1, type: 3}
   - {fileID: 871929964373942017, guid: c25006333a67d644fbff0fe21568e4be, type: 3}
   - {fileID: 9066321273246494692, guid: 4ad571bd921274d4891a48ec702ee28d, type: 3}
-  enemyTypes:
+  entityTypes:
   - {fileID: 8766976142266897041, guid: c0cf2ad78d3454436821d31739456590, type: 3}

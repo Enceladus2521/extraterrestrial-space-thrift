@@ -5,9 +5,12 @@ using UnityEngine;
 #endif
 
 
-
 public class RoomController : MonoBehaviour
-{
+{   
+
+    
+    [SerializeField]
+    RoomManager manager;
     RoomConfig.AnchorType anchorType = RoomConfig.AnchorType.Center;
     Vector2 absOffset = Vector2.zero;
 
@@ -17,8 +20,10 @@ public class RoomController : MonoBehaviour
     // room scriptable object
     public Room script;
 
-    void OnValidate(){
-        if (script == null) {
+    void OnValidate()
+    {
+        if (script == null)
+        {
             Debug.LogError("RoomController script is null");
             return;
         }
@@ -34,6 +39,17 @@ public class RoomController : MonoBehaviour
 
     void Start()
     {
+        manager = new RoomManager(roomConfig);
+    }
+
+    RoomConfig lastRoomConfig;
+    void Update()
+    {
+        if (lastRoomConfig != roomConfig)
+        {
+            lastRoomConfig = roomConfig;
+            manager?.Update(roomConfig);
+        }
     }
 
     public void UpdateConfig(RoomConfig config)
@@ -45,12 +61,13 @@ public class RoomController : MonoBehaviour
     {
 
         if (anchorType == RoomConfig.AnchorType.Center)
-            absOffset =  new Vector2(
+            absOffset = new Vector2(
                 -(roomConfig.width - 2) / 2f,
                 -roomConfig.height / 2f
             );
 
-        if (!roomConfig.internalConfig) {
+        if (!roomConfig.internalConfig)
+        {
             Debug.LogWarning("Enemies are not enabled in room config");
             return;
         }
@@ -63,27 +80,38 @@ public class RoomController : MonoBehaviour
         GenerateEnemies(gizmos);
     }
 
-    void GenerateEnemies (bool gizmos = false)
+    void GenerateEnemies(bool gizmos = false)
     {
-        for (int i = 0; i < roomConfig.internalConfig.enemyTypes.Count; i++)
+        for (int i = 0; i < roomConfig.internalConfig.entityTypes.Count; i++)
         {
-            GameObject enemyPrefab = roomConfig.internalConfig.enemyTypes[i];
-            if (enemyPrefab!= null)
+            GameObject entityPrefab = roomConfig.internalConfig.entityTypes[i];
+            if (entityPrefab != null)
             {
                 float x = Random.Range(1, roomConfig.width - 1) + absOffset.x;
                 float y = Random.Range(1, roomConfig.height - 1) + absOffset.y;
                 Vector3 absPosition = new Vector3(x * roomConfig.gridSize, 0, y * roomConfig.gridSize) + transform.position;
-                if (gizmos){
+                if (gizmos)
+                {
                     DrawGizmos(absPosition, Color.red, Vector3.one, Quaternion.identity);
                     continue;
                 }
+
+                GameObject entityInstance = Instantiate(entityPrefab, absPosition, Quaternion.identity);
+
+                EntityController entityController = entityInstance.GetComponent<EntityController>();
+                if (entityController == null)
+                {
+                    Debug.LogError("EntityController is null");
+                    continue;
+                }
                 
-                GameObject enemyInstance = Instantiate(enemyPrefab, absPosition, Quaternion.identity);
-                enemyInstance.transform.parent = transform;
-                enemyInstance.name = $"Enemy_{x}_{y}";
-                enemyInstance.transform.localPosition = new Vector3(x * roomConfig.gridSize, 0, y * roomConfig.gridSize);
-                enemyInstance.transform.localRotation = Quaternion.identity;
-                enemyInstance.transform.localScale = Vector3.one;
+                
+                entityInstance.transform.parent = transform;
+                entityInstance.name = $"Enemy_{x}_{y}";
+                entityInstance.transform.localPosition = new Vector3(x * roomConfig.gridSize, 0, y * roomConfig.gridSize);
+                entityInstance.transform.localRotation = Quaternion.identity;
+                entityInstance.transform.localScale = Vector3.one;
+                manager?.entities?.Add(entityInstance.GetComponent<EntityController>());
 
 
             }
@@ -231,7 +259,7 @@ public class RoomController : MonoBehaviour
             DrawGizmos(absDoorPosition, Color.red, new Vector3(roomConfig.gridSize, roomConfig.gridSize, 1f), Door.GetRotation(wallType));
             return;
         }
-        
+
         GameObject doorPrefab = roomConfig.getDoorPrefab(wallType);
 
         int centerPosX = roomConfig.width / 2;

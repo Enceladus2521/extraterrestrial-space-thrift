@@ -287,7 +287,7 @@ public class Weapon : MonoBehaviour
                 //do hit
                 OnHit(currentHit, direction, damage);
 
-                //Todo: add burn to enemy spawn burn effect Prefab and child it to enemy set data for burn effect                   
+                //Todo: add burn to entity spawn burn effect Prefab and child it to entity set data for burn effect                   
             }
         }
     }
@@ -309,15 +309,15 @@ public class Weapon : MonoBehaviour
         if (weaponObj.explosionPrefab == null) AddKnockback(hit, direction); //do knockback if no explosion
 
         Explode(hit, damage);
-        //on enemy hit
-        if (!hit.collider.gameObject.CompareTag("enemy")) return;
+        //on entity hit
+        if (!hit.collider.gameObject.CompareTag("entity")) return;
 
 
         // try to get EntityController
-        EntityController enemy = hit.collider.gameObject.GetComponent<EntityController>();
-        if (enemy != null) enemy.TakeDamage(damage);
+        EntityController entity = hit.collider.gameObject.GetComponent<EntityController>();
+        if (entity != null) entity.TakeDamage(damage);
 
-        //Todo: add burn to enemy spawn burn effect Prefab and child it to enemy set data for burn effect
+        //Todo: add burn to entity spawn burn effect Prefab and child it to entity set data for burn effect
 
 
     }
@@ -395,12 +395,13 @@ public class Weapon : MonoBehaviour
 
     public void OnSliceHit(GameObject hitObject)
     {
-        //if hit object is enemy
-        if (hitObject.CompareTag("enemy"))
+        //if hit object is entity
+        if (hitObject.CompareTag("entity"))
         {
-            hitObject.GetComponent<EntityController>().TakeDamage(weaponObj.weaponDamage);
+            EntityController entity = hitObject.GetComponent<EntityController>();
+            entity.TakeDamage(weaponObj.weaponDamage);
 
-            //Todo: add burn to enemy spawn burn effect Prefab and child it to enemy set data for burn effect
+            //Todo: add burn to entity spawn burn effect Prefab and child it to entity set data for burn effect
         }
 
         if (hitEffectPrefab != null) Instantiate(hitEffectPrefab, hitObject.transform.position, Quaternion.LookRotation(hitObject.transform.forward));

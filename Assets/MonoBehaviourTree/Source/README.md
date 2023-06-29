@@ -212,7 +212,7 @@ If running state is returned, then execution will be paused and resumed in next 
 When success or failure is returned, then this result is passed to the parent and ```OnExit``` is called. ```OnDisallowInterrupt``` is not called until the cycle ends or tree is aborted to higher priority node.
 
 ### Custom Leaf
-Leaf nodes are used to do designated task. It can be something simple as setting variable or very complex like enemy navigation along the path.
+Leaf nodes are used to do designated task. It can be something simple as setting variable or very complex like entity navigation along the path.
 ```csharp
 using UnityEngine;
 using MBT;

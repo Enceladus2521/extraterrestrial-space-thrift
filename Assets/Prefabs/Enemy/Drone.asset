@@ -9,30 +9,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f50b658039c6e430c80b6e05a83de36e, type: 3}
+  m_Script: {fileID: 11500000, guid: bc9fbc0aac4c9d67dbc279ebffe2e2c2, type: 3}
   m_Name: Drone
   m_EditorClassIdentifier: 
   movementStats:
-    maxSpeed: 3.22
-    speed: 2
-    flyingAltitude: 1
-    maintainDistance: 2.65
-    viewAngle: 90
-    turnSpeed: 2.05
+    maxSpeed: 5
+    speed: 5.38
+    flyingAltitude: 1.54
+    maintainDistance: 4.12
+    viewAngle: 183.2
+    turnSpeed: 7.7
     viewRange: 10
     isStunned: 0
   combatStats:
     canShoot: 1
-    shootingDamage: 5
+    shootingDamage: 10
     hasMelee: 0
     meleeDamage: 0
     projectile: {fileID: 0}
   healthStats:
-    maxHealth: 33.97
-    healthRegenerationRate: 0
-    health: 0
-    armor: 0
-    isAlive: 0
+    maxArmor: 23
+    maxHealth: 23
+    isAlive: 1
+    health: 23
+    armor: 23
+    healthRegenerationRate: 1
   inventoryStats:
     maxCapacity: 0
     currentCapacity: 0

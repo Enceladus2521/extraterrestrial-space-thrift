@@ -11,5 +11,5 @@ public class RoomInternal : ScriptableObject
     public List<GameObject> doubleDoorTypes;
     public List<GameObject> interactableTypes;
 
-    public List<GameObject> enemyTypes;
+    public List<GameObject> entityTypes;
 }

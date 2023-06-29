@@ -18,7 +18,7 @@ public class MapController : MonoBehaviour
 
     [SerializeField]
     List<RoomConfig> roomConfigs = new List<RoomConfig>();
-    
+
     int count = 0;
 
 
@@ -41,14 +41,10 @@ public class MapController : MonoBehaviour
 
     private void ClearMap()
     {
-        Debug.Log("ClearMap");
         roomConfigs = new List<RoomConfig>();
         lastRoomPosition = Vector3.zero;
-        // delete all roomsGenerated game objects
         foreach (RoomController room in roomsGenerated)
-        {
             DestroyImmediate(room.gameObject);
-        }
         roomsGenerated = new List<RoomController>();
         DestroyImmediate(map);
         map = null;
@@ -57,29 +53,34 @@ public class MapController : MonoBehaviour
     private void GenerateMap()
     {
         for (int i = 0; i < roomConfigs.Count; i++)
-        {
             GenerateRoom(roomConfigs[i]);
-        }
     }
 
     private void UpdateMap()
     {
 
         if (roomsGenerated.Count < roomConfigs.Count)
-        {   
+        {
             GenerateRoom(roomConfigs[roomsGenerated.Count]);
             return;
         }
 
         if (roomsGenerated.Count > roomConfigs.Count)
         {
-            Debug.LogWarning("Generated RoomConfig: " + roomsGenerated.Count + " / " + roomConfigs.Count);
-            ClearMap();
-            GenerateRoom(roomConfigs[0]);
+            Debug.Log("Regenerating map");
+            Regenerate();
             return;
         }
     }
 
+    private void Regenerate()
+    {
+        ClearMap();
+        map = new GameObject("Map");
+        Random.InitState(mapConfig.seed);
+        UnityEngine.Random.InitState(mapConfig.seed);
+        GenerateNewRoomConfig();
+    }
     void GenerateRoom(RoomConfig localRoomConfig)
     {
         Vector3 position = new Vector3(localRoomConfig.offset.x * localRoomConfig.gridSize, 0f, localRoomConfig.offset.y * localRoomConfig.gridSize);
@@ -100,35 +101,33 @@ public class MapController : MonoBehaviour
         Vector3 avgPlayerPos = new Vector3(0f, 0f, 0f);
         List<GameObject> players = GameManager.Instance?.GameState?.getPlayers();
         if (players != null)
-            if (players.Count > 0){
+            if (players.Count > 0)
+            {
                 for (int i = 0; i < players.Count; i++)
-                {
                     avgPlayerPos += players[i].transform.position;
-                } 
                 avgPlayerPos /= players.Count;
             }
 
         float distance = Vector3.Distance(avgPlayerPos, lastRoomPosition);
 
-        if (distance < (roomGenerationDistance ))
-        {
+        if (distance < (roomGenerationDistance))
             GenerateNewRoomConfig();
-        }
         if (roomsGenerated.Count != roomConfigs.Count) UpdateMap();
     }
 
 
     private void GenerateNewRoomConfig()
-    {   
+    {
         RoomConfig currentRoom;
-        if (roomConfigs.Count == 0) {
+        if (roomConfigs.Count == 0)
+        {
             currentRoom = initialRoom.roomConfig;
             foreach (Door door in currentRoom.doorConfigs)
-            {
                 door.isConnected = false;
-            }
             roomConfigs.Add(currentRoom);
-        }else{
+        }
+        else
+        {
             currentRoom = roomConfigs[roomConfigs.Count - 1];
         }
 
@@ -143,7 +142,7 @@ public class MapController : MonoBehaviour
         newRoomConfig.seed = currentRoom.seed + roomConfigs.Count;
         Random.InitState(newRoomConfig.seed);
 
-        newRoomConfig.width =  Random.Range(1, mapConfig.maxWidth + 1);
+        newRoomConfig.width = Random.Range(1, mapConfig.maxWidth + 1);
         newRoomConfig.height = Random.Range(1, mapConfig.maxHeight + 1);
         newRoomConfig.offset = new Vector3(
             currentRoom.offset.x + currentRoom.width / 2f + newRoomConfig.width / 2f,
@@ -155,7 +154,7 @@ public class MapController : MonoBehaviour
         newRoomConfig.gridSize = currentRoom.gridSize;
         count++;
         newRoomConfig.doorConfigs = new List<Door>();
-         
+
         Door doorLeft = new Door();
         doorLeft.isConnected = false;
         doorLeft.wallType = Wall.WallType.Left;
@@ -176,10 +175,8 @@ public class MapController : MonoBehaviour
     {
         List<Door> unconnectedDoors = new List<Door>();
         foreach (Door door in roomConfig.doorConfigs)
-        {
             if (!door.isConnected)
                 unconnectedDoors.Add(door);
-        }
         return unconnectedDoors;
     }
 

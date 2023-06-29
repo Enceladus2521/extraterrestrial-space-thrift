@@ -94,9 +94,11 @@ public class Projectile : MonoBehaviour
     
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.CompareTag("enemy") && explosionPrefab == null)
+        if (other.gameObject.CompareTag("entity") && explosionPrefab == null)
         {
-            other.gameObject.GetComponent<EntityController>().TakeDamage(damage);
+            Debug.Log("hit with damage: " + damage);
+            EntityController entityController = other.gameObject.GetComponent<EntityController>();
+            entityController.TakeDamage(damage);
             DestroySelf();
         }
         else if(bounceAmount > 0)

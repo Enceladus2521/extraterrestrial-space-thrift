@@ -6,7 +6,7 @@ TagManager:
   tags:
   - ground
   - Camera
-  - enemy
+  - entity
   layers:
   - Default
   - TransparentFX
