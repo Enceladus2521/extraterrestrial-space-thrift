@@ -7,11 +7,17 @@ public class RotateToCloseCam : MonoBehaviour
     
 
 
-    // Update is called once per frame
+
+    
+    
+
+
     void Update()
     {
-        //find the closest camera and rotate to it
         GameObject[] cameras = GameObject.FindGameObjectsWithTag("Camera");
+
+        
+        //find the closest camera and rotate to it        
         GameObject closest = null;
         float distance = Mathf.Infinity;
         Vector3 position = transform.position;

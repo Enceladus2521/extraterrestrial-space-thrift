@@ -13,6 +13,9 @@ public class Interacter : MonoBehaviour
     public bool AutoTrigger = false;
     public bool InteractOnce = false;
 
+    [SerializeField] private int interactCost = 0;
+    [SerializeField] private float interactDelay = 0f;
+
     [HideInInspector] public GameObject Player;
 
     private bool Interacted = false;
@@ -45,15 +48,20 @@ public class Interacter : MonoBehaviour
             {
                 //disable sphere collider
                 GetComponent<SphereCollider>().enabled = false;
-
-                //disable this script
-                enabled = false;
-
-
                 return;
             }
+            
 
+            if (interactDelay > 0) StartCoroutine(InteractDelay());
+            
 
+            if(interactCost > 0)
+            {
+                if (other.GetComponent<PlayerStats>().GetMoney() < interactCost)
+                {
+                    return;
+                }
+            }
 
             if (AutoTrigger)
             {
@@ -94,6 +102,15 @@ public class Interacter : MonoBehaviour
         }
     }
 
+    IEnumerator InteractDelay()
+    {
+        yield return new WaitForSeconds(interactDelay);
+        Interacted = false;
+        //enable sphere collider
+        GetComponent<SphereCollider>().enabled = true;
+
+    }
+
 
 
     private void OnTriggerExit(Collider other)
@@ -115,6 +132,7 @@ public class Interacter : MonoBehaviour
         }
 
         Player = player;
+        player.GetComponent<PlayerStats>().TakeMoney(interactCost);
 
         //hide interact canvas
         Destroy(InteractCanvasInstance);
@@ -129,6 +147,12 @@ public class Interacter : MonoBehaviour
         InteractText = text;
     }
 
+    public void SetHasInteracted(bool value)
+    {
+        Interacted = value;
+    }
+   
+
 
     private void OnDestroy()
     {
@@ -140,6 +164,19 @@ public class Interacter : MonoBehaviour
     {
         //enable sphere collider
         GetComponent<SphereCollider>().enabled = true;
+    }
+
+    
+    private void OnDisable()
+    {
+        //disable sphere collider
+        GetComponent<SphereCollider>().enabled = false;
+
+        if(InteractCanvasInstance != null)
+        {
+            Player.GetComponent<PlayerInteractManager>().RemoveEvent(this.gameObject);
+            Destroy(InteractCanvasInstance);
+        }
     }
 
 

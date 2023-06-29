@@ -12,6 +12,9 @@ public class PlayerSpawnManager : MonoBehaviour
         if (Camera.main != null)
             Camera.main.gameObject.SetActive(false);
 
+        // Spawn Player
+        
+
     }
 
     public void OnPlayerDisconnected()

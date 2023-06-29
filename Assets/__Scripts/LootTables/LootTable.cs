@@ -20,7 +20,6 @@ public class LootTable : MonoBehaviour
     public void SpawnLoot(float delay = 1f)
     {
         StartCoroutine(SpawnLootCoroutine(delay));
-
     }
 
     IEnumerator SpawnLootCoroutine(float delay)
@@ -33,9 +32,6 @@ public class LootTable : MonoBehaviour
         {
             SpawnLoot();
         }
-
-
-
     }
 
     private void SpawnLoot()
@@ -62,6 +58,9 @@ public class LootTable : MonoBehaviour
         GameObject loot = lootTableObj.LootTables[rarityIndex].loots[lootIndex].loot;
         GameObject trail = lootTableObj.RarityTrails[rarityIndex];
         GameObject lootObject = Instantiate(loot, LootEmitter.transform.position, LootEmitter.transform.rotation);
+
+        lootObject.transform.SetParent(transform);
+
         GameObject trailObject = Instantiate(trail, lootObject.transform.position, Quaternion.identity);
         trailObject.transform.SetParent(lootObject.transform);
 
@@ -90,7 +89,7 @@ public class LootTable : MonoBehaviour
         //add torque
         rb.AddTorque(new Vector3(Random.Range(-RandomRotationAmount, RandomRotationAmount), Random.Range(-RandomRotationAmount, RandomRotationAmount), Random.Range(-RandomRotationAmount, RandomRotationAmount)));
 
-
+        //
 
     }
 

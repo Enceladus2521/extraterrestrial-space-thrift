@@ -16,6 +16,8 @@ public class Weapon : MonoBehaviour
         ElecA_burn_elec = 4
     };
 
+    public bool dontDrop = false;
+
     private GameObject player;
     private bool isEquiped = false;
     [SerializeField] WeaponObj weaponObj;
@@ -36,6 +38,8 @@ public class Weapon : MonoBehaviour
     [Range(0, 5)]
     public float currentRecoil;
     private int weaponLevel; //Todo: load data
+
+    GameObject meleeObj;
 
 
     [Header("Weapon Stats")]
@@ -105,12 +109,12 @@ public class Weapon : MonoBehaviour
         {
             if ((int)weaponObj.weaponType == (int)WeaponObj.WeaponType.Sword)
             {                
-                MeshFilter meshFilter = GetComponentInChildren<MeshFilter>();
+                MeshFilter meshFilter = GetComponent<MeshFilter>();
                 SpawnSwordDamageDealer(meshFilter);
             }
             else if ((int)weaponObj.weaponType == (int)WeaponObj.WeaponType.GreatSword)
             {
-                MeshFilter meshFilter = GetComponentInChildren<MeshFilter>();
+                MeshFilter meshFilter = GetComponent<MeshFilter>();
                 SpawnSwordDamageDealer(meshFilter);
             }
 
@@ -137,6 +141,17 @@ public class Weapon : MonoBehaviour
 
         //add damage dealer script
         SwordDamageDealer damageDealer = newDamageDealer.AddComponent<SwordDamageDealer>();
+
+        
+        meleeObj = newDamageDealer;
+
+        //deactivate damage dealer
+        newDamageDealer.SetActive(false);
+        
+
+        //set position of new damage dealer to same as weapon position and rotation
+        newDamageDealer.transform.position = transform.position;
+        newDamageDealer.transform.rotation = transform.rotation;
         
     }
 
@@ -207,10 +222,11 @@ public class Weapon : MonoBehaviour
     {
         CoolDown(); //start cooldown
         hasRelesedTrigger = false; //set hasRelesedTrigger to false
-
+        
         if ((int)weaponObj.weaponType == 5 || (int)weaponObj.weaponType == 6)
         {
             //-_- dont touch this it works
+            StartCoroutine(EnableSwordTrigger(weaponFireRate));
         }
         else if (weaponObj.ammoPrefab != null) ShootProjectile();
         else ShootRaycast();
@@ -224,7 +240,7 @@ public class Weapon : MonoBehaviour
 
     #region Raycast
     private void ShootRaycast()
-    {
+    {        
         //if muzzle flash prefab is not null, instantiate muzzle flash prefab at barrel tip position and rotation and set scale to weapon muzzle flash scale
         if (muzzleFlashPrefab != null) Instantiate(muzzleFlashPrefab, barrelTip.position, barrelTip.rotation).gameObject.transform.localScale = weaponObj.muzzleFlashScale;
 
@@ -390,11 +406,19 @@ public class Weapon : MonoBehaviour
     #endregion
 
 
-
+    IEnumerator EnableSwordTrigger(float SliceTime)
+    {
+        meleeObj.SetActive(true);        
+        yield return new WaitForSeconds(SliceTime); 
+        meleeObj.SetActive(false);       
+    }
     
 
     public void OnSliceHit(GameObject hitObject)
     {
+        //if hit object is player
+        if (hitObject.CompareTag("Player")) return;
+
         //if hit object is entity
         if (hitObject.CompareTag("entity"))
         {
@@ -460,10 +484,19 @@ public class Weapon : MonoBehaviour
 
         reloading = true;
         yield return new WaitForSeconds(weaponReloadTime);
-        player.GetComponent<PlayerStats>().TakeAmmo(weaponClipSize - ammoInClip);
+
+
         ammoInClip = weaponClipSize;
         reloading = false;
         isPreloading = false;
+        if ((int)weaponObj.weaponType == 5 || (int)weaponObj.weaponType == 6)
+        {
+            //-_- dont touch this it works   
+            yield break;       
+        }
+
+        player.GetComponent<PlayerStats>().TakeAmmo(weaponClipSize - ammoInClip);
+        
     }
 
 
@@ -485,13 +518,6 @@ public class Weapon : MonoBehaviour
 
 
 
-
-
-
-
-
-
-
     public void SetShooting(bool shooting)
     {
         this.shooting = shooting;
@@ -503,7 +529,7 @@ public class Weapon : MonoBehaviour
         {
             Interacter interacter = GetComponent<Interacter>();
             interacter.AutoTrigger = false;
-            interacter.InteractOnce = false;
+            interacter.InteractOnce = true;
             interacter.events.AddListener(Pickup);
 
             interacter.SetInteractText("Press F or X to pickup " + weaponObj.name);
@@ -528,7 +554,7 @@ public class Weapon : MonoBehaviour
 
 
         //add to player
-        if (player.GetComponent<WeaponController>().PickUpWeapon(weaponObj, individualWeaponData))
+        if (player.GetComponent<WeaponController>().PickUpWeapon(weaponObj, individualWeaponData, dontDrop))
         {
             //remove from world
             Destroy(gameObject);
@@ -549,6 +575,19 @@ public class Weapon : MonoBehaviour
     public void SetEquipped(bool equipped)
     {
         this.isEquiped = equipped;
+
+        if (equipped)
+        {
+            //remove pickup Text
+            GetComponent<Interacter>().SetInteractText("");
+
+        }
+        else
+        {
+            //add pickup Text
+            GetComponent<Interacter>().SetInteractText("Press F or X to pickup " + weaponObj.name);
+
+        }
 
         if (!equipped && lowAmmoIndicator)
         {

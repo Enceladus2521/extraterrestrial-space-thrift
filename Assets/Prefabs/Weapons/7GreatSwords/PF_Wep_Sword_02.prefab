@@ -135,7 +135,7 @@ MonoBehaviour:
   events:
     m_PersistentCalls:
       m_Calls: []
-  InteractText: Press F or X to pickup PF_Wep_Sword_02
+  InteractText: Press F or X to pickup PF_Sword_02
   CanvasOffset: {x: 0, y: 2, z: 0}
 --- !u!54 &4048685391377241235
 Rigidbody:
@@ -165,7 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96faf8d26d155dd499a65e91676c22a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponObj: {fileID: 11400000, guid: 87c201e632a77084e93a881eef7b2dce, type: 2}
+  weaponObj: {fileID: 11400000, guid: 1cbebda23aebbc94489d155a86967ae3, type: 2}
   barrelTip: {fileID: 0}
   timeTillAutoReload: 1
   individualWeaponData:
