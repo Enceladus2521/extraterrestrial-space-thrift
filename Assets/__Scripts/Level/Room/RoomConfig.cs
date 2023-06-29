@@ -26,12 +26,6 @@ public class RoomConfig
         if (otherDoor == null)
             return false;
 
-        door.isConnected = true;
-        otherDoor.isConnected = true;
-
-        door.otherDoor = otherDoor;
-        otherDoor.otherDoor = door;
-
         return true;
     }
 

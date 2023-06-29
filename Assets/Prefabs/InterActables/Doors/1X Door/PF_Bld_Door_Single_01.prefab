@@ -240,14 +240,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 8938076097935523846}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7a6da298f1d21d4998f661f36b6cc19, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f3f39fb503f12a67b9d8b72a9504bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  door:
+    wallType: 0
+    isConnected: 0
+    gridPosition: {x: 0, y: 0}
+    absPosition: {x: 0, y: 0, z: 0}
+    door: {fileID: 0}
   isOpen: 0
   isLocked: 0
-  autoCloseTime: 3
-  openAnimation: {fileID: 7400000, guid: ca215bff2b619bb48bccb7cefe5f652a, type: 2}
-  closeAnimation: {fileID: 7400000, guid: 606232d183f64144a934209df3dbd2be, type: 2}
+  autoCloseTime: 0
+  openAnimation: {fileID: 0}
+  closeAnimation: {fileID: 0}
+  openAudio: {fileID: 0}
+  closeAudio: {fileID: 0}
+  audioMixerGroup: FX
 --- !u!114 &8938536600456358432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,6 +271,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AutoTrigger: 1
   InteractOnce: 0
+  Player: {fileID: 0}
   interactRange: 1.5
   interactOffset: {x: 0, y: 0.63, z: 0}
   events:

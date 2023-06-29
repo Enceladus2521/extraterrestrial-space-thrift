@@ -13,22 +13,27 @@ public class GameState
     [SerializeField]
     public List<int> HighScores { get; set; }
 
-    public List<GameObject> getPlayers() {
+    public List<GameObject> getPlayers()
+    {
         return Players;
     }
 }
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance { get; private set; }
-
 
     [SerializeField]
     public GameState GameState { get; set; }
+    public static GameManager Instance { get; private set; }
+
 
     private void Awake()
     {
-        if (Instance == null)
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
         {
             Instance = this;
             GameState = new GameState();
@@ -37,16 +42,39 @@ public class GameManager : MonoBehaviour
             GameState.DifficultyLevel = 1;
             DontDestroyOnLoad(gameObject);
         }
-        else
-        {
-            Destroy(gameObject);
-        }
+        UpdatePlayers();
     }
+
+
 
     private void Start()
     {
-        Application.targetFrameRate = 60;
-       
+        Application.targetFrameRate = 144;
+        UpdatePlayers();
+    }
+
+    void OnValidate()
+    {
+        UpdatePlayers();
+    }
+
+
+    // check all players by tag and update 
+    public void UpdatePlayers()
+    {   
+        if(GameState == null) return;
+        GameState.Players = new List<GameObject>();
+        GameState.Players = GameObject.FindGameObjectsWithTag("Player").ToList();
+   
+    }
+    public void AddPlayer(GameObject player)
+    {
+        GameState.Players.Add(player);
+    }
+
+    public void RemovePlayer(GameObject player)
+    {
+        GameState.Players.Remove(player);
     }
 
     private void Update()
@@ -56,7 +84,7 @@ public class GameManager : MonoBehaviour
         {
             Application.Quit();
         }
-        
+
     }
     public void AddHighScore(int score)
     {
@@ -71,5 +99,10 @@ public class GameManager : MonoBehaviour
         string highScoresString = PlayerPrefs.GetString("highScores");
         GameState.HighScores = highScoresString.Split(',').Select(int.Parse).ToList();
     }
+    private void OnDestroy()
+    {
+        if (this == Instance) { Instance = null; }
+    }
+
 
 }

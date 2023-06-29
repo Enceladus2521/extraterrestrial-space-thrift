@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class EntityController : MonoBehaviour
 {
+    public GameObject closestPlayer;
     public EntityPrefab prefab;
 
     public EntityState state;
@@ -11,10 +12,8 @@ public class EntityController : MonoBehaviour
 
     private void Start()
     {
-        // if trhere is no Entity State create a new one
         if (state == null)
         {
-            // check if Entity state us already created
             if (gameObject.GetComponent<EntityState>() != null)
                 state = gameObject.GetComponent<EntityState>();
             else
@@ -24,6 +23,15 @@ public class EntityController : MonoBehaviour
         CapsuleCollider capsuleCollider = gameObject.AddComponent<CapsuleCollider>();
         state.LoadPrefab(prefab);
         state.healthStats.ResetEntity();
+
+        // Fetch the Rigidbody from the GameObject with this script attached
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            // Stop the Rigidbody from rotating that its not tipping over 
+            rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+        }
+        
         InitializeControllers();
     }
 
@@ -34,56 +42,57 @@ public class EntityController : MonoBehaviour
         combatController = new EntityCombatController(this, state.combatStats);
     }
 
-    public Transform GetClosestPlayer()
+    public void UpdateTarget()
     {
         List<GameObject> players = GameManager.Instance?.GameState?.getPlayers();
         if (players != null && players.Count > 0)
         {
             float closestDistance = Mathf.Infinity;
-            GameObject closestPlayer = null;
-
             foreach (GameObject player in players)
             {
                 float distance = Vector3.Distance(transform.position, player.transform.position);
                 if (distance < closestDistance)
                 {
+                    // check if is in view distance
+                    // if(state.movementStats.viewRange < distance) {
+                    //     continue;
+                    // }
+                    
                     closestDistance = distance;
                     closestPlayer = player;
+                    Debug.Log("Closest player: " + closestPlayer);
+                    movementController.UpdateTarget(player);
                 }
             }
-
-            return closestPlayer.transform;
         }
 
-        return null;
     }
 
 
     void FixedUpdate()
-    {
-        if (movementController != null)
-            movementController.FixedUpdate();
+    {   
         if (combatController != null)
             combatController.FixedUpdate();
+        if (movementController != null)
+            movementController.FixedUpdate();
     }
 
     void Update()
     {
-        if (movementController != null)
-            movementController.Update();
         if (combatController != null)
             combatController.Update();
     }
 
     public void TakeDamage(float damage)
     {
-        Debug.Log("TakeDamage");
         state.healthStats.TakeDamage(damage);
         if (state != null && state.healthStats.Health <= 0)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
+
+
 
 
 }

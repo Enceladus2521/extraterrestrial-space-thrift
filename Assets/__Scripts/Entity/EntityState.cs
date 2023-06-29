@@ -10,13 +10,22 @@ public enum MaterialType
 public class EntityState : MonoBehaviour
 {
 
+    [SerializeField]
     public MovementStats movementStats;
+
+    [SerializeField]
     public CombatStats combatStats;
+
+    [SerializeField]
     public HealthStats healthStats;
 
+    [SerializeField]
     public InventoryStats inventoryStats;
 
-    public MaterialType materialType;
+
+
+    [SerializeField]
+    private MaterialType materialType;
 
     public void LoadPrefab(EntityPrefab prefab)
     {
@@ -25,6 +34,26 @@ public class EntityState : MonoBehaviour
         healthStats = prefab.healthStats;
         inventoryStats = prefab.inventoryStats;
         materialType = prefab.materialType;
+    }
+
+    void OnDrawGizmos()
+    {
+        // render attack range as circle
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, movementStats.maintainDistance);
+        
+        // render view range as circle
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, movementStats.viewRange);
+
+        // render view angle as two lines
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(transform.position, transform.position + transform.forward * movementStats.viewRange);
+        // view angle
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(transform.position, transform.position + transform.forward * movementStats.viewRange);
+
+        
     }
 
 }
@@ -105,13 +134,14 @@ public class HealthStats
 
     public void TakeDamage(float damage)
     {
-        Debug.Log(damage);
         // the more armor the more damgae reduced
         health -= damage;
-        if (health < 0f)
+        if (health <= 0f)
         {
             isAlive = false;
             health = 0f;
+        }else {
+            isAlive = true;
         }
     }
     // getter for health

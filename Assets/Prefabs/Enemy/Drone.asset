@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementStats:
     maxSpeed: 5
-    speed: 5.38
-    flyingAltitude: 1.54
+    speed: 3.09
+    flyingAltitude: 1.12
     maintainDistance: 4.12
-    viewAngle: 183.2
+    viewAngle: 84
     turnSpeed: 7.7
-    viewRange: 10
+    viewRange: 5.03
     isStunned: 0
   combatStats:
     canShoot: 1
@@ -30,7 +30,7 @@ MonoBehaviour:
   healthStats:
     maxArmor: 23
     maxHealth: 23
-    isAlive: 1
+    isAlive: 0
     health: 23
     armor: 23
     healthRegenerationRate: 1
