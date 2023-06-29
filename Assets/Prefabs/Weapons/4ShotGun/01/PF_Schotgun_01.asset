@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 47fd8c4480ad2484c87f257d102db949, type: 3}
-  m_Name: PF_Wep_Launcher_01
+  m_Name: PF_Schotgun_01
   m_EditorClassIdentifier: 
-  weaponType: 4
-  weaponName: Launcher_01
-  weaponPrefab: {fileID: 6137622589621463267, guid: a5b6a8fcc6e298d47a596ddbf06f6008,
+  weaponType: 2
+  weaponName: Schotgun_01
+  weaponPrefab: {fileID: 7901565739026946909, guid: d156c6176323b8043be5ae83258ba786,
     type: 3}
   weaponOffset: 0
   defaultPositionOffset: {x: 0.149, y: 0.035, z: -0.061}
@@ -25,44 +25,44 @@ MonoBehaviour:
   customScaleOffset: {x: 1, y: 1, z: 1}
   FullAuto: 0
   autoReload: 0
-  weaponFireRate: 0.1
-  projectilesPerShot: 1
-  weaponDamage: 20
+  weaponFireRate: 0.3
+  projectilesPerShot: 5
+  weaponDamage: 5
   weaponRange: 100
   weaponReloadTime: 0.5
   weaponClipSize: 5
-  ammoCostPerShot: 5
+  ammoCostPerShot: 1
   spreadIncreasePerShot: 0.1
-  minSpread: 0
-  maxSpread: 0
+  minSpread: 0.3
+  maxSpread: 0.3
   recoilRecoveryRate: 0.1
   recoilRecoveryDelay: 0.3
-  ammoPrefab: {fileID: 555614015400093906, guid: 34981c929cbdece44b6623fdc3bd19d3,
-    type: 3}
+  ammoPrefab: {fileID: 0}
   muzzleFlashPrefab: {fileID: 0}
   muzzleFlashScale: {x: 1, y: 1, z: 1}
-  hitEffectPrefab: {fileID: 0}
+  hitEffectPrefab: {fileID: 3357757399141271759, guid: acf6838462ba8944485d3b0312e5c9bc,
+    type: 3}
   hitEffectScale: {x: 1, y: 1, z: 1}
   shootSound: {fileID: 0}
   reloadSound: {fileID: 0}
   emptySound: {fileID: 0}
-  knockbackForce: 500
+  knockbackForce: 15
   burnDps: 0
   burnDuration: 0
-  explosionPrefab: {fileID: 283744553014127353, guid: 297b11088e214f2419458a6a66731c00,
-    type: 3}
-  explosionRadius: 20
+  explosionPrefab: {fileID: 0}
+  explosionRadius: 0
   explosionDamageFallOff: 0.7
-  tracerPrefab: {fileID: 0}
-  tracerColor: {fileID: 0}
+  tracerPrefab: {fileID: 8050274072530162843, guid: 72242ada63513024d82ab3cfccfbfd97,
+    type: 3}
+  tracerColor: {fileID: 2100000, guid: 454f11e9756c02744bc06a9359fe13a5, type: 2}
   piercingAmount: 0
   piercingDamageFallOff: 0.7
   lifeTime: 5
   sticky: 0
-  explodeOnImpact: 1
+  explodeOnImpact: 0
   bounceAmount: 0
   trailPrefab: {fileID: 0}
   projectileMovementType: 0
-  constantForce: 20
+  constantForce: 5
   impulseForce: 5
   gravityMultiplier: 1

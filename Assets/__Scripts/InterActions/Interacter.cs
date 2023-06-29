@@ -13,6 +13,8 @@ public class Interacter : MonoBehaviour
     public bool AutoTrigger = false;
     public bool InteractOnce = false;
 
+    [SerializeField] private float interactDelay = 0f;
+
     [HideInInspector] public GameObject Player;
 
     private bool Interacted = false;
@@ -49,9 +51,11 @@ public class Interacter : MonoBehaviour
                 //disable this script
                 enabled = false;
 
-
                 return;
             }
+
+            if (interactDelay > 0) StartCoroutine(InteractDelay());
+            
 
 
 
@@ -92,6 +96,12 @@ public class Interacter : MonoBehaviour
             InteractCanvasInstance.transform.GetChild(0).GetComponent<TMP_Text>().text = InteractText;
 
         }
+    }
+
+    IEnumerator InteractDelay()
+    {
+        yield return new WaitForSeconds(interactDelay);
+        Interacted = false;        
     }
 
 
@@ -140,6 +150,19 @@ public class Interacter : MonoBehaviour
     {
         //enable sphere collider
         GetComponent<SphereCollider>().enabled = true;
+    }
+
+    
+    private void OnDisable()
+    {
+        //disable sphere collider
+        GetComponent<SphereCollider>().enabled = false;
+
+        if(InteractCanvasInstance != null)
+        {
+            Player.GetComponent<PlayerInteractManager>().RemoveEvent(this.gameObject);
+            Destroy(InteractCanvasInstance);
+        }
     }
 
 

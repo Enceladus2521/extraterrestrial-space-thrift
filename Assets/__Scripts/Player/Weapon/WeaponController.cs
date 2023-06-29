@@ -308,8 +308,8 @@ public class WeaponController : MonoBehaviour
 
             currentWeaponInstance = weapon;
 
-            //disable all collider on weapon
-            Collider[] colliders = currentWeaponInstance.GetComponentsInChildren<Collider>();
+            //disable all collider on weapon not child of weapon
+            Collider[] colliders = currentWeaponInstance.GetComponents<Collider>();
             foreach (Collider collider in colliders)
             {
                 collider.enabled = false;

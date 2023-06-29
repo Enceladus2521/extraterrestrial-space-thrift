@@ -62,6 +62,9 @@ public class LootTable : MonoBehaviour
         GameObject loot = lootTableObj.LootTables[rarityIndex].loots[lootIndex].loot;
         GameObject trail = lootTableObj.RarityTrails[rarityIndex];
         GameObject lootObject = Instantiate(loot, LootEmitter.transform.position, LootEmitter.transform.rotation);
+
+        lootObject.transform.SetParent(transform);
+
         GameObject trailObject = Instantiate(trail, lootObject.transform.position, Quaternion.identity);
         trailObject.transform.SetParent(lootObject.transform);
 

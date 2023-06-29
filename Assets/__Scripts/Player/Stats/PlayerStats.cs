@@ -40,7 +40,16 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private int maxAmmo;
 
     [SerializeField] private int baseAmmo = 100;
-    [SerializeField] private float ammoMultiplier = 1.1f;
+    [SerializeField] private float ammoMultiplier = 1.2f;
+
+
+    [Header("Damage")]    
+    [SerializeField] private float damageMultiplier = 1.5f;
+
+    [Header("Money")]
+    [SerializeField] private int money = 0;
+
+
 
 
     /// <summary>
@@ -185,6 +194,34 @@ public class PlayerStats : MonoBehaviour
     {
         return maxArmor;
     }
+
+    public float GetDamage()
+    {
+        return damageMultiplier;
+    }
+
+    public float GetLevel()
+    {
+        return level;
+    }
+
+   
+
+    public int GetMoney()
+    {
+        return money;
+    }
+
+    public void AddMoney(int amount)
+    {
+        money += amount;
+    }
+
+    public void TakeMoney(int amount)
+    {
+        money -= amount;
+    }
+    
 
 
 

@@ -146,6 +146,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AutoTrigger: 0
   InteractOnce: 1
+  interactDelay: 15
+  Player: {fileID: 0}
   interactRange: 1.5
   interactOffset: {x: 0, y: 0, z: 0}
   events:

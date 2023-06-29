@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 47fd8c4480ad2484c87f257d102db949, type: 3}
-  m_Name: PF_Wep_Sword_02
+  m_Name: PF_Wep_Launcher_01
   m_EditorClassIdentifier: 
-  weaponType: 6
-  weaponName: Wep_Sword_02
-  weaponPrefab: {fileID: 5500702006247532567, guid: 4c72006136388e6469fd6800a85aba96,
+  weaponType: 4
+  weaponName: Launcher_01
+  weaponPrefab: {fileID: 6137622589621463267, guid: a5b6a8fcc6e298d47a596ddbf06f6008,
     type: 3}
   weaponOffset: 0
   defaultPositionOffset: {x: 0.149, y: 0.035, z: -0.061}
@@ -25,19 +25,20 @@ MonoBehaviour:
   customScaleOffset: {x: 1, y: 1, z: 1}
   FullAuto: 0
   autoReload: 0
-  weaponFireRate: 1
+  weaponFireRate: 0.1
   projectilesPerShot: 1
-  weaponDamage: 10
-  weaponRange: 0
-  weaponReloadTime: 0
-  weaponClipSize: 1
-  ammoCostPerShot: 0
+  weaponDamage: 20
+  weaponRange: 100
+  weaponReloadTime: 0.5
+  weaponClipSize: 5
+  ammoCostPerShot: 5
   spreadIncreasePerShot: 0.1
   minSpread: 0
   maxSpread: 0
   recoilRecoveryRate: 0.1
   recoilRecoveryDelay: 0.3
-  ammoPrefab: {fileID: 0}
+  ammoPrefab: {fileID: 555614015400093906, guid: 34981c929cbdece44b6623fdc3bd19d3,
+    type: 3}
   muzzleFlashPrefab: {fileID: 0}
   muzzleFlashScale: {x: 1, y: 1, z: 1}
   hitEffectPrefab: {fileID: 0}
@@ -45,11 +46,12 @@ MonoBehaviour:
   shootSound: {fileID: 0}
   reloadSound: {fileID: 0}
   emptySound: {fileID: 0}
-  knockbackForce: 20
+  knockbackForce: 500
   burnDps: 0
   burnDuration: 0
-  explosionPrefab: {fileID: 0}
-  explosionRadius: 0
+  explosionPrefab: {fileID: 283744553014127353, guid: 297b11088e214f2419458a6a66731c00,
+    type: 3}
+  explosionRadius: 20
   explosionDamageFallOff: 0.7
   tracerPrefab: {fileID: 0}
   tracerColor: {fileID: 0}
@@ -57,10 +59,10 @@ MonoBehaviour:
   piercingDamageFallOff: 0.7
   lifeTime: 5
   sticky: 0
-  explodeOnImpact: 0
+  explodeOnImpact: 1
   bounceAmount: 0
   trailPrefab: {fileID: 0}
   projectileMovementType: 0
-  constantForce: 5
-  impulseForce: 5
+  constantForce: 20
+  impulseForce: 10
   gravityMultiplier: 1

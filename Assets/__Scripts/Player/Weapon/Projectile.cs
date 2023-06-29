@@ -107,20 +107,21 @@ public class Projectile : MonoBehaviour
             {
                 return;
             }
-            bounceAmount--;
+            
             StartCoroutine(BounceCooldown(0.1f));
             //get the normal of the collision and calculate the new direction
             Vector3 newDirection = Vector3.Reflect(transform.forward, other.contacts[0].normal);
             //rotate the object to face the new direction
             direction = newDirection;
             transform.rotation = Quaternion.LookRotation(direction);
-
+            bounceAmount--; 
             
             //calculate the bounce force based on the current force and current bounce amount (the more bounces the less force)
             float bounceForce = force * (1 - (currentBounceAmount / bounceAmount));
             //add the force to the rigidbody
             GetComponent<Rigidbody>().AddForce(transform.forward * bounceForce, ForceMode.Impulse);
-            //increase the current bounce amount            
+            //increase the current bounce amount 
+                      
             currentBounceAmount++;
         }
         else if (isSticky)
