@@ -18,6 +18,7 @@ public class SwordDamageDealer : MonoBehaviour
             if(transform.parent.GetComponent<Weapon>() != null)
             {
                 transform.parent.GetComponent<Weapon>().OnSliceHit(other.gameObject);
+                
             }
         }
         

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.InputSystem;
 [RequireComponent(typeof(Interacter))]
 [RequireComponent(typeof(Rigidbody))]
 
@@ -99,6 +99,9 @@ public class Weapon : MonoBehaviour
             maxSpread = weaponObj.maxSpread;
             recoilRecoveryRate = weaponObj.recoilRecoveryRate;
             recoilRecoveryDelay = weaponObj.recoilRecoveryDelay;
+
+
+            UiController.Instance.UpdateAmmo(player.GetComponent<PlayerInput>().playerIndex , player.GetComponent<PlayerStats>().GetAmmo(), ammoInClip, weaponObj.FullAuto); 
         }
     }
 
@@ -116,10 +119,12 @@ public class Weapon : MonoBehaviour
             {
                 MeshFilter meshFilter = GetComponent<MeshFilter>();
                 SpawnSwordDamageDealer(meshFilter);
-            }
-
-            
+            }            
         }
+
+        
+
+
     }
 
 
@@ -200,6 +205,7 @@ public class Weapon : MonoBehaviour
             Shoot();
             StartCoroutine(CoolDown());
             ammoInClip -= ammoCostPerShot;
+            UiController.Instance.UpdateAmmo(player.GetComponent<PlayerInput>().playerIndex , player.GetComponent<PlayerStats>().GetAmmo(), ammoInClip, weaponObj.FullAuto); 
             //Debug.Log("Ammo in clip: " + ammoInClip);
         }
         else if (!shooting && ammoInClip < weaponClipSize && !reloading && autoReload && !isPreloading)
@@ -486,7 +492,7 @@ public class Weapon : MonoBehaviour
         yield return new WaitForSeconds(weaponReloadTime);
 
 
-        ammoInClip = weaponClipSize;
+        
         reloading = false;
         isPreloading = false;
         if ((int)weaponObj.weaponType == 5 || (int)weaponObj.weaponType == 6)
@@ -494,9 +500,12 @@ public class Weapon : MonoBehaviour
             //-_- dont touch this it works   
             yield break;       
         }
-
         player.GetComponent<PlayerStats>().TakeAmmo(weaponClipSize - ammoInClip);
+        ammoInClip = weaponClipSize;
+       
+
         
+        UiController.Instance.UpdateAmmo(player.GetComponent<PlayerInput>().playerIndex, player.GetComponent<PlayerStats>().GetAmmo(), ammoInClip, weaponObj.FullAuto);       
     }
 
 
@@ -509,6 +518,8 @@ public class Weapon : MonoBehaviour
     {
         this.ammoInClip = ammoInClip;
         this.weaponLevel = level;
+        
+       
     }
 
     public int GetAmmoInClip()
@@ -559,6 +570,7 @@ public class Weapon : MonoBehaviour
             //remove from world
             Destroy(gameObject);
         }
+        UiController.Instance.UpdateAmmo(player.GetComponent<PlayerInput>().playerIndex, player.GetComponent<PlayerStats>().GetAmmo(), ammoInClip, weaponObj.FullAuto); 
     }
     public void SetIndividualWeaponData(IndividualWeaponData data)
     {
@@ -580,6 +592,7 @@ public class Weapon : MonoBehaviour
         {
             //remove pickup Text
             GetComponent<Interacter>().SetInteractText("");
+            
 
         }
         else

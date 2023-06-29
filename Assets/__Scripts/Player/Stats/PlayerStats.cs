@@ -2,16 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 
 public class PlayerStats : MonoBehaviour
-{    
-    
+{
+
 
     [Header("Leveling")]
     [SerializeField] private int level = 0;
     [SerializeField] private float experience = 0;
-    private float requiredExperience = 100;
+
+    private float currentRequiredExperience = 0;
+    private float baseRequiredExperience = 100;
 
     [SerializeField] private float experienceMultiplier = 1.5f;
 
@@ -33,7 +36,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private int baseArmor = 100;
     [SerializeField] private float armorMultiplier = 1.9f;
 
-  
+
 
 
     [Header("Ammo")]
@@ -44,19 +47,20 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private float ammoMultiplier = 1.2f;
 
 
-    [Header("Damage")]    
+    [Header("Damage")]
     [SerializeField] private float damageMultiplier = 1.5f;
 
     [Header("Money")]
     [SerializeField] private int money = 0;
 
 
+    [SerializeField] Material[] materials;
+    [SerializeField] GameObject playerHighlight;
 
 
-    /// <summary>
-    /// Start is called on the frame when a script is enabled just before
-    /// any of the Update methods is called the first time.
-    /// </summary>
+
+
+    
     private void Start()
     {
 
@@ -72,36 +76,66 @@ public class PlayerStats : MonoBehaviour
         health = maxHealth;
         armor = maxArmor;
         ammo = maxAmmo;
-    }
 
-    private void CalculateRequiredExperience()
-    {
-        requiredExperience = requiredExperience * experienceMultiplier * level;
-    }
+        UiController.Instance.DisplayPlayerStats(GetComponent<PlayerInput>().playerIndex, true);
+        UiController.Instance.UpdateHealth(GetComponent<PlayerInput>().playerIndex, maxHealth, health);
+        UiController.Instance.UpdateArmor(GetComponent<PlayerInput>().playerIndex, maxArmor, armor);
+        UiController.Instance.UpdateXp(GetComponent<PlayerInput>().playerIndex, currentRequiredExperience, experience, level);
+        UiController.Instance.UpdateMoney(GetComponent<PlayerInput>().playerIndex, money);
 
-
-
-    public void AddExperience(float amount)
-    {
-        experience += amount;
-        if (experience >= requiredExperience)
+        //Set player color corresponding to player index check if player highlight is not null and check if materials is not null
+        if (playerHighlight != null && materials[GetComponent<PlayerInput>().playerIndex] != null)
         {
-            experience -= requiredExperience * experienceMultiplier * level;
-            level++;
-            CalculateRequiredExperience();
-            UpdateStats();
-
+            playerHighlight.GetComponent<MeshRenderer>().material = materials[GetComponent<PlayerInput>().playerIndex];
         }
+
     }
+
+
+
+
+
+
 
     [EButton("Update Stats")]
     public void UpdateStats()
     {
         maxHealth = (int)(baseHealth * Mathf.Pow(healthMultiplier, level));
-        maxArmor = (int)(baseArmor * Mathf.Pow(armorMultiplier, level));        
+        maxArmor = (int)(baseArmor * Mathf.Pow(armorMultiplier, level));
         maxAmmo = (int)(baseAmmo * Mathf.Pow(ammoMultiplier, level));
         CalculateRequiredExperience();
+        UiController.Instance.UpdateXp(GetComponent<PlayerInput>().playerIndex, currentRequiredExperience, experience, level);
+    }
 
+
+
+    public void Die()
+    {
+        Debug.Log("Player died");
+        //TODO: respawn
+        Debug.Log("Respawn");
+
+    }
+
+    //Health------------------------
+    public void AddHealth(int amount)
+    {
+        health += amount;
+        if (health > maxHealth)
+        {
+            health = maxHealth;
+        }
+        UiController.Instance.UpdateHealth(GetComponent<PlayerInput>().playerIndex, maxHealth, health);
+    }
+
+    public float GetHealth()
+    {
+        return health;
+    }
+
+    public float GetMaxHealth()
+    {
+        return maxHealth;
     }
 
     public void TakeDamage(int damage)
@@ -122,26 +156,10 @@ public class PlayerStats : MonoBehaviour
         {
             Die();
         }
-       
-    }
-
-    public void Die()
-    {
-        Debug.Log("Player died");
-        //TODO: respawn
-        Debug.Log("Respawn");
+        UiController.Instance.UpdateHealth(GetComponent<PlayerInput>().playerIndex, maxHealth, health);
 
     }
-
-    public void AddHealth(int amount)
-    {
-        health += amount;
-        if (health > maxHealth)
-        {
-            health = maxHealth;
-        }
-    }
-
+    //Armor-------------------------
     public void AddArmor(int amount)
     {
         armor += amount;
@@ -149,9 +167,22 @@ public class PlayerStats : MonoBehaviour
         {
             armor = maxArmor;
         }
+        UiController.Instance.UpdateArmor(GetComponent<PlayerInput>().playerIndex, maxArmor, armor);
+
     }
 
-    
+    public float GetAmor()
+    {
+        return armor;
+    }
+
+    public float GetMaxAmor()
+    {
+        return maxArmor;
+    }
+
+
+    //Ammo--------------------------
 
     public void AddAmmo(int amount)
     {
@@ -169,6 +200,7 @@ public class PlayerStats : MonoBehaviour
         {
             ammo = 0;
         }
+
     }
 
     public int GetAmmo()
@@ -176,36 +208,50 @@ public class PlayerStats : MonoBehaviour
         return ammo;
     }
 
-    public float GetHealth()
-    {
-        return health;
-    }
-
-    public float GetMaxHealth()
-    {
-        return maxHealth;
-    }
-
-    public float GetAmor()
-    {
-        return armor;
-    }
-
-    public float GetMaxAmor()
-    {
-        return maxArmor;
-    }
-
     public float GetDamage()
     {
         return damageMultiplier;
     }
 
+
+    //Level-------------------------
     public float GetLevel()
     {
         return level;
-    }   
 
+    }
+
+    public float GetExperience()
+    {
+        return experience;
+    }
+
+    public float GetRequiredExperience()
+    {
+        return currentRequiredExperience;
+    }
+
+    public void AddExperience(float amount)
+    {
+        experience += amount;
+
+        while (experience >= currentRequiredExperience)
+        {
+            //Debug.Log("Level up");
+            experience -= currentRequiredExperience;
+            level++;
+
+            UpdateStats();
+        }
+    }
+
+    private void CalculateRequiredExperience()
+    {
+        currentRequiredExperience = baseRequiredExperience * experienceMultiplier * level;
+    }
+
+
+    //Money-------------------------
     public int GetMoney()
     {
         return money;
@@ -214,15 +260,19 @@ public class PlayerStats : MonoBehaviour
     public void AddMoney(int amount)
     {
         money += amount;
+        UiController.Instance.UpdateMoney(GetComponent<PlayerInput>().playerIndex, money);
     }
 
     public void TakeMoney(int amount)
     {
         money -= amount;
+        UiController.Instance.UpdateMoney(GetComponent<PlayerInput>().playerIndex, money);
     }
-    
 
-   
+
+
+
+
 
 
 
