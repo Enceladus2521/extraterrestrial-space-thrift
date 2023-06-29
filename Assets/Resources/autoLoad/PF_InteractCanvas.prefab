@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1619979580898029830}
   - component: {fileID: 1619979580898029831}
   - component: {fileID: 477068641222977472}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: PF_InteractCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 1619979582329855558}
   - component: {fileID: 1619979582329855556}
   - component: {fileID: 1619979582329855557}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

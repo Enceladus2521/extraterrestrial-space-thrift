@@ -3,24 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+[RequireComponent(typeof(Interacter))]
 public class PickUpInteraction : MonoBehaviour
 {
     public int ammoAmount = 0;
     public int healthAmount = 0;
     public int amorAmount = 0;
+    public int moneyAmount = 0;
 
     [SerializeField] private float flySpeed = 6f;
 
-    [SerializeField] private float pickupRange = 1f;
+    [SerializeField] private float pickupRange = 1.5f;
 
     [SerializeField] private bool InstantPickup = false;
 
 
-    public void SetAmount(int ammo, int health, int amor)
+    
+    private void Start()
+    {
+        //get interacter
+        Interacter interacter = GetComponent<Interacter>();
+        //clear all events
+        interacter.events.RemoveAllListeners();
+        //add loot function to events
+        interacter.events.AddListener(Loot);
+        
+    }
+
+    public void SetAmount(int ammo, int health, int amor, int money)
     {
         ammoAmount = ammo;
         healthAmount = health;
         amorAmount = amor;
+        moneyAmount = money;
     }
 
     public void Loot()
@@ -52,22 +67,29 @@ public class PickUpInteraction : MonoBehaviour
             }
         }
 
-        //Todo: add ammo to player
+        
         if (ammoAmount > 0)
         {
             closestPlayer.GetComponent<PlayerStats>().AddAmmo(ammoAmount);
         }
 
-        //Todo: add health to player
+        
         if (healthAmount > 0)
         {
             closestPlayer.GetComponent<PlayerStats>().AddHealth(healthAmount);
         }
 
-        //Todo: add amor to player
+        
         if (amorAmount > 0)
         {
             closestPlayer.GetComponent<PlayerStats>().AddArmor(amorAmount);
+        }
+
+
+
+        if (moneyAmount > 0)
+        {
+            closestPlayer.GetComponent<PlayerStats>().AddMoney(moneyAmount);
         }
 
 
@@ -97,22 +119,28 @@ public class PickUpInteraction : MonoBehaviour
         
 
 
-        //Todo: add ammo to player
+        
         if (ammoAmount > 0)
         {
             player.GetComponent<PlayerStats>().AddAmmo(ammoAmount);
         }
 
-        //Todo: add health to player
+        
         if (healthAmount > 0)
         {
             player.GetComponent<PlayerStats>().AddHealth(healthAmount);
         }
 
-        //Todo: add amor to player
+        
         if (amorAmount > 0)
         {
             player.GetComponent<PlayerStats>().AddArmor(amorAmount);
+        }
+
+        
+        if (moneyAmount > 0)
+        {
+            player.GetComponent<PlayerStats>().AddMoney(moneyAmount);
         }
 
         Destroy(gameObject);

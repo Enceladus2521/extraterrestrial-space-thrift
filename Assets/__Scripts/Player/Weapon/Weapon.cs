@@ -482,10 +482,19 @@ public class Weapon : MonoBehaviour
 
         reloading = true;
         yield return new WaitForSeconds(weaponReloadTime);
-        player.GetComponent<PlayerStats>().TakeAmmo(weaponClipSize - ammoInClip);
+
+
         ammoInClip = weaponClipSize;
         reloading = false;
         isPreloading = false;
+        if ((int)weaponObj.weaponType == 5 || (int)weaponObj.weaponType == 6)
+        {
+            //-_- dont touch this it works   
+            yield break;       
+        }
+
+        player.GetComponent<PlayerStats>().TakeAmmo(weaponClipSize - ammoInClip);
+        
     }
 
 
@@ -504,13 +513,6 @@ public class Weapon : MonoBehaviour
     {
         return ammoInClip;
     }
-
-
-
-
-
-
-
 
 
 
@@ -579,6 +581,11 @@ public class Weapon : MonoBehaviour
 
         }
         else
+        {
+            //add pickup Text
+            GetComponent<Interacter>().SetInteractText("Press F or X to pickup " + weaponObj.name);
+
+        }
 
         if (!equipped && lowAmmoIndicator)
         {

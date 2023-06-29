@@ -5,7 +5,8 @@ using UnityEngine.Events;
 
 
 public class PlayerStats : MonoBehaviour
-{
+{    
+    
 
     [Header("Leveling")]
     [SerializeField] private int level = 0;
@@ -203,9 +204,7 @@ public class PlayerStats : MonoBehaviour
     public float GetLevel()
     {
         return level;
-    }
-
-   
+    }   
 
     public int GetMoney()
     {
@@ -223,6 +222,7 @@ public class PlayerStats : MonoBehaviour
     }
     
 
+   
 
 
 
