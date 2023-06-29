@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4726071861339551740}
   - component: {fileID: 4726071861339551741}
   m_Layer: 0
-  m_Name: SM_Prop_Money_Folded_01
+  m_Name: PF_Money_Folded_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

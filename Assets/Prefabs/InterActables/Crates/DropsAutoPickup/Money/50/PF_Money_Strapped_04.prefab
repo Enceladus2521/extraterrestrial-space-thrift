@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6656423297533245529
+--- !u!1 &1824354917647143841
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,50 +8,50 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6662325565960350523}
-  - component: {fileID: 6634880596120677523}
-  - component: {fileID: 6644719548440841897}
-  - component: {fileID: 6667171279601144287}
-  - component: {fileID: 6657803907732685361}
-  - component: {fileID: 6657803907732685367}
-  - component: {fileID: 6657803907732685366}
+  - component: {fileID: 1827272636333328039}
+  - component: {fileID: 1811430785485406983}
+  - component: {fileID: 1803284859661948077}
+  - component: {fileID: 1852685698464087039}
+  - component: {fileID: 1825549839336292579}
+  - component: {fileID: 1825549839336292573}
+  - component: {fileID: 1825549839336292572}
   m_Layer: 0
-  m_Name: SM_Prop_Money_Stack_01
+  m_Name: PF_Money_Strapped_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6662325565960350523
+--- !u!4 &1827272636333328039
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6656423297533245529}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10.978786, y: 0.00000011920929, z: -15.414409}
+  m_GameObject: {fileID: 1824354917647143841}
+  m_LocalRotation: {x: -0, y: 0.70710576, z: -0, w: 0.70710784}
+  m_LocalPosition: {x: 8.561683, y: 0.00000011920929, z: -15.389121}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &6634880596120677523
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!33 &1811430785485406983
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6656423297533245529}
-  m_Mesh: {fileID: 4300000, guid: 238506c16f3d66447b4b9fdf349d1c78, type: 3}
---- !u!23 &6644719548440841897
+  m_GameObject: {fileID: 1824354917647143841}
+  m_Mesh: {fileID: 4300000, guid: f00ee7d2981912949b31de12ff98676b, type: 3}
+--- !u!23 &1803284859661948077
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6656423297533245529}
+  m_GameObject: {fileID: 1824354917647143841}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -87,40 +87,40 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6667171279601144287
+--- !u!64 &1852685698464087039
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6656423297533245529}
+  m_GameObject: {fileID: 1824354917647143841}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: 43062827677887836, guid: a0d098e602f223a48adb78bcda4bd4db, type: 2}
---- !u!135 &6657803907732685361
+  m_Mesh: {fileID: 43803456393520798, guid: 4b041be05aae39e488ea053fb28c8cac, type: 2}
+--- !u!135 &1825549839336292579
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6656423297533245529}
+  m_GameObject: {fileID: 1824354917647143841}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.2123138
-  m_Center: {x: 0.00000011175871, y: 0.09723436, z: -0.000000037252903}
---- !u!114 &6657803907732685367
+  m_Radius: 0.1509898
+  m_Center: {x: -0.0035847053, y: 0.035583425, z: 0.0008480437}
+--- !u!114 &1825549839336292573
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6656423297533245529}
+  m_GameObject: {fileID: 1824354917647143841}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 871a02181e425fe4fadcd065545777ba, type: 3}
@@ -129,17 +129,17 @@ MonoBehaviour:
   ammoAmount: 0
   healthAmount: 0
   amorAmount: 0
-  moneyAmount: 100
+  moneyAmount: 50
   flySpeed: 6
   pickupRange: 1.5
   InstantPickup: 0
---- !u!114 &6657803907732685366
+--- !u!114 &1825549839336292572
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6656423297533245529}
+  m_GameObject: {fileID: 1824354917647143841}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3a1be3fba64902041a4efa7c79a342e2, type: 3}
