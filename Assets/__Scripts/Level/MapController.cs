@@ -17,7 +17,10 @@ public class MapController : MonoBehaviour
     public MapConfig mapConfig;
 
     [SerializeField]
-    List<Room> roomConfigs = new List<Room>();
+    List<RoomConfig> roomConfigs = new List<RoomConfig>();
+    
+    int count = 0;
+
 
     [SerializeField]
     List<RoomController> roomsGenerated = new List<RoomController>();
@@ -39,7 +42,7 @@ public class MapController : MonoBehaviour
     private void ClearMap()
     {
         Debug.Log("ClearMap");
-        roomConfigs = new List<Room>();
+        roomConfigs = new List<RoomConfig>();
         lastRoomPosition = Vector3.zero;
         // delete all roomsGenerated game objects
         foreach (RoomController room in roomsGenerated)
@@ -70,16 +73,17 @@ public class MapController : MonoBehaviour
 
         if (roomsGenerated.Count > roomConfigs.Count)
         {
-            Debug.LogWarning("Generated Room: " + roomsGenerated.Count + " / " + roomConfigs.Count);
+            Debug.LogWarning("Generated RoomConfig: " + roomsGenerated.Count + " / " + roomConfigs.Count);
             ClearMap();
             GenerateRoom(roomConfigs[0]);
             return;
         }
     }
 
-    void GenerateRoom(Room localRoomConfig)
+    void GenerateRoom(RoomConfig localRoomConfig)
     {
-        GameObject room = Instantiate(localRoomConfig.transform.gameObject);
+        Vector3 position = new Vector3(localRoomConfig.offset.x * localRoomConfig.gridSize, 0f, localRoomConfig.offset.y * localRoomConfig.gridSize);
+        GameObject room = Instantiate(initialRoom.gameObject, position, Quaternion.identity);
         if (room == null) return;
         if (map == null) return;
         room.transform.parent = map.transform;
@@ -116,7 +120,7 @@ public class MapController : MonoBehaviour
 
     private void GenerateNewRoomConfig()
     {   
-        Room currentRoom;
+        RoomConfig currentRoom;
         if (roomConfigs.Count == 0) {
             currentRoom = initialRoom.roomConfig;
             foreach (Door door in currentRoom.doorConfigs)
@@ -135,7 +139,9 @@ public class MapController : MonoBehaviour
             return;
         }
 
-        Room newRoomConfig = new Room();
+        RoomConfig newRoomConfig = new RoomConfig();
+        newRoomConfig.seed = currentRoom.seed + roomConfigs.Count;
+        Random.InitState(newRoomConfig.seed);
 
         newRoomConfig.width =  Random.Range(1, mapConfig.maxWidth + 1);
         newRoomConfig.height = Random.Range(1, mapConfig.maxHeight + 1);
@@ -144,12 +150,12 @@ public class MapController : MonoBehaviour
             0,
             currentRoom.offset.y
         );
-        newRoomConfig.roomType = Room.RoomType.Basic;
+        newRoomConfig.roomType = RoomConfig.RoomType.Basic;
         newRoomConfig.internalConfig = currentRoom.internalConfig;
-        newRoomConfig.transform = currentRoom.transform;
         newRoomConfig.gridSize = currentRoom.gridSize;
-        newRoomConfig.seed = currentRoom.seed + (roomConfigs.Count + 1);
-
+        count++;
+        newRoomConfig.doorConfigs = new List<Door>();
+         
         Door doorLeft = new Door();
         doorLeft.isConnected = false;
         doorLeft.wallType = Wall.WallType.Left;
@@ -161,12 +167,12 @@ public class MapController : MonoBehaviour
         newRoomConfig.doorConfigs.Add(doorRight);
 
 
-        Room roomLeft = roomConfigs[roomConfigs.Count - 1];
+        RoomConfig roomLeft = roomConfigs[roomConfigs.Count - 1];
         roomConfigs.Add(newRoomConfig);
         roomLeft.Connect(doorLeft);
     }
 
-    private List<Door> GetUnconnectedDoors(Room roomConfig)
+    private List<Door> GetUnconnectedDoors(RoomConfig roomConfig)
     {
         List<Door> unconnectedDoors = new List<Door>();
         foreach (Door door in roomConfig.doorConfigs)
@@ -177,17 +183,17 @@ public class MapController : MonoBehaviour
         return unconnectedDoors;
     }
 
-    private Room GetRandomRoomConfig()
+    private RoomConfig GetRandomRoomConfig()
     {
         return roomConfigs[UnityEngine.Random.Range(0, roomConfigs.Count)];
     }
 
     void OnDrawGizmos()
     {
-        foreach (Room roomConfig in roomConfigs)
+        foreach (RoomConfig roomConfig in roomConfigs)
         {
-            Vector3 pos = roomConfig.transform.position;
-            pos += new Vector3(roomConfig.offset.x * roomConfig.gridSize, 0, roomConfig.offset.y * roomConfig.gridSize);
+            // Vector3 pos = roomConfig.transform.position;
+            Vector3 pos = new Vector3(roomConfig.offset.x * roomConfig.gridSize, 0, roomConfig.offset.y * roomConfig.gridSize);
             Vector3 scale = new Vector3(roomConfig.width, 1f, roomConfig.height) * roomConfig.gridSize;
             Gizmos.DrawWireCube(pos, scale);
             Gizmos.color = Color.green;
@@ -200,7 +206,7 @@ public class MapController : MonoBehaviour
 
     void OnValidate()
     {
-        roomConfigs = new List<Room>();
+        roomConfigs = new List<RoomConfig>();
     }
 
 }

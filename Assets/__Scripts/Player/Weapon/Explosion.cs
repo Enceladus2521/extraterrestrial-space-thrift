@@ -61,9 +61,17 @@ public class Explosion : MonoBehaviour
 
         foreach (GameObject enemy in enemyHits)
         {
-            //Todo: calculate damage based on distance from explosion
-             //Todo: cause damage
-            //Todo: cause burn effect          
+                if (!enemy) continue;
+                Vector3 enemyPosition = enemy.transform.position;
+                float distance = Vector3.Distance(transform.position, enemyPosition);
+
+                if (distance < explosionRadius)
+                {
+                    enemy.GetComponent<Rigidbody>().AddExplosionForce(knockbackForce, enemyPosition, explosionRadius);
+                    float damageAmount = damage * (1 - (distance/explosionRadius) * explosionDamageFallOff);
+                    enemy.GetComponent<EntityController>().TakeDamage(damageAmount);
+                    yield return new WaitForSeconds(burnDuration);
+                }
         }
 
         yield return null;

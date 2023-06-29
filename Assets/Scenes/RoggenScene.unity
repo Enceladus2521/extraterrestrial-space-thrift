@@ -173,19 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fede00894b602bbeb4423be1067b428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anchorType: 1
-  roomConfig:
-    internalConfig: {fileID: 11400000, guid: 994140c206f16109e85e2718bf0059c3, type: 2}
-    gridSize: 5
-    roomType: 0
-    offset: {x: 0, y: 0}
-    width: 6
-    height: 6
-    seed: 42
-    transform: {fileID: 1994462481}
-    doorConfigs:
-    - wallType: 1
-      isConnected: 0
+  script: {fileID: 11400000, guid: 3d4c3e4262c09f8bf8229453a0899450, type: 2}
 --- !u!1001 &2588950117442425898
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -278,7 +266,6 @@ MonoBehaviour:
     maxHeight: 4
     maxWidth: 10
     seed: 42
-  roomConfigs: []
   roomsGenerated: []
   roomGenerationDistance: 42
 --- !u!114 &2588950117442425903

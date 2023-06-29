@@ -398,7 +398,7 @@ public class Weapon : MonoBehaviour
         //if hit object is enemy
         if (hitObject.CompareTag("enemy"))
         {
-            //Todo: damage enemy
+            hitObject.GetComponent<EntityController>().TakeDamage(weaponObj.weaponDamage);
 
             //Todo: add burn to enemy spawn burn effect Prefab and child it to enemy set data for burn effect
         }

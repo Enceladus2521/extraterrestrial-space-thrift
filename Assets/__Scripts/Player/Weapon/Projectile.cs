@@ -94,8 +94,9 @@ public class Projectile : MonoBehaviour
     
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.CompareTag("enemy"))
+        if (other.gameObject.CompareTag("enemy") && explosionPrefab == null)
         {
+            other.gameObject.GetComponent<EntityController>().TakeDamage(damage);
             DestroySelf();
         }
         else if(bounceAmount > 0)
@@ -161,7 +162,6 @@ public class Projectile : MonoBehaviour
         Destroy(gameObject);
     }
    
-
 
 }
 

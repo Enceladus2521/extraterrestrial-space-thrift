@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2965060525304846236}
   - component: {fileID: 2965060525304846234}
-  - component: {fileID: 2965060525304846233}
   m_Layer: 0
   m_Name: PlayerInputManager
   m_TagString: Untagged
@@ -52,7 +51,7 @@ MonoBehaviour:
   m_PlayerJoinedEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2965060525304846233}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PlayerSpawnManager, Assembly-CSharp
         m_MethodName: OnPlayerConnected
         m_Mode: 1
@@ -67,7 +66,7 @@ MonoBehaviour:
   m_PlayerLeftEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2965060525304846233}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PlayerSpawnManager, Assembly-CSharp
         m_MethodName: OnPlayerDisconnected
         m_Mode: 1
@@ -118,15 +117,3 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &2965060525304846233
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2965060525304846237}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c82b955738520d4db5c12d6ebbd52c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

@@ -8,19 +8,35 @@ using UnityEngine;
 
 public class RoomController : MonoBehaviour
 {
-    [SerializeField]
-    Room.AnchorType anchorType = Room.AnchorType.Bottom;
+    RoomConfig.AnchorType anchorType = RoomConfig.AnchorType.Center;
     Vector2 absOffset = Vector2.zero;
 
-    public Room roomConfig = new Room();
+    [SerializeField]
+    public RoomConfig roomConfig = new RoomConfig();
+
+    // room scriptable object
+    public Room script;
+
+    void OnValidate(){
+        if (script == null) {
+            Debug.LogError("RoomController script is null");
+            return;
+        }
+        roomConfig.internalConfig = script.internalConfig;
+        roomConfig.gridSize = script.gridSize;
+        roomConfig.roomType = script.roomType;
+        roomConfig.offset = script.offset;
+        roomConfig.width = script.width;
+        roomConfig.height = script.height;
+        roomConfig.seed = script.seed;
+        roomConfig.doorConfigs = script.doorConfigs;
+    }
 
     void Start()
     {
-        Random.InitState(roomConfig.seed);
-        // GenerateRoom();
     }
 
-    public void UpdateConfig(Room config)
+    public void UpdateConfig(RoomConfig config)
     {
         roomConfig = config;
     }
@@ -28,12 +44,19 @@ public class RoomController : MonoBehaviour
     public void Generate(bool gizmos = false)
     {
 
-        if (anchorType == Room.AnchorType.Center)
-            absOffset = roomConfig.offset + new Vector2(
+        if (anchorType == RoomConfig.AnchorType.Center)
+            absOffset =  new Vector2(
                 -(roomConfig.width - 2) / 2f,
                 -roomConfig.height / 2f
             );
 
+        if (!roomConfig.internalConfig) {
+            Debug.LogWarning("Enemies are not enabled in room config");
+            return;
+        }
+
+        Random.InitState(roomConfig.seed);
+        UnityEngine.Random.InitState(roomConfig.seed);
         GenerateFloor(gizmos);
         GenerateWalls(gizmos);
         GenerateInteractables(gizmos);
@@ -108,7 +131,7 @@ public class RoomController : MonoBehaviour
                 absPosition += transform.position;
                 Vector2Int gridPosition = new Vector2Int(x, y);
 
-                Wall.WallType? wallType = GetWallType(gridPosition);
+                Wall.WallType? wallType = RoomConfig.GetWallType(roomConfig, gridPosition);
 
 
                 if (!wallType.HasValue) continue;
@@ -140,7 +163,7 @@ public class RoomController : MonoBehaviour
                         break;
                 }
 
-                if (IsDoor(gridPosition, wallType.Value))
+                if (RoomConfig.IsDoor(roomConfig, gridPosition, wallType.Value))
                 {
                     GenerateDoor(absPosition, wallType.Value, gridPosition, gizmos);
                 }
@@ -255,90 +278,8 @@ public class RoomController : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        Random.InitState(roomConfig.seed);
         Generate(gizmos: true);
 
     }
 
-
-    // TODO: need to outsource
-
-    Wall.WallType? GetWallType(Vector2Int gridPosition)
-    {
-        if (gridPosition.x == -1 && gridPosition.y >= 0 && gridPosition.y < roomConfig.height)
-            return Wall.WallType.Left;
-
-        if (gridPosition.x == roomConfig.width && gridPosition.y >= 0 && gridPosition.y < roomConfig.height)
-            return Wall.WallType.Right;
-
-        if (gridPosition.y == -1 && gridPosition.x >= 0 && gridPosition.x < roomConfig.width)
-            return Wall.WallType.Bottom;
-
-        if (gridPosition.y == roomConfig.height && gridPosition.x >= 0 && gridPosition.x < roomConfig.width)
-            return Wall.WallType.Top;
-
-        return null;
-    }
-
-    bool hasDoorOnSide(Wall.WallType wallType)
-    {
-        bool hasDoor = false;
-
-        for (int i = 0; i < roomConfig.doorConfigs.Count; i++)
-        {
-            if (roomConfig.doorConfigs[i].wallType == wallType)
-                hasDoor = true;
-        }
-
-        return hasDoor;
-
-    }
-
-    bool IsDoor(Vector2Int position, Wall.WallType wallType)
-    {
-        int centerPosX = roomConfig.width / 2;
-        int centerPosY = roomConfig.height / 2;
-
-        bool hasDoor = hasDoorOnSide(wallType);
-
-        if (position.y >= 0 && position.y < roomConfig.height)
-        {
-            if (position.x == -1 && wallType == Wall.WallType.Left)
-                return (hasDoor && (position.y == centerPosY || (roomConfig.height % 2 == 0 && position.y == centerPosY - 1)));
-
-            if (position.x == roomConfig.width && wallType == Wall.WallType.Right)
-                return (hasDoor && (position.y == centerPosY || (roomConfig.height % 2 == 0 && position.y == centerPosY - 1)));
-        }
-
-        if (position.x >= 0 && position.x < roomConfig.width)
-        {
-            if (position.y == -1 && wallType == Wall.WallType.Bottom)
-                return (hasDoor && (position.x == centerPosX || (roomConfig.width % 2 == 0 && position.x == centerPosX - 1)));
-
-            if (position.y == roomConfig.height && wallType == Wall.WallType.Top)
-                return (hasDoor && (position.x == centerPosX || (roomConfig.width % 2 == 0 && position.x == centerPosX - 1)));
-        }
-
-        return false;
-    }
-
-    bool ShouldSpawnDoubleDoor(Wall.WallType wallType, Vector2Int gridPosition)
-    {
-        int centerPosX = roomConfig.width / 2;
-        int centerPosY = roomConfig.height / 2;
-
-        if (roomConfig.height % 2 == 0 || roomConfig.width % 2 == 0)
-        {
-            if ((wallType == Wall.WallType.Left || wallType == Wall.WallType.Right) && gridPosition.y == centerPosY)
-            {
-                return true;
-            }
-            else if ((wallType == Wall.WallType.Top || wallType == Wall.WallType.Bottom) && gridPosition.x == centerPosX)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }

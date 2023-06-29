@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Drone
   m_EditorClassIdentifier: 
   movementStats:
-    maxSpeed: 0
+    maxSpeed: 3.22
     speed: 2
     flyingAltitude: 1
     maintainDistance: 2.65
@@ -28,7 +28,7 @@ MonoBehaviour:
     meleeDamage: 0
     projectile: {fileID: 0}
   healthStats:
-    maxHealth: 10.22
+    maxHealth: 33.97
     healthRegenerationRate: 0
     health: 0
     armor: 0
@@ -36,3 +36,4 @@ MonoBehaviour:
   inventoryStats:
     maxCapacity: 0
     currentCapacity: 0
+  materialType: 0
