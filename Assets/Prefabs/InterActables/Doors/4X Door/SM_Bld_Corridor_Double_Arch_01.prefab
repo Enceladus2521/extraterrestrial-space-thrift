@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 33596265569871240}
   - component: {fileID: 23623317173249106}
   - component: {fileID: 64617861379653786}
+  - component: {fileID: 4177591217441108224}
   m_Layer: 0
   m_Name: SM_Bld_Corridor_Double_Arch_01
   m_TagString: wall
@@ -98,3 +99,27 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: fe9dbb47c65ada045bb1ce5786bd534e, type: 3}
+--- !u!114 &4177591217441108224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1533665238825324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f3f39fb503f12a67b9d8b72a9504bb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  door:
+    wallType: 0
+    isConnected: 0
+    gridPosition: {x: 0, y: 0}
+    absPosition: {x: 0, y: 0, z: 0}
+  isOpen: 0
+  isLocked: 0
+  autoCloseTime: 0
+  openAudio: {fileID: 8300000, guid: 87fd02d4ed69562ffa1003f147816fd0, type: 3}
+  closeAudio: {fileID: 8300000, guid: 9f6778e48ba7f24cc81563f533655683, type: 3}
+  audioMixerGroup: FX
+  otherDoor: {fileID: 0}

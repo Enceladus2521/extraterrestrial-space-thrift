@@ -14,7 +14,7 @@ public class Watcher
 public class RoomManager : MonoBehaviour
 {
     // constructor for Room Watcher is dead true
-    RoomConfig roomConfig;
+    public RoomConfig roomConfig;
     [SerializeField]
     public Watcher watcher;
     Watcher voidWatcher;
@@ -71,7 +71,7 @@ public class RoomManager : MonoBehaviour
 
 
         if (!isActive) return;
-
+    
         UpdateEntities();
         UpdateInteractables();
         UpdateDoors();
@@ -121,8 +121,10 @@ public class RoomManager : MonoBehaviour
         }
 
         // if enemies are 0 unlock room
-        if (GetEnemys().Count == 0)
+        if (GetEnemys().Count == 0 && isActive)
             isLocked = false;
+        else
+            isLocked = true;
     }
     private void UpdatePlayers()
     {
@@ -158,28 +160,7 @@ public class RoomManager : MonoBehaviour
         for (int i = 0; i < watcher?.doors.Count; i++)
         {
             DoorController door = watcher.doors[i];
-            if (door == null)
-            {
-                voidWatcher.doors.Add(door);
-                watcher.doors.Remove(door);
-                if (!isLocked && isActive == true)
-                {
-                    door.ToggleDoorLockState(false);
-                }
-                else
-                {
-                    door.ToggleDoorLockState(true);
-                }
-                continue;
-            }
-        }
-        for (int i = 0; i < voidWatcher?.doors.Count; i++)
-        {
-            DoorController door = voidWatcher.doors[i];
-            if (door == null) continue;
-
-            watcher.doors.Add(door);
-            voidWatcher.doors.Remove(door);
+            door.ToggleDoorLockState(isLocked);
         }
     }
 

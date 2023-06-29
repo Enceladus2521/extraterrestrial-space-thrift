@@ -13,10 +13,10 @@ public class RoomConfig
     public int seed;
     public List<Door> doorConfigs;
 
-    public bool Connect(Door door)
+    public void Connect(Door door)
     {
         if (door.isConnected)
-            return false;
+            return;
 
         Wall.WallType wallType = door.wallType;
         // get opposite wall type of the door
@@ -24,9 +24,10 @@ public class RoomConfig
         // find own door with opposite wall type
         Door otherDoor = doorConfigs.Find(d => d.wallType == oppositeWallType);
         if (otherDoor == null)
-            return false;
+            return;
 
-        return true;
+        otherDoor.isConnected = true;
+        door.isConnected = true;
     }
 
     public enum AnchorType

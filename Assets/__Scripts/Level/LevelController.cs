@@ -9,7 +9,7 @@ public class MapConfig
     public int seed;
 }
 
- public class LevelController : MonoBehaviour
+public class LevelController : MonoBehaviour
 {
     [SerializeField]
     float roomGenerationDistance = 0.5f;
@@ -100,6 +100,7 @@ public class MapConfig
 
     private void Update()
     {
+
         Vector3 avgPlayerPos = new Vector3(0f, 0f, 0f);
         List<GameObject> players = GameManager.Instance?.GameState?.getPlayers();
         if (players != null)
@@ -113,8 +114,12 @@ public class MapConfig
         float distance = Vector3.Distance(avgPlayerPos, lastRoomPosition);
 
         if (distance < (roomGenerationDistance))
+        {
+            Debug.Log("Room Generation");
             GenerateNewRoomConfig();
-        if (roomsGenerated.Count != roomConfigs.Count) UpdateMap();
+        }
+        if (roomsGenerated.Count != roomConfigs.Count)
+            UpdateMap();
     }
 
 
@@ -151,6 +156,7 @@ public class MapConfig
         List<Door> unconnectedDoors = GetUnconnectedDoors(currentRoom);
         if (unconnectedDoors.Count == 0)
         {
+            Debug.Log("No unconnected doors");
             return;
         }
 
@@ -158,8 +164,8 @@ public class MapConfig
         newRoomConfig.seed = currentRoom.seed + roomConfigs.Count;
         Random.InitState(newRoomConfig.seed);
 
-        newRoomConfig.width = Random.Range(1, mapConfig.maxWidth + 1);
-        newRoomConfig.height = Random.Range(1, mapConfig.maxHeight + 1);
+        newRoomConfig.width = Random.Range(1, (mapConfig.maxWidth / 2) + 1) * 2 - 1;
+        newRoomConfig.height = Random.Range(1, (mapConfig.maxHeight / 2) + 1) * 2 - 1;
         newRoomConfig.offset = new Vector3(
             currentRoom.offset.x + currentRoom.width / 2f + newRoomConfig.width / 2f,
             0,
@@ -183,6 +189,7 @@ public class MapConfig
         RoomConfig roomLeft = roomConfigs[roomConfigs.Count - 1];
         roomConfigs.Add(newRoomConfig);
         roomLeft.Connect(doorLeft);
+             
     }
 
     private List<Door> GetUnconnectedDoors(RoomConfig roomConfig)

@@ -35,6 +35,8 @@ public class RoomController : MonoBehaviour
         roomConfig.height = script.height;
         roomConfig.seed = script.seed;
         roomConfig.doorConfigs = script.doorConfigs;
+        if(manager != null)
+        manager.roomConfig = roomConfig;
     }
 
     void Start()
@@ -45,19 +47,10 @@ public class RoomController : MonoBehaviour
             manager = gameObject.GetComponent<RoomManager>();
     }
 
-    RoomConfig lastRoomConfig;
-    void Update()
-    {
-        if (lastRoomConfig != roomConfig)
-        {
-            lastRoomConfig = roomConfig;
-            manager.UpdateRoomConfig(roomConfig);
-        }
-    }
-
     public void UpdateConfig(RoomConfig config)
     {
         roomConfig = config;
+        manager.roomConfig = roomConfig;
     }
 
     public void Generate(bool gizmos = false)
@@ -323,22 +316,14 @@ public class RoomController : MonoBehaviour
         }
 
         if (!Application.isPlaying) return;
-        if(door == null) return;
         GameObject doorInstance = Instantiate(doorPrefab);
         doorInstance.transform.position = door.absPosition;
         doorInstance.transform.rotation = Door.GetRotation(door.wallType);
         doorInstance.transform.SetParent(transform);
         doorInstance.name = $"Door_{door.gridPosition.x}_{door.gridPosition.y}";
-        if (doorInstance.GetComponent<DoorController>() == null)
-            {
-                Debug.Log("DoorController not found");
-                return;
-            }
         DoorController doorController = doorInstance.GetComponent<DoorController>();
-        doorController.AssignDoor(door);        
-
-
-
+        doorController.door = door;
+        doorController.isLocked = true;
         manager.watcher.doors.Add(doorController);
     }   
 

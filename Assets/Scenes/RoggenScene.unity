@@ -129,7 +129,7 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3731865509031491338}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1994462479
+--- !u!1 &1445704794
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -137,8 +137,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1994462481}
-  - component: {fileID: 1994462482}
+  - component: {fileID: 1445704796}
+  - component: {fileID: 1445704795}
   m_Layer: 0
   m_Name: RoomController
   m_TagString: Untagged
@@ -146,28 +146,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1994462481
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1994462479}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1994462482
+--- !u!114 &1445704795
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1994462479}
+  m_GameObject: {fileID: 1445704794}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 075376dbad012dbcfaf9d0d284cf1723, type: 3}
@@ -179,8 +164,8 @@ MonoBehaviour:
     gridSize: 5
     roomType: 0
     offset: {x: 0, y: 0}
-    width: 6
-    height: 6
+    width: 5
+    height: 5
     seed: 42
     doorConfigs:
     - wallType: 1
@@ -188,6 +173,21 @@ MonoBehaviour:
       gridPosition: {x: 0, y: 0}
       absPosition: {x: 0, y: 0, z: 0}
   script: {fileID: 11400000, guid: bd55e9fba631bf0499440ec9bdf47434, type: 2}
+--- !u!4 &1445704796
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1445704794}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2588950117442425898
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -288,7 +288,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomGenerationDistance: 42
-  initialRoom: {fileID: 1994462482}
+  initialRoom: {fileID: 1445704795}
   mapConfig:
     maxHeight: 8
     maxWidth: 8

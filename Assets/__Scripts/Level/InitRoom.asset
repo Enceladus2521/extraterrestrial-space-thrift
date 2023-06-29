@@ -16,9 +16,11 @@ MonoBehaviour:
   gridSize: 5
   roomType: 0
   offset: {x: 0, y: 0}
-  width: 6
-  height: 6
+  width: 5
+  height: 5
   seed: 42
   doorConfigs:
   - wallType: 1
     isConnected: 0
+    gridPosition: {x: 0, y: 0}
+    absPosition: {x: 0, y: 0, z: 0}
