@@ -6,8 +6,9 @@ public class Door
 {
     public Wall.WallType wallType;
     public bool isConnected;
-    public Door otherDoor;
 
+    public Vector2Int gridPosition;
+    public Vector3 absPosition;
 
     public static Quaternion GetRotation(Wall.WallType wallType)
     {

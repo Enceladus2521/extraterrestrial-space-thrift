@@ -49,7 +49,7 @@ GameObject:
   - component: {fileID: 4805389418910978608}
   m_Layer: 0
   m_Name: PF_Bld_Door_Double_01
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -210,14 +210,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 4806589984447475723}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7a6da298f1d21d4998f661f36b6cc19, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f3f39fb503f12a67b9d8b72a9504bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  door:
+    wallType: 0
+    isConnected: 0
+    gridPosition: {x: 0, y: 0}
+    absPosition: {x: 0, y: 0, z: 0}
+    door: {fileID: 0}
   isOpen: 0
   isLocked: 0
-  autoCloseTime: 3
+  autoCloseTime: 2
   openAnimation: {fileID: 7400000, guid: 4f58ba3e6ae7d214c8f573f13c7613a2, type: 2}
   closeAnimation: {fileID: 7400000, guid: c861b2e609e344148a1f3c71e07ccc8b, type: 2}
+  openAudio: {fileID: 8300000, guid: 87fd02d4ed69562ffa1003f147816fd0, type: 3}
+  closeAudio: {fileID: 8300000, guid: 9f6778e48ba7f24cc81563f533655683, type: 3}
+  audioMixerGroup: FX
 --- !u!1 &4806738891971416121
 GameObject:
   m_ObjectHideFlags: 0

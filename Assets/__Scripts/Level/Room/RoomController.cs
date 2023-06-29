@@ -6,9 +6,9 @@ using UnityEngine;
 
 
 public class RoomController : MonoBehaviour
-{   
+{
 
-    
+
     [SerializeField]
     RoomManager manager;
     RoomConfig.AnchorType anchorType = RoomConfig.AnchorType.Center;
@@ -39,7 +39,10 @@ public class RoomController : MonoBehaviour
 
     void Start()
     {
-        manager = new RoomManager(roomConfig);
+        if (gameObject.GetComponent<RoomManager>() == null)
+            manager = gameObject.AddComponent<RoomManager>();
+        else
+            manager = gameObject.GetComponent<RoomManager>();
     }
 
     RoomConfig lastRoomConfig;
@@ -48,7 +51,7 @@ public class RoomController : MonoBehaviour
         if (lastRoomConfig != roomConfig)
         {
             lastRoomConfig = roomConfig;
-            manager?.Update(roomConfig);
+            manager.UpdateRoomConfig(roomConfig);
         }
     }
 
@@ -74,10 +77,35 @@ public class RoomController : MonoBehaviour
 
         Random.InitState(roomConfig.seed);
         UnityEngine.Random.InitState(roomConfig.seed);
+
         GenerateFloor(gizmos);
         GenerateWalls(gizmos);
+        GenerateCeiling(gizmos);
         GenerateInteractables(gizmos);
         GenerateEnemies(gizmos);
+    }
+
+    // Ceiling will be just a box collider
+    void GenerateCeiling(bool gizmos = false)
+    {
+        float width = roomConfig.width * roomConfig.gridSize;
+        float height = roomConfig.height * roomConfig.gridSize;
+        Vector3 size = new Vector3(width, 1, height);
+        Vector3 ceilingOffset = new Vector3(roomConfig.offset.x * roomConfig.gridSize, 3f, roomConfig.offset.y * roomConfig.gridSize);
+
+        if (gizmos)
+        {
+            // DrawGizmos(ceilingOffset, Color.red, size, Quaternion.identity);
+            return;
+        }
+
+        GameObject ceiling = new GameObject("Ceiling");
+        ceiling.transform.parent = transform;
+        ceiling.AddComponent<BoxCollider>();
+        ceiling.transform.localScale = size;
+        ceiling.transform.position = ceilingOffset;
+
+
     }
 
     void GenerateEnemies(bool gizmos = false)
@@ -99,19 +127,20 @@ public class RoomController : MonoBehaviour
                 GameObject entityInstance = Instantiate(entityPrefab, absPosition, Quaternion.identity);
 
                 EntityController entityController = entityInstance.GetComponent<EntityController>();
+                manager?.watcher?.entities?.Add(entityInstance.GetComponent<EntityController>());
+                
                 if (entityController == null)
                 {
                     Debug.LogError("EntityController is null");
                     continue;
                 }
-                
-                
+
+
                 entityInstance.transform.parent = transform;
                 entityInstance.name = $"Enemy_{x}_{y}";
                 entityInstance.transform.localPosition = new Vector3(x * roomConfig.gridSize, 0, y * roomConfig.gridSize);
                 entityInstance.transform.localRotation = Quaternion.identity;
                 entityInstance.transform.localScale = Vector3.one;
-                manager?.entities?.Add(entityInstance.GetComponent<EntityController>());
 
 
             }
@@ -193,7 +222,12 @@ public class RoomController : MonoBehaviour
 
                 if (RoomConfig.IsDoor(roomConfig, gridPosition, wallType.Value))
                 {
-                    GenerateDoor(absPosition, wallType.Value, gridPosition, gizmos);
+                    Door newDoor = new Door();
+                    newDoor.wallType = wallType.Value;
+                    newDoor.gridPosition = gridPosition;
+                    newDoor.absPosition = absPosition;
+
+                    GenerateDoor(newDoor, gizmos);
                 }
                 else
                 {
@@ -252,47 +286,61 @@ public class RoomController : MonoBehaviour
         }
     }
 
-    void GenerateDoor(Vector3 absDoorPosition, Wall.WallType wallType, Vector2Int gridPosition, bool gizmos = false)
+    void GenerateDoor(Door door, bool gizmos = false)
     {
         if (gizmos)
         {
-            DrawGizmos(absDoorPosition, Color.red, new Vector3(roomConfig.gridSize, roomConfig.gridSize, 1f), Door.GetRotation(wallType));
+            DrawGizmos(door.absPosition, Color.red, new Vector3(roomConfig.gridSize, roomConfig.gridSize, 1f), Door.GetRotation(door.wallType));
             return;
         }
 
-        GameObject doorPrefab = roomConfig.getDoorPrefab(wallType);
+        GameObject doorPrefab = roomConfig.getDoorPrefab(door.wallType);
 
         int centerPosX = roomConfig.width / 2;
         int centerPosY = roomConfig.height / 2;
 
-        if (roomConfig.height % 2 == 0 && (wallType == Wall.WallType.Left || wallType == Wall.WallType.Right))
+        if (roomConfig.height % 2 == 0 && (door.wallType == Wall.WallType.Left || door.wallType == Wall.WallType.Right))
         {
-            doorPrefab = roomConfig.getDoubleDoorPrefab(wallType);
-            if (gridPosition.y == (centerPosY))
-                if (wallType == Wall.WallType.Left)
-                    absDoorPosition += new Vector3(0, 0, -2 * roomConfig.gridSize + (roomConfig.gridSize / 2));
-                else if (wallType == Wall.WallType.Right)
-                    absDoorPosition += new Vector3(0, 0, roomConfig.gridSize / 2);
+            doorPrefab = roomConfig.getDoubleDoorPrefab(door.wallType);
+            if (door.gridPosition.y == (centerPosY))
+                if (door.wallType == Wall.WallType.Left)
+                    door.absPosition += new Vector3(0, 0, -2 * roomConfig.gridSize + (roomConfig.gridSize / 2));
+                else if (door.wallType == Wall.WallType.Right)
+                    door.absPosition += new Vector3(0, 0, roomConfig.gridSize / 2);
                 else return;
             else return;
         }
-        else if (roomConfig.width % 2 == 0 && (wallType == Wall.WallType.Top || wallType == Wall.WallType.Bottom))
+        else if (roomConfig.width % 2 == 0 && (door.wallType == Wall.WallType.Top || door.wallType == Wall.WallType.Bottom))
         {
-            doorPrefab = roomConfig.getDoubleDoorPrefab(wallType);
-            if (gridPosition.x == (centerPosX))
-                if (wallType == Wall.WallType.Top)
-                    absDoorPosition += new Vector3(-2 * roomConfig.gridSize + (roomConfig.gridSize / 2), 0, 0);
-                else if (wallType == Wall.WallType.Bottom)
-                    absDoorPosition += new Vector3(roomConfig.gridSize / 2, 0, 0);
+            doorPrefab = roomConfig.getDoubleDoorPrefab(door.wallType);
+            if (door.gridPosition.x == (centerPosX))
+                if (door.wallType == Wall.WallType.Top)
+                    door.absPosition += new Vector3(-2 * roomConfig.gridSize + (roomConfig.gridSize / 2), 0, 0);
+                else if (door.wallType == Wall.WallType.Bottom)
+                    door.absPosition += new Vector3(roomConfig.gridSize / 2, 0, 0);
                 else return;
             else return;
         }
 
         if (!Application.isPlaying) return;
-        GameObject doorInstance = Instantiate(doorPrefab, absDoorPosition, Door.GetRotation(wallType));
+        if(door == null) return;
+        GameObject doorInstance = Instantiate(doorPrefab);
+        doorInstance.transform.position = door.absPosition;
+        doorInstance.transform.rotation = Door.GetRotation(door.wallType);
         doorInstance.transform.SetParent(transform);
-        doorInstance.name = $"Door_{gridPosition.x}_{gridPosition.y}";
-    }
+        doorInstance.name = $"Door_{door.gridPosition.x}_{door.gridPosition.y}";
+        if (doorInstance.GetComponent<DoorController>() == null)
+            {
+                Debug.Log("DoorController not found");
+                return;
+            }
+        DoorController doorController = doorInstance.GetComponent<DoorController>();
+        doorController.AssignDoor(door);        
+
+
+
+        manager.watcher.doors.Add(doorController);
+    }   
 
     void DrawGizmos(Vector3 absPosition, Color color, Vector3 scale, Quaternion rotation)
     {

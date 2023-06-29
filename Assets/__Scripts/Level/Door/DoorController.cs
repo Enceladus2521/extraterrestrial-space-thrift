@@ -1,30 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Animations;
 using UnityEngine.Audio;
 
-[RequireComponent(typeof(Animation))]
 public class DoorController : MonoBehaviour
 {
+    public Door door;
     public bool isOpen = false;
     public bool isLocked = false;
     public float autoCloseTime;
-    public AnimationClip openAnimation;
-    public AnimationClip closeAnimation;
     public AudioClip openAudio;
     public AudioClip closeAudio;
 
     public string audioMixerGroup = "FX";
 
-    private Animation doorAnimation;
     private AudioSource audioSource;
-    
-    // public AudioMixerGroup mixerGroup;
+
+    [SerializeField]
+    private DoorController otherDoor;
 
     private void Awake()
     {
-        doorAnimation = GetComponent<Animation>();
+        // Get closest other door and set the other door
+        otherDoor = FindClosestDoor();
 
         // Check if an AudioSource component already exists
         audioSource = GetComponent<AudioSource>();
@@ -52,34 +50,62 @@ public class DoorController : MonoBehaviour
             Debug.LogError("Could not find FX group in the main mixer");
         }
 
-
-
         // Load audio clips from resources/audio folder
         openAudio = Resources.Load<AudioClip>("Audio/Door/Open");
         closeAudio = Resources.Load<AudioClip>("Audio/Door/Close");
-
-        doorAnimation.playAutomatically = false;
     }
 
-    public void OpenDoor()
+
+    public DoorController FindClosestDoor()
     {
-        if (isLocked)
+        // Find closest door by tag "door"
+        GameObject[] doors = GameObject.FindGameObjectsWithTag("door");
+        DoorController closestDoor = null;
+        float closestDistance = Mathf.Infinity;
+        for (int i = 0; i < doors.Length; i++)
         {
-            Debug.Log("Door is locked");
-            return;
+            DoorController otherDoor = doors[i].GetComponent<DoorController>();
+            
+            float distance = Vector3.Distance(transform.position, otherDoor.transform.position);
+            if (distance < closestDistance)
+            {
+                closestDoor = otherDoor;
+                closestDistance = distance;
+            }
+        }
+        return closestDoor;
+    }
+
+    public void AssignDoor(Door doorObj)
+    {
+        otherDoor = FindClosestDoor();
+        this.door = doorObj;
+    }
+
+    public bool OpenDoor()
+    {
+        if (otherDoor)
+        {
+            bool isOtherLocked = otherDoor.OpenDoor();
+            if (isLocked)
+            {
+                Debug.Log("Other door is locked");
+                return false;
+            }
         }
 
+        if (isLocked)
+        {
+            return false;
+        }
         isOpen = true;
-
-        // Play open animation
-        doorAnimation.clip = openAnimation;
-        doorAnimation.Play();
 
         // Play open audio
         audioSource.clip = openAudio;
         audioSource.Play();
 
         StartCoroutine(AutoClose());
+        return true;
     }
 
     public IEnumerator AutoClose()
@@ -96,10 +122,6 @@ public class DoorController : MonoBehaviour
     {
         isOpen = false;
 
-        // Play close animation
-        doorAnimation.clip = closeAnimation;
-        doorAnimation.Play();
-
         // Play close audio
         audioSource.clip = closeAudio;
         audioSource.Play();
@@ -108,5 +130,9 @@ public class DoorController : MonoBehaviour
     public void ToggleDoorLockState(bool locked)
     {
         isLocked = locked;
+        if (isLocked && otherDoor != null)
+        {
+            otherDoor.ToggleDoorLockState(true);
+        }
     }
 }
