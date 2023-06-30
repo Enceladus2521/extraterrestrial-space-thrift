@@ -121,6 +121,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: dfe8f32628019ed46a1642266ebda8f6, type: 2}
   - {fileID: 2100000, guid: ea450a0660bc6b949a406f3abf18e94b, type: 2}
   playerHighlight: {fileID: 919132148336847262}
+  Canvas: {fileID: 3148514709391490745, guid: 190225a46e79d704f8d0c0e2cf04372d, type: 3}
 --- !u!114 &2689786828991264819
 MonoBehaviour:
   m_ObjectHideFlags: 0
