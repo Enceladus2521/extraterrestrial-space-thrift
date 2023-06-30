@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c38936be11063de0bd018ca4573fa11, type: 3}
+  m_Name: Wave
+  m_EditorClassIdentifier: 
+  wallTypes:
+  - {fileID: 100000, guid: 0c71ba21b3ffebb4188d15c7b1d33f7e, type: 3}
+  floorTypes:
+  - {fileID: 1525326058169648, guid: 14eab3179517a954c87faf31cd4331f8, type: 3}
+  singleDoorTypes:
+  - {fileID: 2054528009870061951, guid: 2b518d54a7715084a9b3ee492b911ddf, type: 3}
+  doubleDoorTypes:
+  - {fileID: 4806589984447475723, guid: ba23d7fec517400439f97e3c170f7933, type: 3}
+  interactableTypes: []
+  entityTypes:
+  - {fileID: 8766976142266897041, guid: c0cf2ad78d3454436821d31739456590, type: 3}
+  - {fileID: 8766976142266897041, guid: c0cf2ad78d3454436821d31739456590, type: 3}
+  - {fileID: 8766976142266897041, guid: c0cf2ad78d3454436821d31739456590, type: 3}
+  - {fileID: 8766976142266897041, guid: c0cf2ad78d3454436821d31739456590, type: 3}
+  - {fileID: 8766976142266897041, guid: c0cf2ad78d3454436821d31739456590, type: 3}
+  - {fileID: 8766976142266897041, guid: c0cf2ad78d3454436821d31739456590, type: 3}
+  - {fileID: 8766976142266897041, guid: c0cf2ad78d3454436821d31739456590, type: 3}
+  - {fileID: 8766976142266897041, guid: c0cf2ad78d3454436821d31739456590, type: 3}
