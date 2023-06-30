@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: Drone
   m_EditorClassIdentifier: 
   movementStats:
-    maxSpeed: 20.87
+    maxSpeed: 2.35
     speed: 7.84
     flyingAltitude: 0.98
     maintainDistance: 4.03
     viewAngle: 360
     turnSpeed: 8.51
-    viewRange: 10
+    viewRange: 7.33
     isStunned: 0
-    accelerationMultiplier: 10.05
+    accelerationMultiplier: 1
     accelerationDirection: 0
     isBouncy: 1
   combatStats:
@@ -41,9 +41,9 @@ MonoBehaviour:
   healthStats:
     maxArmor: 23
     maxHealth: 23
-    isAlive: 0
-    health: 0
-    armor: 0
+    isAlive: 1
+    health: 23
+    armor: 23
     healthRegenerationRate: 1
     canRegenerateHealth: 0
   inventoryStats:

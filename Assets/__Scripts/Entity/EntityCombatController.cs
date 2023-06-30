@@ -1,31 +1,34 @@
 using UnityEngine;
 
-public class EntityCombatController
+public class EntityCombatController : MonoBehaviour
 {
-    private EntityController entityController;
-    private CombatStats stats;
+    public EntityController entityController;
+    public CombatStats stats;
+    public GameObject target;
 
-    public EntityCombatController(EntityController entityController, CombatStats stats)
+    private void Start()
     {
-        this.entityController = entityController;
-        this.stats = stats;
+        if (entityController == null)
+        {
+            entityController = GetComponent<EntityController>();
+        }
     }
 
-    public void Attack()
+    public void Attack(GameObject target)
     {
         if (stats.canShoot)
         {
-            Shoot();
+            Shoot(target);
         }
         else if (stats.canMelee)
         {
-            MeleeAttack();
+            MeleeAttack(target);
         }
     }
 
-    private void Shoot()
+    private void Shoot(GameObject target)
     {
-        if (stats.projectile != null)
+        if (stats.projectile != null && target != null)
         {
             // Instantiate the bullet prefab
             GameObject bullet = GameObject.Instantiate(stats.projectile, entityController.transform.position, entityController.transform.rotation);
@@ -43,7 +46,7 @@ public class EntityCombatController
         }
     }
 
-    private void MeleeAttack()
+    private void MeleeAttack(GameObject target)
     {
         Collider[] colliders = Physics.OverlapSphere(entityController.transform.position, stats.attackRange);
 
@@ -59,11 +62,6 @@ public class EntityCombatController
         }
     }
 
-    public void FixedUpdate()
-    {
-        // Implement any fixed update logic for combat, if needed
-    }
-
     public void Update()
     {
         if (entityController.closestPlayer != null)
@@ -71,8 +69,25 @@ public class EntityCombatController
             float distance = Vector3.Distance(entityController.transform.position, entityController.closestPlayer.transform.position);
             if (distance <= stats.attackRange)
             {
-                Attack();
+                Attack(target);
             }
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (entityController == null || stats == null)
+            return;
+
+        // Draw attack range
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(entityController.transform.position, stats.attackRange);
+
+        // Draw additional gizmos here if needed
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        // Draw selected gizmos here if needed
     }
 }

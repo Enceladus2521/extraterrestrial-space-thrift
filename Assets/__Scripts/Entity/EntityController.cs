@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+
 public class EntityController : MonoBehaviour
 {
     public GameObject closestPlayer;
@@ -31,15 +32,18 @@ public class EntityController : MonoBehaviour
             // Stop the Rigidbody from rotating that its not tipping over 
             rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
         }
-        
+
         InitializeControllers();
     }
-
 
     private void InitializeControllers()
     {
         movementController = new EntityMovementController(this, state.movementStats);
-        combatController = new EntityCombatController(this, state.combatStats);
+        if (gameObject.GetComponent<EntityCombatController>())
+            combatController = gameObject.GetComponent<EntityCombatController>();
+        else
+            combatController = gameObject.AddComponent<EntityCombatController>();
+        combatController.stats = state.combatStats;
     }
 
     public void UpdateTarget()
@@ -57,30 +61,28 @@ public class EntityController : MonoBehaviour
                     // if(state.movementStats.viewRange < distance) {
                     //     continue;
                     // }
-                    
+
                     closestDistance = distance;
                     closestPlayer = player;
                     Debug.Log("Closest player: " + closestPlayer);
                     movementController.UpdateTarget(player);
+                    combatController.Update();
                 }
             }
         }
-
     }
 
-
     void FixedUpdate()
-    {   
-        if (combatController != null)
-            combatController.FixedUpdate();
+    {
+        // if (combatController != null)
+        //     combatController.FixedUpdate();
         if (movementController != null)
             movementController.FixedUpdate();
     }
 
     void Update()
     {
-        if (combatController != null)
-            combatController.Update();
+        UpdateTarget();
     }
 
     public void TakeDamage(float damage)
@@ -91,5 +93,4 @@ public class EntityController : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
-
 }
