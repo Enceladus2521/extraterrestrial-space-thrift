@@ -57,7 +57,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] Material[] materials;
     [SerializeField] GameObject playerHighlight;
 
-    [SerializeField] GameObject Canvas;
+    
 
 
 
@@ -65,7 +65,7 @@ public class PlayerStats : MonoBehaviour
     
     private void Start()
     {
-        Instantiate(Canvas, transform.position, Quaternion.identity);
+        
 
         CalculateRequiredExperience();
         UpdateStats();

@@ -7024,11 +7024,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI CANVAS
       objectReference: {fileID: 0}
-    - target: {fileID: 3148514709391490745, guid: 190225a46e79d704f8d0c0e2cf04372d,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4595132894504645674, guid: 190225a46e79d704f8d0c0e2cf04372d,
         type: 3}
       propertyPath: m_AnchorMax.x
