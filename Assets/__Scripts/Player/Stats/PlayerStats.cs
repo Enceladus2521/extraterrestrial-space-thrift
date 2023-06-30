@@ -114,6 +114,7 @@ public class PlayerStats : MonoBehaviour
         Debug.Log("Player died");
         //TODO: respawn
         Debug.Log("Respawn");
+        gameObject.SetActive(false);
 
     }
 
@@ -138,18 +139,18 @@ public class PlayerStats : MonoBehaviour
         return maxHealth;
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
-        int totalDamage = damage;
+        float totalDamage = damage;
         if (armor < totalDamage)
         {
             totalDamage -= armor;
             armor = 0;
-            health -= totalDamage;
+            health -= (int) totalDamage;
         }
         else
         {
-            armor -= totalDamage;
+            armor -= (int) totalDamage;
         }
 
         if (health <= 0)

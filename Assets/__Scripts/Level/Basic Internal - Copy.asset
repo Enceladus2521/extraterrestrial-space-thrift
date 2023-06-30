@@ -23,11 +23,6 @@ MonoBehaviour:
   doubleDoorTypes:
   - {fileID: 1533665238825324, guid: f503f34f626ff76b19a5499514822e37, type: 3}
   interactableTypes:
-  - {fileID: 5722448691214944898, guid: 90080332bd97bf34fbd341fe6ceda8dd, type: 3}
-  - {fileID: 4021108159534978569, guid: 80f2de443d84ad94aa2637f29230e6e3, type: 3}
-  - {fileID: 7882638954089525130, guid: e874ab73de444d4419de2087868b2e2d, type: 3}
-  - {fileID: 6781292966255158772, guid: ea7bd2bbff30d75439551fb4dc43b5a1, type: 3}
-  - {fileID: 871929964373942017, guid: c25006333a67d644fbff0fe21568e4be, type: 3}
-  - {fileID: 9066321273246494692, guid: 4ad571bd921274d4891a48ec702ee28d, type: 3}
+  - {fileID: 3876150599294784098, guid: 24833853c9bfe7940a0469e6ae057696, type: 3}
   entityTypes:
   - {fileID: 8766976142266897041, guid: c0cf2ad78d3454436821d31739456590, type: 3}

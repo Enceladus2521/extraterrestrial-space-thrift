@@ -45,9 +45,35 @@ public class EntityMovementController
 
         Vector3 moveDirection = target.position - rb.position;
         moveDirection.y = 0f; // Ignore vertical movement
-        Vector3 velocity = moveDirection.normalized * stats.speed;
-        rb.velocity = velocity;
+
+        if (stats.isStunned)
+        {
+            rb.velocity = Vector3.zero;
+        }
+        else
+        {
+            Vector3 velocity = rb.velocity;
+
+            if (stats.accelerationDirection == AccelerationDirection.TargetDirection)
+            {
+                Vector3 targetDirection = target.position - rb.position;
+                Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
+                rb.MoveRotation(targetRotation);
+                rb.velocity = rb.velocity + moveDirection.normalized * stats.speed;
+            }
+            else if (stats.accelerationDirection == AccelerationDirection.CurrentDirection)
+            {
+                velocity = rb.velocity + moveDirection.normalized * stats.speed;
+            }
+            else
+            {
+                velocity = Vector3.zero;
+            }
+
+            rb.velocity = velocity * stats.accelerationMultiplier;
+        }
     }
+
 
     private void Fly()
     {

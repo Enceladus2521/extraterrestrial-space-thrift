@@ -144,7 +144,6 @@ public class DoorController : MonoBehaviour
         SetClosestDoor();
         if (isLocked)
         {
-            Debug.Log("is locked");
             return;
         }
 

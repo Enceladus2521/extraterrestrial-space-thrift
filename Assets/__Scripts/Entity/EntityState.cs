@@ -28,7 +28,12 @@ public class EntityState : MonoBehaviour
     private MaterialType materialType;
 
     public void LoadPrefab(EntityPrefab prefab)
-    {
+    {    
+        if (prefab == null)
+        {
+            Debug.LogError("Cannot load null prefab.");
+            return;
+        }
         movementStats = prefab.movementStats;
         combatStats = prefab.combatStats;
         healthStats = prefab.healthStats;
@@ -66,6 +71,13 @@ public class InventoryStats
     public int currentCapacity;
 }
 
+public enum AccelerationDirection
+{
+    TargetDirection,
+    CurrentDirection
+}
+
+
 [System.Serializable]
 public class MovementStats
 {
@@ -90,6 +102,10 @@ public class MovementStats
     public float viewRange;
 
     public bool isStunned;
+    public float accelerationMultiplier;
+    public AccelerationDirection accelerationDirection;
+
+    public bool isBouncy;
 
 }
 
@@ -102,27 +118,50 @@ public class CombatStats
     public float meleeDamage;
     public float attackRange;
     public GameObject projectile;
+    public bool canExplode;
+    public float explosionRadius;
+    public float explosionDamage;
+    public bool canSummonMinions;
+    public int maxMinions;
+    public float summonCooldown;
+    public bool canSpecialAttack;
 }
 
 [System.Serializable]
 public class HealthStats
 
 {   
+
     [SerializeField]
+
     private float maxArmor;
+
     [SerializeField]
+
     private float maxHealth;
     
+
     [SerializeField]
+
     bool isAlive;
     
     
+
     [SerializeField]
+
     float health; 
+
     [SerializeField]
+
     float armor;
+
     [SerializeField]
-    float healthRegenerationRate;
+
+    public float healthRegenerationRate;
+
+    [SerializeField]
+
+    public bool canRegenerateHealth;
     
 
 
@@ -135,17 +174,36 @@ public class HealthStats
 
     public void TakeDamage(float damage)
     {
-        // the more armor the more damgae reduced
-        health -= damage;
+        float reducedDamage = damage - armor;
+        if (reducedDamage  < 0)
+            {
+                // armor breaking
+                reducedDamage = 0;
+                armor = 0;
+            }
+        else {
+            armor -= armor * (reducedDamage / maxArmor);
+            if(armor < 0)
+                armor = 0;
+            if (armor > maxArmor)
+                armor = maxArmor;
+        }
+        health -= reducedDamage;
+
         if (health <= 0f)
         {
             isAlive = false;
             health = 0f;
-        }else {
+        }
+        else
+        {
             isAlive = true;
         }
     }
+
     // getter for health
     public float Health { get { return health; } }
+    public float MaxArmor { get { return maxArmor; } }
+    public float MaxHealth { get { return maxHealth; } }
     public bool IsAlive { get { return isAlive; } }
 }

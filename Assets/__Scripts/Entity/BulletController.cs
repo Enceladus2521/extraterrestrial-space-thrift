@@ -32,6 +32,10 @@ public class BulletController : MonoBehaviour
         {
             // Apply damage to the entity
             entity.TakeDamage(damage);
+        }else {
+            PlayerStats player = collision.gameObject.GetComponent<PlayerStats>();
+            if (player != null)
+                player.TakeDamage(damage);
         }
 
         // Destroy the bullet upon collision
