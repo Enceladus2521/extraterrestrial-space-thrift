@@ -64,7 +64,6 @@ public class EntityController : MonoBehaviour
 
                     closestDistance = distance;
                     closestPlayer = player;
-                    Debug.Log("Closest player: " + closestPlayer);
                     movementController.UpdateTarget(player);
                     combatController.Update();
                 }

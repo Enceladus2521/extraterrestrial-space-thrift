@@ -115,7 +115,6 @@ public class LevelController : MonoBehaviour
 
         if (distance < (roomGenerationDistance))
         {
-            Debug.Log("Room Generation");
             GenerateNewRoomConfig();
         }
         if (roomsGenerated.Count != roomConfigs.Count)
