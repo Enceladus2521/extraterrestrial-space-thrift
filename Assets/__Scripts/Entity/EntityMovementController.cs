@@ -24,24 +24,27 @@ public class EntityMovementController
 
     public void FixedUpdate()
     {
-        if (target){
+        if (target)
+        {
             Vector3 targetDirection = target.position - rb.position;
-            targetDirection.x = 0;
-            targetDirection.z = 0;
             Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
             rb.MoveRotation(targetRotation);
+
+            if (stats.flyingAltitude > 0f)
+                Fly();
+
             float currentDistance = Vector3.Distance(rb.position, target.position);
             MoveToTarget(currentDistance);
         }
-        if (stats.flyingAltitude > 0f)
-            Fly();
     }
-
 
     private void MoveToTarget(float currentDistance)
     {
-        if (stats.maintainDistance > 0 && currentDistance <= stats.maintainDistance) return;
+        if (stats.maintainDistance > 0f && currentDistance <= stats.maintainDistance)
+            return;
+
         Vector3 moveDirection = target.position - rb.position;
+        moveDirection.y = 0f; // Ignore vertical movement
         Vector3 velocity = moveDirection.normalized * stats.speed;
         rb.velocity = velocity;
     }
@@ -63,7 +66,6 @@ public class EntityMovementController
         }
     }
 
-
     // Visualize the view range and view angle in the Scene view
     [System.Diagnostics.Conditional("UNITY_EDITOR")]
     private void OnDrawGizmos()
@@ -84,5 +86,4 @@ public class EntityMovementController
             Gizmos.DrawRay(rb.position, rightDir * stats.viewRange);
         }
     }
-
 }

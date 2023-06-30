@@ -98,8 +98,9 @@ public class CombatStats
 {
     public bool canShoot;
     public float shootingDamage;
-    public bool hasMelee;
+    public bool canMelee;
     public float meleeDamage;
+    public float attackRange;
     public GameObject projectile;
 }
 

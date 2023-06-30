@@ -101,7 +101,7 @@ public class Weapon : MonoBehaviour
             recoilRecoveryDelay = weaponObj.recoilRecoveryDelay;
 
 
-            UiController.Instance.UpdateAmmo(player.GetComponent<PlayerInput>().playerIndex , player.GetComponent<PlayerStats>().GetAmmo(), ammoInClip, weaponObj.FullAuto); 
+            //TTODO: FIX: UiController.Instance.UpdateAmmo(player.GetComponent<PlayerInput>().playerIndex , player.GetComponent<PlayerStats>().GetAmmo(), ammoInClip, weaponObj.FullAuto); 
         }
     }
 
@@ -205,7 +205,7 @@ public class Weapon : MonoBehaviour
             Shoot();
             StartCoroutine(CoolDown());
             ammoInClip -= ammoCostPerShot;
-            UiController.Instance.UpdateAmmo(player.GetComponent<PlayerInput>().playerIndex , player.GetComponent<PlayerStats>().GetAmmo(), ammoInClip, weaponObj.FullAuto); 
+            // TODO: FIX: UiController.Instance.UpdateAmmo(player.GetComponent<PlayerInput>().playerIndex , player.GetComponent<PlayerStats>().GetAmmo(), ammoInClip, weaponObj.FullAuto); 
             //Debug.Log("Ammo in clip: " + ammoInClip);
         }
         else if (!shooting && ammoInClip < weaponClipSize && !reloading && autoReload && !isPreloading)
@@ -505,7 +505,7 @@ public class Weapon : MonoBehaviour
        
 
         
-        UiController.Instance.UpdateAmmo(player.GetComponent<PlayerInput>().playerIndex, player.GetComponent<PlayerStats>().GetAmmo(), ammoInClip, weaponObj.FullAuto);       
+        // TODO: FIX: UiController.Instance.UpdateAmmo(player.GetComponent<PlayerInput>().playerIndex, player.GetComponent<PlayerStats>().GetAmmo(), ammoInClip, weaponObj.FullAuto);       
     }
 
 

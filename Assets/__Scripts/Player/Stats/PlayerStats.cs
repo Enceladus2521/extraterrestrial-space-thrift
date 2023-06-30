@@ -104,7 +104,7 @@ public class PlayerStats : MonoBehaviour
         maxArmor = (int)(baseArmor * Mathf.Pow(armorMultiplier, level));
         maxAmmo = (int)(baseAmmo * Mathf.Pow(ammoMultiplier, level));
         CalculateRequiredExperience();
-        UiController.Instance.UpdateXp(GetComponent<PlayerInput>().playerIndex, currentRequiredExperience, experience, level);
+        // TODO: UiController.Instance.UpdateXp(GetComponent<PlayerInput>().playerIndex, currentRequiredExperience, experience, level);
     }
 
 
@@ -266,7 +266,7 @@ public class PlayerStats : MonoBehaviour
     public void TakeMoney(int amount)
     {
         money -= amount;
-        UiController.Instance.UpdateMoney(GetComponent<PlayerInput>().playerIndex, money);
+        // TODO: UiController.Instance.UpdateMoney(GetComponent<PlayerInput>().playerIndex, money);
     }
 
 

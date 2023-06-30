@@ -29,7 +29,7 @@ public class EntityController : MonoBehaviour
         if (rb != null)
         {
             // Stop the Rigidbody from rotating that its not tipping over 
-            rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+            rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
         }
         
         InitializeControllers();
@@ -91,8 +91,5 @@ public class EntityController : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
-
-
-
 
 }

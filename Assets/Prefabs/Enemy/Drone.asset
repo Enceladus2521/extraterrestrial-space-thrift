@@ -15,18 +15,19 @@ MonoBehaviour:
   movementStats:
     maxSpeed: 5
     speed: 3.09
-    flyingAltitude: 1.12
-    maintainDistance: 4.12
-    viewAngle: 84
-    turnSpeed: 7.7
-    viewRange: 5.03
+    flyingAltitude: 0.44
+    maintainDistance: 4.03
+    viewAngle: 360
+    turnSpeed: 8.51
+    viewRange: 10
     isStunned: 0
   combatStats:
     canShoot: 1
     shootingDamage: 10
-    hasMelee: 0
+    canMelee: 0
     meleeDamage: 0
-    projectile: {fileID: 0}
+    attackRange: 0
+    projectile: {fileID: 100000, guid: 2e68dbddeabab79469c7e0ad08418c18, type: 3}
   healthStats:
     maxArmor: 23
     maxHealth: 23
