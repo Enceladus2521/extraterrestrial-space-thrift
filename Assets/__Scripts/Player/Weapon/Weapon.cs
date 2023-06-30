@@ -205,7 +205,7 @@ public class Weapon : MonoBehaviour
             Shoot();
             StartCoroutine(CoolDown());
             ammoInClip -= ammoCostPerShot;
-            // TODO: FIX: UiController.Instance.UpdateAmmo(player.GetComponent<PlayerInput>().playerIndex , player.GetComponent<PlayerStats>().GetAmmo(), ammoInClip, weaponObj.FullAuto); 
+            UiController.Instance.UpdateAmmo(player.GetComponent<PlayerInput>().playerIndex , player.GetComponent<PlayerStats>().GetAmmo(), ammoInClip, weaponObj.FullAuto); 
             //Debug.Log("Ammo in clip: " + ammoInClip);
         }
         else if (!shooting && ammoInClip < weaponClipSize && !reloading && autoReload && !isPreloading)
@@ -505,7 +505,7 @@ public class Weapon : MonoBehaviour
        
 
         
-        // TODO: FIX: UiController.Instance.UpdateAmmo(player.GetComponent<PlayerInput>().playerIndex, player.GetComponent<PlayerStats>().GetAmmo(), ammoInClip, weaponObj.FullAuto);       
+        UiController.Instance.UpdateAmmo(player.GetComponent<PlayerInput>().playerIndex, player.GetComponent<PlayerStats>().GetAmmo(), ammoInClip, weaponObj.FullAuto);       
     }
 
 
