@@ -21,8 +21,9 @@ public class UiController : MonoBehaviour
         }
         else
         {
-            //Destroy this
-            Destroy(this);
+            //destroy gameobject
+            Destroy(gameObject);
+            
         }
     }
 
