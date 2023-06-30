@@ -79,12 +79,14 @@ public class PlayerStats : MonoBehaviour
         health = maxHealth;
         armor = maxArmor;
         ammo = maxAmmo;
-
+    
+        Debug.Log("Set stats");
         UiController.Instance.DisplayPlayerStats(GetComponent<PlayerInput>().playerIndex, true);
         UiController.Instance.UpdateHealth(GetComponent<PlayerInput>().playerIndex, maxHealth, health);
         UiController.Instance.UpdateArmor(GetComponent<PlayerInput>().playerIndex, maxArmor, armor);
         UiController.Instance.UpdateXp(GetComponent<PlayerInput>().playerIndex, currentRequiredExperience, experience, level);
         UiController.Instance.UpdateMoney(GetComponent<PlayerInput>().playerIndex, money);
+        UiController.Instance.UpdateAmmo(GetComponent<PlayerInput>().playerIndex, ammo,0, false);
 
         //Set player color corresponding to player index check if player highlight is not null and check if materials is not null
         if (playerHighlight != null && materials[GetComponent<PlayerInput>().playerIndex] != null)
@@ -107,7 +109,7 @@ public class PlayerStats : MonoBehaviour
         maxArmor = (int)(baseArmor * Mathf.Pow(armorMultiplier, level));
         maxAmmo = (int)(baseAmmo * Mathf.Pow(ammoMultiplier, level));
         CalculateRequiredExperience();
-        // TODO: UiController.Instance.UpdateXp(GetComponent<PlayerInput>().playerIndex, currentRequiredExperience, experience, level);
+        UiController.Instance.UpdateXp(GetComponent<PlayerInput>().playerIndex, currentRequiredExperience, experience, level);
     }
 
 
@@ -270,7 +272,7 @@ public class PlayerStats : MonoBehaviour
     public void TakeMoney(int amount)
     {
         money -= amount;
-        // TODO: UiController.Instance.UpdateMoney(GetComponent<PlayerInput>().playerIndex, money);
+        UiController.Instance.UpdateMoney(GetComponent<PlayerInput>().playerIndex, money);
     }
 
 
