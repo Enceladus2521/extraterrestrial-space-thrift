@@ -46,6 +46,7 @@ public class XPToken : MonoBehaviour
         //get closest player
         GameObject closestPlayer = null;
         float closestDistance = Mathf.Infinity;
+        Debug.Log("Heavy load of Player");
         foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
         {
             float distance = Vector3.Distance(transform.position, player.transform.position);
