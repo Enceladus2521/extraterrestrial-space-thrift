@@ -3,17 +3,21 @@ using System.Collections.Generic;
 
 public class LevelController : MonoBehaviour
 {
-    [SerializeField] private float roomGenerationDistance = 0.5f;
-    [SerializeField] public RoomInternal catalog;
+    private RoomInternal catalog;
+
     [SerializeField] private List<RoomConfig> roomConfigs = new List<RoomConfig>();
     [SerializeField] private List<RoomManager> roomsGenerated = new List<RoomManager>();
     private Vector3 lastRoomPosition = Vector2.zero;
     private GameObject map = null;
 
+    public RoomInternal Catalog { set { catalog = value; } }
+    public Vector3 LastRoomPos { get { return lastRoomPosition; } }
+    public int RoomCount { get { return roomConfigs.Count; } }
+    public int RoomGeneratedCount { get { return roomsGenerated.Count; } }
     void Start()
     {
         map = new GameObject("Map");
-        GenerateNewRoomConfig();
+        roomConfigs.Add(GetRandomRoom(catalog));
     }
 
     private RoomConfig GetRandomRoom(RoomInternal catalog, RoomConfig previousRoom = null)
@@ -28,8 +32,10 @@ public class LevelController : MonoBehaviour
             newRoomConfig.seed = previousRoom.seed + 42; // :D
             Random.InitState(newRoomConfig.seed);
 
-            newRoomConfig.width = Random.Range(1, (previousRoom.difficultyLevel) + 1) * 2 - 1;
-            newRoomConfig.height = Random.Range(1, (previousRoom.difficultyLevel) + 1) * 2 - 1;
+            newRoomConfig.width = Random.Range(1, (previousRoom.difficultyLevel) + 1);
+            if (previousRoom.width == 2)
+                newRoomConfig.width += 1;
+            newRoomConfig.height = Random.Range(1, (previousRoom.difficultyLevel) + 1);
             newRoomConfig.offset = new Vector3(
                 previousRoom.offset.x + previousRoom.width / 2f + newRoomConfig.width / 2f,
                 0,
@@ -78,18 +84,18 @@ public class LevelController : MonoBehaviour
         return newRoomConfig;
     }
 
-   private void GenerateNewRoomConfig()
+    public void GenerateNewRoomConfig()
     {
         RoomConfig newRoomConfig = GetRandomRoom(catalog, roomConfigs.Count > 0 ? roomConfigs[roomConfigs.Count - 1] : null);
         roomConfigs.Add(newRoomConfig);
-        GenerateNewRoom(newRoomConfig);
+        // GenerateNewRoom(newRoomConfig);
     }
 
     private void GenerateNewRoom(RoomConfig newRoomConfig)
     {
         GameObject newRoom = new GameObject($"Room_{roomsGenerated.Count}");
         newRoom.transform.parent = map.transform;
-        newRoom.transform.position = newRoomConfig.offset;
+        newRoom.transform.position = newRoomConfig.offset * newRoomConfig.gridSize;
 
         RoomManager roomManager = newRoom.AddComponent<RoomManager>();
         roomManager.InitRoom(newRoomConfig);
@@ -103,15 +109,70 @@ public class LevelController : MonoBehaviour
 
         lastRoomPosition = newRoom.transform.position;
     }
+    public void UpdateMap()
+    {
+
+        if (roomsGenerated.Count < roomConfigs.Count)
+        {
+            GenerateNewRoom(roomConfigs[roomsGenerated.Count]);
+            return;
+        }
+
+        if (roomsGenerated.Count > roomConfigs.Count)
+        {
+            Debug.Log("Regenerating map");
+            Regenerate();
+            return;
+        }
+    }
 
     private void ConnectDoors(RoomManager roomA, RoomManager roomB)
     {
-        List<Door> doorsA = roomA.rooms[0].doors;
-        List<Door> doorsB = roomB.rooms[0].doors;
+        // inside RoomManager's game object are DoorController , get all door controllers of this room and the previous room
+        DoorController[] doorControllers = roomA.gameObject.GetComponentsInChildren<DoorController>();
+        DoorController[] previousDoorControllers = roomB.GetComponentsInChildren<DoorController>();
 
-        Door doorA = doorsA[Random.Range(0, doorsA.Count)];
-        Door doorB = doorsB[Random.Range(0, doorsB.Count)];
 
-        roomA.ConnectDoors(doorA, doorB, roomB);
+        // now check for the right door of previous room and connect it with the left door of this room
+        for (int i = 0; i < doorControllers.Length; i++)
+            for (int j = 0; j < previousDoorControllers.Length; j++)
+            {
+                DoorController doorController = doorControllers[i];
+                DoorController previousDoorController = previousDoorControllers[j];
+
+                doorController.AssignDoor(previousDoorController);
+                previousDoorController.AssignDoor(doorController);
+
+                roomA.watcher.doors.Add(doorController);
+                roomB.watcher.doors.Add(previousDoorController);
+            }
+    }
+
+
+    public void Regenerate()
+    {
+        // Remove all previously generated rooms and clear the lists
+        foreach (var room in roomsGenerated)
+        {
+            Destroy(room.gameObject);
+        }
+        roomsGenerated.Clear();
+        roomConfigs.Clear();
+
+        // Generate a new room configuration and start the map generation process again
+        GenerateNewRoomConfig();
+    }
+
+        void OnDrawGizmos()
+    {
+        foreach (RoomConfig roomConfig in roomConfigs)
+        {
+            // Vector3 pos = roomConfig.transform.position;
+            Vector3 pos = new Vector3(roomConfig.offset.x * roomConfig.gridSize, 0, roomConfig.offset.y * roomConfig.gridSize);
+            Vector3 scale = new Vector3(roomConfig.width, 1f, roomConfig.height) * roomConfig.gridSize;
+            Gizmos.DrawWireCube(pos, scale);
+            Gizmos.color = Color.green;
+        }
+
     }
 }

@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 7290962546352045579}
   m_Layer: 0
   m_Name: SM_Bld_Corridor_Double_Arch_02
-  m_TagString: wall
+  m_TagString: door
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

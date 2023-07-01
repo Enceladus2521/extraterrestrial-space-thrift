@@ -38,12 +38,6 @@ public class RoomConfig
         door.isConnected = true;
     }
 
-    public enum AnchorType
-    {
-        Bottom,
-        Center
-    }
-
     public enum RoomType
     {
         Start,
