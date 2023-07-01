@@ -146,14 +146,17 @@ public class PlayerStats : MonoBehaviour
     public void TakeDamage(float damage)
     {
         float totalDamage = damage;
+        Debug.Log("Damage taken: " + totalDamage);
         if (armor < totalDamage)
         {
+            Debug.Log("Armor broken");
             totalDamage -= armor;
             armor = 0;
             health -= (int) totalDamage;
         }
         else
         {
+            Debug.Log("Armor not broken");
             armor -= (int) totalDamage;
         }
 
@@ -161,6 +164,7 @@ public class PlayerStats : MonoBehaviour
         {
             Die();
         }
+        UiController.Instance.UpdateArmor(GetComponent<PlayerInput>().playerIndex, maxArmor, armor);
         UiController.Instance.UpdateHealth(GetComponent<PlayerInput>().playerIndex, maxHealth, health);
 
     }

@@ -331,7 +331,15 @@ public class Weapon : MonoBehaviour
         if (weaponObj.explosionPrefab == null) AddKnockback(hit, direction); //do knockback if no explosion
 
         Explode(hit, damage);
-        //on entity hit
+        
+        //on Enemy hit
+        if (hit.collider.gameObject.CompareTag("Enemy"))
+        {            
+            EnemyController enemy = hit.collider.gameObject.GetComponent<EnemyController>();
+            if (enemy != null) enemy.TakeDamage(damage);
+        }
+
+        //on entity hit        
         if (!hit.collider.gameObject.CompareTag("entity")) return;
 
 
@@ -495,13 +503,15 @@ public class Weapon : MonoBehaviour
         
         reloading = false;
         isPreloading = false;
+        int tempClip = ammoInClip;
         ammoInClip = weaponClipSize;
+
         if ((int)weaponObj.weaponType == 5 || (int)weaponObj.weaponType == 6)
         {
             //-_- dont touch this it works   
             yield break;       
         }
-        player.GetComponent<PlayerStats>().TakeAmmo(weaponClipSize - ammoInClip);
+        player.GetComponent<PlayerStats>().TakeAmmo(weaponClipSize - tempClip);
         
        
 

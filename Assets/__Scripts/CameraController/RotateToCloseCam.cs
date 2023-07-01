@@ -16,7 +16,7 @@ public class RotateToCloseCam : MonoBehaviour
 
     void Update()
     {        
-        Debug.Log("Heavy load of Camera");
+        //Debug.Log("Heavy load of Camera");
         GameObject[] cameras = GameObject.FindGameObjectsWithTag("Camera");
 
         

@@ -101,6 +101,13 @@ public class Projectile : MonoBehaviour
             entityController.TakeDamage(damage);
             DestroySelf();
         }
+        else if(other.gameObject.CompareTag("Enemy") && explosionPrefab == null)
+        {
+            Debug.Log("hit with damage: " + damage);
+            EnemyController enemyController = other.gameObject.GetComponent<EnemyController>();
+            enemyController.TakeDamage(damage);
+            DestroySelf();
+        }
         else if(bounceAmount > 0)
         {
             if (OnBounceCooldown)

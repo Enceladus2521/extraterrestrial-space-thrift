@@ -8,6 +8,8 @@ TagManager:
   - Camera
   - entity
   - door
+  - wall
+  - Enemy
   layers:
   - Default
   - TransparentFX

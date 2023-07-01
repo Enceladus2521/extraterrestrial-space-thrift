@@ -116,7 +116,7 @@ public class MovementStats
 
     public bool isBouncy;
 
-        public void GenerateRandom(int difficultySeed, int difficultyLevel)
+    public void GenerateRandom(int difficultySeed, int difficultyLevel)
     {
         UnityEngine.Random.InitState(difficultySeed);
         maxSpeed = UnityEngine.Random.Range(1, difficultyLevel) ;

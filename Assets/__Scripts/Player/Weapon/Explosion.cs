@@ -14,6 +14,9 @@ public class Explosion : MonoBehaviour
 
     private float explosionDamageFallOff = 0.7f;
 
+    
+    public bool damagePlayer;
+
     //set data
     public void SetExplosionData(float damage, float knockbackForce, float burnDps, float burnDuration, float explosionRadius, float explosionDamageFallOff)
     {
@@ -23,23 +26,23 @@ public class Explosion : MonoBehaviour
         this.burnDuration = burnDuration;
         this.explosionRadius = explosionRadius;
         this.explosionDamageFallOff = explosionDamageFallOff;
+        StartCoroutine(Explode());
     }
 
     
-    private void Start()
-    {
-        //start coroutine
-        StartCoroutine(Explode());
-    }
+    
 
     IEnumerator Explode()
     {
         List<GameObject> rigidBodysHits = new List<GameObject>();
         List<GameObject> entityHits = new List<GameObject>();
+
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
+        
         
         foreach (Collider collider in colliders)
         {
+            
             if (collider.gameObject.GetComponent<Rigidbody>() != null)
             {
                 rigidBodysHits.Add(collider.gameObject);
@@ -47,8 +50,22 @@ public class Explosion : MonoBehaviour
             if (collider.CompareTag("entity"))
             {
                 entityHits.Add(collider.gameObject);
-            }            
+            }    
+            if (collider.CompareTag("Player"))
+            {       
+                
+                float damageAmount = damage * (1 - (Vector3.Distance(transform.position, collider.transform.position)/explosionRadius) * explosionDamageFallOff);
+                collider.gameObject.GetComponent<PlayerStats>().TakeDamage(damageAmount);
+            }    
+            if(collider.CompareTag("Enemy"))
+            {
+                float damageAmount = damage * (1 - (Vector3.Distance(transform.position, collider.transform.position)/explosionRadius) * explosionDamageFallOff);
+                collider.gameObject.GetComponent<EnemyController>().TakeDamage(damageAmount);
+            }
+
         }
+
+        
 
         // Debug.Log("Explosion hit " + rigidBodysHits.Count + " rigidbodies and " + entityHits.Count + " enemies");
         //Debug.Log("Explosion data is: damage: " + damage + " knockbackForce: " + knockbackForce + " burnDps: " + burnDps + " burnDuration: " + burnDuration + " explosionRadius: " + explosionRadius + " explosionDamageFallOff: " + explosionDamageFallOff);
@@ -75,6 +92,8 @@ public class Explosion : MonoBehaviour
                     yield return new WaitForSeconds(burnDuration);
                 }
         }
+
+
 
         yield return null;
     }
