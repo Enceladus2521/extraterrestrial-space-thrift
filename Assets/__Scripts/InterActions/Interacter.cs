@@ -186,4 +186,7 @@ public class Interacter : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position + interactOffset, interactRange);
     }
+
+    
+    
 }

@@ -8,9 +8,11 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
 
+
     private GameObject closestPlayer;
     private Rigidbody rb;
     private int attackPointIndex = 0;
+    private int difficultyLevel = 0;
 
 
 
@@ -80,7 +82,7 @@ public class EnemyController : MonoBehaviour
 
     public void SetEnemyStats(int enemyType, float health, float attackRate, float attackDamage, float knockback, bool despawnOnImpact,
         float projectileForce, int burstAmount, float burstRate, Color projectileColor, float explodeRange)
-    {        
+    {
         if ((EnemyType)enemyType == EnemyType.Eplode) attackRange = 0f;
         this.health = health;
         this.attackRate = attackRate;
@@ -91,16 +93,16 @@ public class EnemyController : MonoBehaviour
         this.burstAmount = burstAmount;
         this.burstRate = burstRate;
         this.projectileColor = projectileColor;
-        this.explodeRange = explodeRange;        
+        this.explodeRange = explodeRange;
     }
 
     public void GenerateRandom(int difficultySeed, int difficultyLevel)
     {
         UnityEngine.Random.InitState(difficultySeed);
-        enemyType = (EnemyType)UnityEngine.Random.Range(0, 1); 
+        enemyType = (EnemyType)UnityEngine.Random.Range(0, 1);
         if (enemyType == EnemyType.Eplode) attackRange = 0f;
         health = UnityEngine.Random.Range(1, Random.Range(1 + difficultyLevel * 2, 1 + difficultyLevel * 5));
-        attackRate = UnityEngine.Random.Range(0.5f * difficultyLevel, 5f );
+        attackRate = UnityEngine.Random.Range(0.5f * difficultyLevel, 5f);
         attackDamage = UnityEngine.Random.Range(10, 10 + difficultyLevel * 2);
         knockback = UnityEngine.Random.Range(10, 10 + difficultyLevel * 2);
         despawnOnImpact = Random.Range(0, 1) == 0 ? true : false;
@@ -110,6 +112,8 @@ public class EnemyController : MonoBehaviour
         burstRate = UnityEngine.Random.Range(0.2f, 0.5f);
         projectileColor = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0, 1f));
         explodeRange = UnityEngine.Random.Range(3, 5);
+
+        this.difficultyLevel = difficultyLevel;
     }
 
     private void Update()
@@ -169,8 +173,8 @@ public class EnemyController : MonoBehaviour
         projectile.GetComponent<Renderer>().material.SetColor("_EmissionColor", projectileColor);
         projectile.transform.GetChild(0).GetComponent<TrailRenderer>().startColor = projectileColor;
         projectile.transform.GetChild(0).GetComponent<TrailRenderer>().endColor = projectileColor;
-        
-        
+
+
         projectile.GetComponent<EnemyProjectile>().SetProjectileData(attackDamage, timeToLive, despawnOnImpact, projectileForce, knockback);
 
         //check if attackPointIndex can be incremented
@@ -226,6 +230,12 @@ public class EnemyController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        GameObject money = Resources.Load("PF_Money_10_01") as GameObject;
+        GameObject newMoney = Instantiate(money, transform.position, Quaternion.identity);
+        //give random force to money
+        newMoney.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f)) * 2, ForceMode.Impulse);
+        newMoney.GetComponent<PickUpInteraction>().SetAmount(0,0,0,10,50);
+        newMoney.AddComponent<AutoDespawn>().SetTimeToDespawn(15f);
         health -= damage;
         if (health <= 0)
         {
@@ -235,10 +245,101 @@ public class EnemyController : MonoBehaviour
 
     private void Die()
     {
-        //Todo: Spawn death effect
-        //Todo: Spawn loot
+
+        MoneyDrop();
         Destroy(gameObject);
     }
+
+
+    int[] moneyDenominations = { 10, 10, 20, 20, 50, 50, 50, 50, 100, 100, 500, 500 };
+    int maxSpawnCount = 5; 
+    private void MoneyDrop()
+    {
+        for (int i = 0; i < maxSpawnCount; i++)
+        {
+            int randomIndex = (int)(Random.value * moneyDenominations.Length);
+            int moneyValue = moneyDenominations[randomIndex];
+            spawnMoney(moneyValue);
+        }
+    }   
+
+    
+    private void spawnMoney(int value)
+    {
+        GameObject money;
+        int wichOne = Random.Range(1, 2);
+        switch(value)
+        {
+            case 10:                
+                if (wichOne == 1)
+                {
+                    money = Resources.Load("PF_Money_10_01") as GameObject;
+                }
+                else
+                {
+                    money = Resources.Load("PF_Money_10_02") as GameObject;
+                }
+                break;
+            case 20:
+                if (wichOne == 1)
+                {
+                    money = Resources.Load("PF_Money_20_01") as GameObject;
+                }
+                else
+                {
+                    money = Resources.Load("PF_Money_20_02") as GameObject;
+                }
+                break;
+            case 50:
+                if (wichOne == 1)
+                {
+                    money = Resources.Load("PF_Money_50_01") as GameObject;
+                }
+                else
+                {
+                    money = Resources.Load("PF_Money_50_02") as GameObject;
+                }
+                break;
+            case 100:
+                if (wichOne == 1)
+                {
+                    money = Resources.Load("PF_Money_100_01") as GameObject;
+                }
+                else
+                {
+                    money = Resources.Load("PF_Money_100_02") as GameObject;
+                }
+                break;
+            case 500:
+                if (wichOne == 1)
+                {
+                    money = Resources.Load("PF_Money_500_01") as GameObject;
+                }
+                else
+                {
+                    money = Resources.Load("PF_Money_500_02") as GameObject;
+                }
+                break; 
+            default:
+                if (wichOne == 1)
+                {
+                    money = Resources.Load("PF_Money_10_01") as GameObject;
+                }
+                else
+                {
+                    money = Resources.Load("PF_Money_10_02") as GameObject;
+                }
+                break;               
+        }
+
+        GameObject newMoney = Instantiate(money, transform.position, Quaternion.identity);
+        //give random force to money
+        newMoney.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f)) * 2, ForceMode.Impulse);
+        
+    }
+
+
+
 
     #endregion
 
@@ -250,11 +351,11 @@ public class EnemyController : MonoBehaviour
     {
         if (closestPlayer != null)
         {
-            
+
             Vector3 direction = closestPlayer.transform.position - transform.position;
             Quaternion rotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Lerp(transform.rotation, rotation, rotationSpeed * Time.deltaTime);
-            
+
         }
     }
     private void Move(GameObject player)

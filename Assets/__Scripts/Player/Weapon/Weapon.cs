@@ -263,7 +263,13 @@ public class Weapon : MonoBehaviour
             //raycastall to get all hits
             hits.AddRange(Physics.RaycastAll(barrelTip.position, direction, weaponObj.weaponRange));
 
-            if (hits.Count > 0)
+            //ignore if istrigger
+            for (int j = 0; j < hits.Count; j++)
+            {
+                if (hits[j].collider.isTrigger) hits.Remove(hits[j]);
+            }
+
+            if (hits.Count > 0) 
             {
                 //sort hits by distance
                 hits.Sort((x, y) => x.distance.CompareTo(y.distance));
@@ -309,7 +315,7 @@ public class Weapon : MonoBehaviour
                 //do hit
                 OnHit(currentHit, direction, damage);
 
-                //Todo: add burn to entity spawn burn effect Prefab and child it to entity set data for burn effect                   
+                                 
             }
         }
     }
@@ -347,7 +353,7 @@ public class Weapon : MonoBehaviour
         EntityController entity = hit.collider.gameObject.GetComponent<EntityController>();
         if (entity != null) entity.TakeDamage(damage);
 
-        //Todo: add burn to entity spawn burn effect Prefab and child it to entity set data for burn effect
+        
 
 
     }

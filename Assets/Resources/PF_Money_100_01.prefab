@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6657803907732685367}
   - component: {fileID: 6657803907732685366}
   m_Layer: 0
-  m_Name: PF_Money_Stack_01
+  m_Name: PF_Money_100_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

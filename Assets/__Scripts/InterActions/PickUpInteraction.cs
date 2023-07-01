@@ -4,6 +4,7 @@ using UnityEngine;
 
 
 [RequireComponent(typeof(Interacter))]
+[RequireComponent(typeof(Rigidbody))]
 public class PickUpInteraction : MonoBehaviour
 {
     public int ammoAmount = 0;
@@ -30,12 +31,13 @@ public class PickUpInteraction : MonoBehaviour
         
     }
 
-    public void SetAmount(int ammo, int health, int amor, int money)
+    public void SetAmount(int ammo, int health, int amor, int money, float pickupRange)
     {
         ammoAmount = ammo;
         healthAmount = health;
         amorAmount = amor;
         moneyAmount = money;
+        this.pickupRange = pickupRange;
     }
 
     public void Loot()
@@ -73,30 +75,24 @@ public class PickUpInteraction : MonoBehaviour
         {
             closestPlayer.GetComponent<PlayerStats>().AddAmmo(ammoAmount);
         }
-
         
         if (healthAmount > 0)
         {
             closestPlayer.GetComponent<PlayerStats>().AddHealth(healthAmount);
         }
-
         
         if (amorAmount > 0)
         {
             closestPlayer.GetComponent<PlayerStats>().AddArmor(amorAmount);
         }
 
-
-
         if (moneyAmount > 0)
         {
             closestPlayer.GetComponent<PlayerStats>().AddMoney(moneyAmount);
         }
-
-
-
-
     }
+
+
     IEnumerator Pickup()
     {
 
