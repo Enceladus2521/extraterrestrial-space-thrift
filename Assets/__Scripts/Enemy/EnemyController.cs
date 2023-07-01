@@ -230,12 +230,8 @@ public class EnemyController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        GameObject money = Resources.Load("PF_Money_10_01") as GameObject;
-        GameObject newMoney = Instantiate(money, transform.position, Quaternion.identity);
-        //give random force to money
-        newMoney.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f)) * 2, ForceMode.Impulse);
-        newMoney.GetComponent<PickUpInteraction>().SetAmount(0,0,0,10,50);
-        newMoney.AddComponent<AutoDespawn>().SetTimeToDespawn(15f);
+        
+        
         health -= damage;
         if (health <= 0)
         {
@@ -251,6 +247,26 @@ public class EnemyController : MonoBehaviour
     }
 
 
+
+    private void DropAmmo()
+    {
+        GameObject variableForPrefab = Resources.Load("PF_Ammo") as GameObject;
+
+        //drop 1-4
+        int ammoAmount = Random.Range(1, 4);
+        for (int i = 0; i < ammoAmount; i++)
+        {
+            GameObject ammo = Instantiate(variableForPrefab, transform.position, Quaternion.identity);
+            //add rigidbody if not already there
+            if (ammo.GetComponent<Rigidbody>() == null)
+            {
+                ammo.AddComponent<Rigidbody>();
+            }
+            ammo.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f)) * 2, ForceMode.Impulse);
+            ammo.GetComponent<PickUpInteraction>().SetAmount(difficultyLevel,0,0,0,1.5f);
+        }
+    }
+
     int[] moneyDenominations = { 10, 10, 20, 20, 50, 50, 50, 50, 100, 100, 500, 500 };
     int maxSpawnCount = 5; 
     private void MoneyDrop()
@@ -262,6 +278,8 @@ public class EnemyController : MonoBehaviour
             spawnMoney(moneyValue);
         }
     }   
+
+
 
     
     private void spawnMoney(int value)
@@ -335,6 +353,7 @@ public class EnemyController : MonoBehaviour
         GameObject newMoney = Instantiate(money, transform.position, Quaternion.identity);
         //give random force to money
         newMoney.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f)) * 2, ForceMode.Impulse);
+        newMoney.AddComponent<AutoDespawn>().SetTimeToDespawn(40f);
         
     }
 
