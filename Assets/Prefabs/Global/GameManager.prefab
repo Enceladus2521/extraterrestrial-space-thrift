@@ -71,8 +71,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomGenerationDistance: 42
-  initialRoom: {fileID: 0}
   mapConfig:
+    initialRoom:
+      internalConfig: {fileID: 11400000, guid: 42ac15deb5480875583603d1e56ce9ab, type: 2}
+      gridSize: 5
+      roomType: 0
+      offset: {x: 0, y: 0}
+      width: 5
+      height: 5
+      seed: 42
+      doorConfigs:
+      - wallType: 1
+        isConnected: 0
+        gridPosition: {x: 0, y: 0}
+        absPosition: {x: 0, y: 0, z: 0}
     maxHeight: 8
     maxWidth: 8
     seed: 42

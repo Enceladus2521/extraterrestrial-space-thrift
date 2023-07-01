@@ -1,31 +1,23 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
-[System.Serializable]
-public class MapConfig
-{
-    public int maxHeight;
-    public int maxWidth;
-    public int seed;
-}
 
 public class LevelController : MonoBehaviour
 {
+    public int seed;
     [SerializeField]
     float roomGenerationDistance = 0.5f;
 
     [SerializeField]
-    RoomController initialRoom = null;
-
-    [SerializeField]
-    public MapConfig mapConfig;
+    private RoomInternal catalog;
 
     [SerializeField]
     List<RoomConfig> roomConfigs = new List<RoomConfig>();
 
 
     [SerializeField]
-    List<RoomController> roomsGenerated = new List<RoomController>();
+    List<RoomManager> roomsGenerated = new List<RoomManager>();
 
 
     private Vector3 lastRoomPosition = Vector2.zero;
@@ -37,17 +29,84 @@ public class LevelController : MonoBehaviour
         map = new GameObject("Map");
         GenerateNewRoomConfig();
     }
+    private RoomConfig GetRandomRoom(RoomInternal catalog, RoomConfig previousRoom = null)
+    {
+        RoomConfig newRoomConfig = new RoomConfig();
+        newRoomConfig.gridSize = 5;
+
+        if (previousRoom != null)
+        {
+            Debug.Log("New Difficulty Level: " + previousRoom.difficultyLevel);
+            newRoomConfig.difficultyLevel = previousRoom.difficultyLevel + 1;
+            newRoomConfig.seed = previousRoom.seed + 42; // :D
+            UnityEngine.Random.InitState(newRoomConfig.seed);
+
+            // Set other random properties for the new room
+            newRoomConfig.width =  UnityEngine.Random.Range(1, (previousRoom.difficultyLevel) + 1) * 2 - 1;
+            newRoomConfig.height = UnityEngine.Random.Range(1, (previousRoom.difficultyLevel) + 1) * 2 - 1;
+            newRoomConfig.offset = new Vector3(
+                previousRoom.offset.x + previousRoom.width / 2f + newRoomConfig.width / 2f,
+                0,
+                previousRoom.offset.y
+            );
+
+            newRoomConfig.doorConfigs = new List<Door>();
+            Door doorLeft = new Door();
+            doorLeft.isConnected = false;
+            doorLeft.wallType = Wall.WallType.Left;
+            newRoomConfig.doorConfigs.Add(doorLeft);
+
+            Door doorRight = new Door();
+            doorRight.isConnected = false;
+            doorRight.wallType = Wall.WallType.Right;
+            newRoomConfig.doorConfigs.Add(doorRight);
+        }
+        else
+        {
+            newRoomConfig.difficultyLevel = 1;
+            newRoomConfig.seed = 42;
+            UnityEngine.Random.InitState(newRoomConfig.seed);
+            newRoomConfig.roomType = RoomConfig.RoomType.Start;
+            newRoomConfig.offset = new Vector3(0, 0, 0);
+            newRoomConfig.width = 3;
+            newRoomConfig.height = 3;
+
+            newRoomConfig.doorConfigs = new List<Door>();
+            Door initDoorRight = new Door();
+            initDoorRight.isConnected = false;
+            initDoorRight.wallType = Wall.WallType.Right;
+            newRoomConfig.doorConfigs.Add(initDoorRight);
+        }
+
+        // Randomly select GameObjects from the lists
+        newRoomConfig.wallTypes = new List<GameObject> { catalog.wallTypes[UnityEngine.Random.Range(0, catalog.wallTypes.Count)] };
+        newRoomConfig.floorTypes = new List<GameObject> { catalog.floorTypes[UnityEngine.Random.Range(0, catalog.floorTypes.Count)] };
+        newRoomConfig.singleDoorTypes = new List<GameObject> { catalog.singleDoorTypes[UnityEngine.Random.Range(0, catalog.singleDoorTypes.Count)] };
+        newRoomConfig.doubleDoorTypes = new List<GameObject> { catalog.doubleDoorTypes[UnityEngine.Random.Range(0, catalog.doubleDoorTypes.Count)] };
+        
+        int interactableRandomIndex = UnityEngine.Random.Range(0, catalog.interactableTypes.Count);
+        for (int i = 0; i < LevelScaler.GetNumberOfInteractablesToAdd(newRoomConfig.difficultyLevel); i++)
+            newRoomConfig.interactableTypes = new List<GameObject> { catalog.interactableTypes[interactableRandomIndex] };
+        
+        int entityRandomIndex = UnityEngine.Random.Range(0, catalog.entityTypes.Count);
+        for (int i = 0; i < LevelScaler.GetNumberOfEnemiesToAdd(newRoomConfig.difficultyLevel); i++)
+            newRoomConfig.entityTypes = new List<GameObject> { catalog.entityTypes[entityRandomIndex] };
+
+        return newRoomConfig;
+    }
+
+
 
     private void ClearMap()
     {
         Destroy(map);
-        foreach (RoomController room in roomsGenerated)
-            Destroy(room.gameObject);
+        foreach (RoomManager room in roomsGenerated)
+            Destroy(room);
 
 
         lastRoomPosition = Vector3.zero;
         roomConfigs = new List<RoomConfig>();
-        roomsGenerated = new List<RoomController>();
+        roomsGenerated = new List<RoomManager>();
         map = null;
     }
 
@@ -80,21 +139,45 @@ public class LevelController : MonoBehaviour
     {
         ClearMap();
         map = new GameObject("Map");
-        Random.InitState(mapConfig.seed);
-        UnityEngine.Random.InitState(mapConfig.seed);
         GenerateNewRoomConfig();
     }
     void GenerateRoom(RoomConfig localRoomConfig)
     {
         Vector3 position = new Vector3(localRoomConfig.offset.x * localRoomConfig.gridSize, 0f, localRoomConfig.offset.y * localRoomConfig.gridSize);
-        GameObject room = Instantiate(initialRoom.gameObject, position, Quaternion.identity);
-        initialRoom.gameObject.SetActive(true);
+        GameObject room = new GameObject("Room");
+        room.transform.parent = map.transform;
+        room.transform.position = position;
+
+        room.name = localRoomConfig.roomType.ToString() + " (" + localRoomConfig.offset.x + ", " + localRoomConfig.offset.y + ")";
+        room.SetActive(true);
         room.transform.parent = map.transform;
         room.name = localRoomConfig.roomType.ToString() + " (" + localRoomConfig.offset.x + ", " + localRoomConfig.offset.y + ")";
-        RoomController roomController = room.GetComponent<RoomController>();
-        roomsGenerated.Add(roomController);
-        roomController.UpdateConfig(localRoomConfig);
-        roomController.Generate();
+        room.gameObject.AddComponent<RoomManager>();
+        RoomManager roomManager = room.GetComponent<RoomManager>();
+        roomManager.UpdateConfig(localRoomConfig);
+        if (roomsGenerated.Count != 0)
+        {
+            // connect doors
+            // inside RoomManager's game object are DoorController , get all door controllers of this room and the previous room
+            DoorController[] doorControllers = roomManager.gameObject.GetComponentsInChildren<DoorController>();
+            DoorController[] previousDoorControllers = roomsGenerated[roomsGenerated.Count - 1].GetComponentsInChildren<DoorController>();
+
+
+            // now check for the right door of previous room and connect it with the left door of this room
+            for (int i = 0; i < doorControllers.Length; i++)
+                for (int j = 0; j < previousDoorControllers.Length; j++)
+                {
+                    DoorController doorController = doorControllers[i];
+                    DoorController previousDoorController = previousDoorControllers[j];
+
+                    doorController.AssignDoor(previousDoorController);
+                    previousDoorController.AssignDoor(doorController);
+
+                    roomManager.watcher.doors.Add(doorController);
+                    roomsGenerated[roomsGenerated.Count - 1].watcher.doors.Add(previousDoorController);
+                }
+        }
+        roomsGenerated.Add(roomManager);
         lastRoomPosition = new Vector3(localRoomConfig.offset.x * localRoomConfig.gridSize, 0f, localRoomConfig.offset.y * localRoomConfig.gridSize);
     }
 
@@ -121,30 +204,13 @@ public class LevelController : MonoBehaviour
             UpdateMap();
     }
 
-
     private void GenerateNewRoomConfig()
     {
         RoomConfig currentRoom;
         if (roomConfigs.Count == 0)
         {
-            currentRoom = initialRoom.roomConfig;
-            // create a copy
-            RoomConfig initRoomConfig = new RoomConfig();
-            initRoomConfig.seed = currentRoom.seed;
-            initRoomConfig.gridSize = currentRoom.gridSize;
-            initRoomConfig.roomType = currentRoom.roomType;
-            initRoomConfig.offset = currentRoom.offset;
-            initRoomConfig.width = currentRoom.width;
-            initRoomConfig.internalConfig = currentRoom.internalConfig;
-            initRoomConfig.height = currentRoom.height;
-            initRoomConfig.doorConfigs = new List<Door>();
+            roomConfigs.Add(GetRandomRoom(catalog));
 
-            Door initDoorRight = new Door();
-            initDoorRight.isConnected = false;
-            initDoorRight.wallType = Wall.WallType.Right;
-            initRoomConfig.doorConfigs.Add(initDoorRight);
-
-            roomConfigs.Add(initRoomConfig);
             return;
         }
         else
@@ -159,37 +225,11 @@ public class LevelController : MonoBehaviour
             return;
         }
 
-        RoomConfig newRoomConfig = new RoomConfig();
-        newRoomConfig.seed = currentRoom.seed + roomConfigs.Count;
-        Random.InitState(newRoomConfig.seed);
-
-        newRoomConfig.width = Random.Range(1, (mapConfig.maxWidth / 2) + 1) * 2 - 1;
-        newRoomConfig.height = Random.Range(1, (mapConfig.maxHeight / 2) + 1) * 2 - 1;
-        newRoomConfig.offset = new Vector3(
-            currentRoom.offset.x + currentRoom.width / 2f + newRoomConfig.width / 2f,
-            0,
-            currentRoom.offset.y
-        );
-        newRoomConfig.roomType = RoomConfig.RoomType.Basic;
-        newRoomConfig.internalConfig = currentRoom.internalConfig;
-        newRoomConfig.gridSize = currentRoom.gridSize;
-        newRoomConfig.doorConfigs = new List<Door>();
-
-        Door doorLeft = new Door();
-        doorLeft.isConnected = false;
-        doorLeft.wallType = Wall.WallType.Left;
-        newRoomConfig.doorConfigs.Add(doorLeft);
-
-        Door doorRight = new Door();
-        doorRight.isConnected = false;
-        doorRight.wallType = Wall.WallType.Right;
-        newRoomConfig.doorConfigs.Add(doorRight);
-
-        RoomConfig roomLeft = roomConfigs[roomConfigs.Count - 1];
+        RoomConfig newRoomConfig = GetRandomRoom(catalog, currentRoom);
         roomConfigs.Add(newRoomConfig);
-        roomLeft.Connect(doorLeft);
-             
+        currentRoom.Connect(newRoomConfig.doorConfigs[0]); // Assuming we are connecting the first door of the new room to the current room.
     }
+
 
     private List<Door> GetUnconnectedDoors(RoomConfig roomConfig)
     {
@@ -198,11 +238,6 @@ public class LevelController : MonoBehaviour
             if (!door.isConnected)
                 unconnectedDoors.Add(door);
         return unconnectedDoors;
-    }
-
-    private RoomConfig GetRandomRoomConfig()
-    {
-        return roomConfigs[UnityEngine.Random.Range(0, roomConfigs.Count)];
     }
 
     void OnDrawGizmos()

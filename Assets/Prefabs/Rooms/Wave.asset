@@ -20,7 +20,8 @@ MonoBehaviour:
   - {fileID: 2054528009870061951, guid: 2b518d54a7715084a9b3ee492b911ddf, type: 3}
   doubleDoorTypes:
   - {fileID: 4806589984447475723, guid: ba23d7fec517400439f97e3c170f7933, type: 3}
-  interactableTypes: []
+  interactableTypes:
+  - {fileID: 3876150599294784098, guid: 24833853c9bfe7940a0469e6ae057696, type: 3}
   entityTypes:
   - {fileID: 8766976142266897041, guid: c0cf2ad78d3454436821d31739456590, type: 3}
   - {fileID: 8766976142266897041, guid: c0cf2ad78d3454436821d31739456590, type: 3}

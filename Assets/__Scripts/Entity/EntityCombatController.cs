@@ -64,9 +64,9 @@ public class EntityCombatController : MonoBehaviour
 
     public void Update()
     {
-        if (entityController.closestPlayer != null)
+        if (entityController.GetClosestPlayer() != null)
         {
-            float distance = Vector3.Distance(entityController.transform.position, entityController.closestPlayer.transform.position);
+            float distance = Vector3.Distance(entityController.transform.position, entityController.GetClosestPlayer().transform.position);
             if (distance <= stats.attackRange)
             {
                 Attack(target);

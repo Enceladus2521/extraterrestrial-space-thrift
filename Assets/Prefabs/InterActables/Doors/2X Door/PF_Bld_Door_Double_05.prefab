@@ -249,7 +249,6 @@ MonoBehaviour:
     isConnected: 0
     gridPosition: {x: 0, y: 0}
     absPosition: {x: 0, y: 0, z: 0}
-    door: {fileID: 0}
   isOpen: 0
   isLocked: 0
   autoCloseTime: 2
@@ -258,6 +257,7 @@ MonoBehaviour:
   openAudio: {fileID: 8300000, guid: 87fd02d4ed69562ffa1003f147816fd0, type: 3}
   closeAudio: {fileID: 8300000, guid: 9f6778e48ba7f24cc81563f533655683, type: 3}
   audioMixerGroup: FX
+  otherDoor: {fileID: 0}
 --- !u!114 &6797553277119163055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,6 +272,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AutoTrigger: 1
   InteractOnce: 0
+  interactCost: 0
+  interactDelay: 0
   Player: {fileID: 0}
   interactRange: 2
   interactOffset: {x: 0, y: 0.5, z: 0}
@@ -281,7 +283,7 @@ MonoBehaviour:
       - m_Target: {fileID: 6797553277119163053}
         m_TargetAssemblyTypeName: DoorController, Assembly-CSharp
         m_MethodName: OpenDoor
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

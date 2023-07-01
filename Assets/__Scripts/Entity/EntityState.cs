@@ -7,7 +7,7 @@ public enum MaterialType
     Meat
 }
 
-public class EntityState : MonoBehaviour
+public class EntityState
 {
 
     [SerializeField]
@@ -27,36 +27,44 @@ public class EntityState : MonoBehaviour
     [SerializeField]
     private MaterialType materialType;
 
-    public void LoadPrefab(EntityPrefab prefab)
-    {    
-        if (prefab == null)
-        {
-            Debug.LogError("Cannot load null prefab.");
-            return;
-        }
-        movementStats = prefab.movementStats;
-        combatStats = prefab.combatStats;
-        healthStats = prefab.healthStats;
-        inventoryStats = prefab.inventoryStats;
-        materialType = prefab.materialType;
+    void OnAwake(){
+        movementStats = new MovementStats();
+        combatStats = new CombatStats();
+        healthStats = new HealthStats();
+        inventoryStats = new InventoryStats();
+
     }
+
+    // public void LoadPrefab(EntityPrefab prefab)
+    // {    
+    //     if (prefab == null)
+    //     {
+    //         Debug.LogError("Cannot load null prefab.");
+    //         return;
+    //     }
+    //     movementStats = prefab.movementStats;
+    //     combatStats = prefab.combatStats;
+    //     healthStats = prefab.healthStats;
+    //     inventoryStats = prefab.inventoryStats;
+    //     materialType = prefab.materialType;
+    // }
 
     void OnDrawGizmos()
     {
-        // render attack range as circle
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, movementStats.maintainDistance);
+        // // render attack range as circle
+        // Gizmos.color = Color.red;
+        // Gizmos.DrawWireSphere(transform.position, movementStats.maintainDistance);
         
-        // render view range as circle
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, movementStats.viewRange);
+        // // render view range as circle
+        // Gizmos.color = Color.blue;
+        // Gizmos.DrawWireSphere(transform.position, movementStats.viewRange);
 
-        // render view angle as two lines
-        Gizmos.color = Color.green;
-        Gizmos.DrawLine(transform.position, transform.position + transform.forward * movementStats.viewRange);
-        // view angle
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(transform.position, transform.position + transform.forward * movementStats.viewRange);
+        // // render view angle as two lines
+        // Gizmos.color = Color.green;
+        // Gizmos.DrawLine(transform.position, transform.position + transform.forward * movementStats.viewRange);
+        // // view angle
+        // Gizmos.color = Color.yellow;
+        // Gizmos.DrawLine(transform.position, transform.position + transform.forward * movementStats.viewRange);
 
         
     }
@@ -73,6 +81,7 @@ public class InventoryStats
 
 public enum AccelerationDirection
 {
+    None,
     TargetDirection,
     CurrentDirection
 }
@@ -107,6 +116,21 @@ public class MovementStats
 
     public bool isBouncy;
 
+        public void GenerateRandom(int difficultySeed, int difficultyLevel)
+    {
+        UnityEngine.Random.InitState(difficultySeed);
+        maxSpeed = UnityEngine.Random.Range(1, difficultyLevel) ;
+        speed = UnityEngine.Random.Range(1, difficultyLevel) ;
+        flyingAltitude = UnityEngine.Random.Range(1, 1) ;
+        maintainDistance = UnityEngine.Random.Range(1, difficultyLevel);
+        viewAngle = UnityEngine.Random.Range(1, 361);
+        turnSpeed = UnityEngine.Random.Range(1, difficultyLevel);
+        viewRange = UnityEngine.Random.Range(1, difficultyLevel);
+        isStunned = UnityEngine.Random.value > 0.5f;
+        accelerationMultiplier = UnityEngine.Random.Range(1, difficultyLevel);
+        isBouncy = UnityEngine.Random.value > 0.5f;
+    }
+
 }
 
 [System.Serializable]
@@ -125,6 +149,25 @@ public class CombatStats
     public int maxMinions;
     public float summonCooldown;
     public bool canSpecialAttack;
+
+
+    public void GenerateRandom(int difficultySeed, int difficultyLevel)
+    {
+        UnityEngine.Random.InitState(difficultySeed);
+        canShoot = UnityEngine.Random.value > 0.5f;
+        shootingDamage = UnityEngine.Random.Range(1, 11) * difficultyLevel;
+        canMelee = UnityEngine.Random.value > 0.5f;
+        meleeDamage = UnityEngine.Random.Range(1, 11) * difficultyLevel;
+        attackRange = UnityEngine.Random.Range(1, 11) * difficultyLevel;
+        // Assuming projectile is one of several possible GameObjects
+        canExplode = UnityEngine.Random.value > 0.5f;
+        explosionRadius = UnityEngine.Random.Range(1, 11) * difficultyLevel;
+        explosionDamage = UnityEngine.Random.Range(1, 11) * difficultyLevel;
+        canSummonMinions = UnityEngine.Random.value > 0.5f;
+        maxMinions = UnityEngine.Random.Range(1, 11) * difficultyLevel;
+        summonCooldown = UnityEngine.Random.Range(1, 11) / difficultyLevel;
+        canSpecialAttack = UnityEngine.Random.value > 0.5f;
+    }
 }
 
 [System.Serializable]
@@ -163,8 +206,18 @@ public class HealthStats
 
     public bool canRegenerateHealth;
     
-
-
+   
+    public void GenerateRandom(int difficultySeed, int difficultyLevel)
+    {
+        UnityEngine.Random.InitState(difficultySeed);
+        maxArmor = UnityEngine.Random.Range(1, 11) / difficultyLevel;
+        maxHealth = UnityEngine.Random.Range(1, 11) / difficultyLevel;
+        isAlive = true; // Assuming the entity is alive when stats are generated
+        health = maxHealth; // Assuming health is full when stats are generated
+        armor = maxArmor; // Assuming armor is full when stats are generated
+        healthRegenerationRate = UnityEngine.Random.Range(1, 11) / difficultyLevel;
+        canRegenerateHealth = UnityEngine.Random.value > 0.5f;
+    }
 
     public void ResetEntity()
     {

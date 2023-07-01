@@ -1,20 +1,23 @@
 using UnityEngine;
 
-public class EntityMovementController
+public class EntityMovementController : MonoBehaviour
 {
-    private EntityController entityController;
+    [SerializeField]
     private MovementStats stats;
     private Rigidbody rb;
     private Transform target;
     private CapsuleCollider capsuleCollider;
 
-    public EntityMovementController(EntityController entityController, MovementStats stats)
+    public void Start()
     {
-        this.entityController = entityController;
-        this.stats = stats;
-        rb = entityController.GetComponent<Rigidbody>();
-        capsuleCollider = entityController.GetComponent<CapsuleCollider>();
+        rb = GetComponent<Rigidbody>();
+        capsuleCollider = GetComponent<CapsuleCollider>();
         AdjustColliderHeight(stats.flyingAltitude);
+    }
+
+    public void UpdateStates(MovementStats stats)
+    {
+        this.stats = stats;
     }
 
     public void UpdateTarget(GameObject target)
@@ -26,10 +29,6 @@ public class EntityMovementController
     {
         if (target)
         {
-            Vector3 targetDirection = target.position - rb.position;
-            Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
-            rb.MoveRotation(targetRotation);
-
             if (stats.flyingAltitude > 0f)
                 Fly();
 
@@ -58,7 +57,7 @@ public class EntityMovementController
             {
                 Vector3 targetDirection = target.position - rb.position;
                 Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
-                rb.MoveRotation(targetRotation);
+                rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, stats.turnSpeed * Time.deltaTime));
                 rb.velocity = rb.velocity + moveDirection.normalized * stats.speed;
             }
             else if (stats.accelerationDirection == AccelerationDirection.CurrentDirection)
@@ -73,7 +72,6 @@ public class EntityMovementController
             rb.velocity = velocity * stats.accelerationMultiplier;
         }
     }
-
 
     private void Fly()
     {

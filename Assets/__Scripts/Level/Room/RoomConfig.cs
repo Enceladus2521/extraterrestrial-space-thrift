@@ -4,15 +4,23 @@ using UnityEngine;
 [System.Serializable]   
 public class RoomConfig
 {
-    public RoomInternal internalConfig;
     public float gridSize;
     public RoomType roomType;
     public Vector2 offset;
     public int width;
     public int height;
     public int seed;
+    public int difficultyLevel;
     public List<Door> doorConfigs;
 
+    public List<GameObject> wallTypes;
+    public List<GameObject> floorTypes;
+    public List<GameObject> singleDoorTypes;
+    public List<GameObject> doubleDoorTypes;
+    public List<GameObject> interactableTypes;
+    public List<GameObject> entityTypes;
+
+     
     public void Connect(Door door)
     {
         if (door.isConnected)
@@ -45,14 +53,17 @@ public class RoomConfig
         Shop
     }
 
-    public GameObject getDoorPrefab(Wall.WallType wallType)
+    public GameObject getDoorPrefab(Wall.WallType wallType, int seed)
     {
-        return internalConfig.singleDoorTypes[Random.Range(0, internalConfig.singleDoorTypes.Count)];
+        Random.InitState(seed);
+        return singleDoorTypes[Random.Range(0, singleDoorTypes.Count)];
     }
 
-    public GameObject getDoubleDoorPrefab(Wall.WallType wallType)
+    public GameObject getDoubleDoorPrefab(Wall.WallType wallType, int seed)
     {
-        return internalConfig.doubleDoorTypes[Random.Range(0, internalConfig.doubleDoorTypes.Count)];
+        // init sed
+        Random.InitState(seed);
+        return doubleDoorTypes[Random.Range(0, doubleDoorTypes.Count)];
     }
 
     public Vector3 getDoorPosition(Vector3 absPosition, Wall.WallType wallType, Vector2Int gridPosition)
@@ -179,7 +190,7 @@ public class RoomConfig
         return false;
     }
 
-    public static bool ShouldSpawnDoubleDoor(Room roomConfig, Wall.WallType wallType, Vector2Int gridPosition)
+    public static bool ShouldSpawnDoubleDoor(RoomConfig roomConfig, Wall.WallType wallType, Vector2Int gridPosition)
     {
         int centerPosX = roomConfig.width / 2;
         int centerPosY = roomConfig.height / 2;

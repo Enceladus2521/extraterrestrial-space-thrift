@@ -4,26 +4,20 @@ using System.Collections.Generic;
 
 public class EntityController : MonoBehaviour
 {
-    public GameObject closestPlayer;
-    public EntityPrefab prefab;
-
-    public EntityState state;
+    private GameObject closestPlayer;
+    private EntityState state;
     private EntityMovementController movementController;
     private EntityCombatController combatController;
 
+    private HealthStats healthStats;
+    private InventoryStats inventoryStats;
+
     private void Start()
     {
-        if (state == null)
-        {
-            if (gameObject.GetComponent<EntityState>() != null)
-                state = gameObject.GetComponent<EntityState>();
-            else
-                state = gameObject.AddComponent<EntityState>();
-        }
+        healthStats = state.healthStats;
 
         CapsuleCollider capsuleCollider = gameObject.AddComponent<CapsuleCollider>();
-        state.LoadPrefab(prefab);
-        state.healthStats.ResetEntity();
+        // state.LoadPrefab(prefab);
 
         // Fetch the Rigidbody from the GameObject with this script attached
         Rigidbody rb = GetComponent<Rigidbody>();
@@ -38,12 +32,18 @@ public class EntityController : MonoBehaviour
 
     private void InitializeControllers()
     {
-        movementController = new EntityMovementController(this, state.movementStats);
+        if (gameObject.GetComponent<EntityMovementController>())
+            movementController = gameObject.GetComponent<EntityMovementController>();
+        else
+            movementController = gameObject.AddComponent<EntityMovementController>();
+
         if (gameObject.GetComponent<EntityCombatController>())
             combatController = gameObject.GetComponent<EntityCombatController>();
         else
             combatController = gameObject.AddComponent<EntityCombatController>();
-        combatController.stats = state.combatStats;
+        
+        movementController.UpdateStates(state.movementStats);
+        combatController.stats = state.combatStats; // TODO: change to priv
     }
 
     public void UpdateTarget()
@@ -86,10 +86,22 @@ public class EntityController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        state.healthStats.TakeDamage(damage);
-        if (state != null && state.healthStats.Health <= 0)
+        healthStats.TakeDamage(damage);
+        if (state != null && healthStats.Health <= 0)
         {
             gameObject.SetActive(false);
         }
+    }
+
+    public void ApplyRoomEffect(EntityState newState)
+    {
+        state = newState;
+        if (healthStats != null)
+            healthStats.ResetEntity();
+    }
+
+    public GameObject GetClosestPlayer()
+    {
+        return closestPlayer;
     }
 }

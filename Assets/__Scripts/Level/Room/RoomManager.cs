@@ -15,23 +15,40 @@ public class RoomManager : MonoBehaviour
 {
     // constructor for Room Watcher is dead true
     public RoomConfig roomConfig;
+    RoomController controller;
     [SerializeField]
     public Watcher watcher;
     Watcher voidWatcher;
 
     [SerializeField]
     bool isActive = false;
+    [SerializeField]
     bool isLocked = true;
-
-    // List<GameObject> walls = new List<GameObject>();
-    // List<GameObject> floors = new List<GameObject>();
-
-    // void room watcher
 
     void Awake()
     {
         watcher = new Watcher();
         voidWatcher = new Watcher();
+        if (gameObject.GetComponent<RoomController>() == null)
+            controller = gameObject.AddComponent<RoomController>();
+        else
+            controller = gameObject.GetComponent<RoomController>();
+    }
+
+    void Start()
+    {
+    }
+    
+    RoomConfig lastRoomConfig;
+    public void UpdateConfig(RoomConfig config)
+    {
+
+        if (lastRoomConfig == roomConfig && lastRoomConfig != null) return;
+
+        lastRoomConfig = roomConfig;
+        roomConfig = config;
+        controller.UpdateConfig(config);
+
     }
 
     List<EntityController> GetEnemys()
@@ -61,7 +78,7 @@ public class RoomManager : MonoBehaviour
         roomConfig = config;
     }
 
-    // last entites
+    // last entities
     List<EntityController> lastEntities = new List<EntityController>();
 
 

@@ -60,11 +60,10 @@ public class DoorController : MonoBehaviour
             Debug.LogError("Could not find FX group in the main mixer");
         }
 
-
-
-        // Load audio clips from resources/audio folder
-        openAudio = Resources.Load<AudioClip>("Audio/Door/Open");
-        closeAudio = Resources.Load<AudioClip>("Audio/Door/Close");
+        if (openAnimation != null)
+            openAudio = Resources.Load<AudioClip>("Audio/Door/Open");
+        if (closeAnimation != null)
+            closeAudio = Resources.Load<AudioClip>("Audio/Door/Close");
 
         doorAnimation.playAutomatically = false;
     }
@@ -72,12 +71,6 @@ public class DoorController : MonoBehaviour
 
     public void SetClosestDoor()
     {
-        // only if instansiated
-        // if(!door.isConnected)
-        //  {
-        //     Debug.Log("door is not connected");
-        //     return;
-        //  }
 
         // Find closest door by tag "door"
         GameObject[] doors = GameObject.FindGameObjectsWithTag("wall");
@@ -126,63 +119,71 @@ public class DoorController : MonoBehaviour
 
     public void OpenDoorForced()
     {
-        isOpen = true;
+        if (openAnimation)
+        {
+            isOpen = true;
+            doorAnimation.clip = openAnimation;
+            doorAnimation.Play();
+            StartCoroutine(AutoClose(silent: true));
+        }
 
-        // Play open animation
-        doorAnimation.clip = openAnimation;
-        doorAnimation.Play();
-
-        // Play open audio
-        audioSource.clip = openAudio;
-        audioSource.Play();
-
-        StartCoroutine(AutoClose());
     }
 
-    public void OpenDoor()
+    public void OpenDoor(bool silent = false)
     {
         SetClosestDoor();
         if (isLocked)
-        {
-            return;
-        }
+            if (otherDoor)
+                if (!otherDoor.isLocked && door.wallType == Wall.WallType.Left)
+                    isLocked = false;
+                else
+                    return;
+            else
+                return;
 
         if (otherDoor)
             otherDoor.OpenDoorForced();
-        isOpen = true;
 
-        // Play open animation
-        doorAnimation.clip = openAnimation;
-        doorAnimation.Play();
+        if (openAudio != null && !silent)
+        {
+            audioSource.clip = openAudio;
+            audioSource.Play();
+        }
 
-        // Play open audio
-        audioSource.clip = openAudio;
-        audioSource.Play();
-
-        StartCoroutine(AutoClose());
+        if (openAnimation)
+        {
+            isOpen = true;
+            doorAnimation.clip = openAnimation;
+            doorAnimation.Play();
+            StartCoroutine(AutoClose());
+        }
     }
 
-    public IEnumerator AutoClose()
+    public IEnumerator AutoClose(bool silent = false)
     {
         if (autoCloseTime == 0)
             yield break;
 
         yield return new WaitForSeconds(autoCloseTime);
 
-        CloseDoor();
+        CloseDoor(silent: silent);
     }
 
-    public void CloseDoor()
+    public void CloseDoor(bool silent = false)
     {
         isOpen = false;
 
-        // Play close animation
-        doorAnimation.clip = closeAnimation;
-        doorAnimation.Play();
+        if (closeAnimation != null)
+        {
+            doorAnimation.clip = closeAnimation;
+            doorAnimation.Play();
+        }
 
-        // Play close audio
-        audioSource.clip = closeAudio;
-        audioSource.Play();
+        if (closeAudio != null && !silent)
+        {
+            audioSource.clip = closeAudio;
+            audioSource.Play();
+        }
     }
 
     public void ToggleDoorLockState(bool locked)
