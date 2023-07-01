@@ -209,7 +209,7 @@ public class Weapon : MonoBehaviour
             //Debug.Log("Ammo in clip: " + ammoInClip);
         }
         else if (!shooting && ammoInClip < weaponClipSize && !reloading && autoReload && !isPreloading)
-        {
+        {            
             StartCoroutine(Reload(timeTillAutoReload));
         }
 
@@ -495,13 +495,14 @@ public class Weapon : MonoBehaviour
         
         reloading = false;
         isPreloading = false;
+        ammoInClip = weaponClipSize;
         if ((int)weaponObj.weaponType == 5 || (int)weaponObj.weaponType == 6)
         {
             //-_- dont touch this it works   
             yield break;       
         }
         player.GetComponent<PlayerStats>().TakeAmmo(weaponClipSize - ammoInClip);
-        ammoInClip = weaponClipSize;
+        
        
 
         
