@@ -145,8 +145,7 @@ public class PlayerStats : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        float totalDamage = damage;
-        Debug.Log("Damage taken: " + totalDamage);
+        float totalDamage = damage;        
         if (armor < totalDamage)
         {
             Debug.Log("Armor broken");

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(Rigidbody))]
 public class EnemyController : MonoBehaviour
 {
@@ -60,6 +61,7 @@ public class EnemyController : MonoBehaviour
 
 
 
+
     [Header("Eplode Stats")]
     private float explodeRange = 5f; //can be random
 
@@ -73,12 +75,12 @@ public class EnemyController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
         StartCoroutine(UpdateTargetCoroutine());
+        if ((EnemyType)enemyType == EnemyType.Eplode) attackRange = 0f;
     }
 
     public void SetEnemyStats(int enemyType, float health, float attackRate, float attackDamage, float knockback, bool despawnOnImpact,
         float projectileForce, int burstAmount, float burstRate, Color projectileColor, float explodeRange)
-    {
-        this.enemyType = (EnemyType)enemyType;
+    {        
         if ((EnemyType)enemyType == EnemyType.Eplode) attackRange = 0f;
         this.health = health;
         this.attackRate = attackRate;
@@ -165,6 +167,9 @@ public class EnemyController : MonoBehaviour
         GameObject projectile = Instantiate(variableForPrefab, attackPoints[attackPointIndex].position, attackPoints[attackPointIndex].rotation);
         projectile.GetComponent<Renderer>().material.color = projectileColor;
         projectile.GetComponent<Renderer>().material.SetColor("_EmissionColor", projectileColor);
+        projectile.transform.GetChild(0).GetComponent<TrailRenderer>().startColor = projectileColor;
+        projectile.transform.GetChild(0).GetComponent<TrailRenderer>().endColor = projectileColor;
+        
         
         projectile.GetComponent<EnemyProjectile>().SetProjectileData(attackDamage, timeToLive, despawnOnImpact, projectileForce, knockback);
 
@@ -245,8 +250,11 @@ public class EnemyController : MonoBehaviour
     {
         if (closestPlayer != null)
         {
-            Vector3 targetDirection = closestPlayer.transform.position - transform.position;
-            rb.AddTorque(Vector3.Cross(transform.forward, targetDirection) * rotationSpeed * Time.deltaTime);
+            
+            Vector3 direction = closestPlayer.transform.position - transform.position;
+            Quaternion rotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Lerp(transform.rotation, rotation, rotationSpeed * Time.deltaTime);
+            
         }
     }
     private void Move(GameObject player)
