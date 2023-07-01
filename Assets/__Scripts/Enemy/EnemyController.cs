@@ -35,7 +35,7 @@ public class EnemyController : MonoBehaviour
     }
 
     [Header("Health Stats")]
-    private float health = 100f; //can be random
+    public float health = 100f; //can be random
 
 
 
@@ -230,20 +230,23 @@ public class EnemyController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        
-        
+
+
         health -= damage;
         if (health <= 0)
         {
+            Destroy(gameObject, 0.1f);
             Die();
+            
         }
     }
 
+    
+
     private void Die()
     {
-
+        DropAmmo();
         MoneyDrop();
-        Destroy(gameObject);
     }
 
 
@@ -263,12 +266,12 @@ public class EnemyController : MonoBehaviour
                 ammo.AddComponent<Rigidbody>();
             }
             ammo.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f)) * 2, ForceMode.Impulse);
-            ammo.GetComponent<PickUpInteraction>().SetAmount(difficultyLevel,0,0,0,1.5f);
+            ammo.GetComponent<PickUpInteraction>().SetAmount(difficultyLevel + 1 * 10, 0, 0, 0, 1.5f);
         }
     }
 
     int[] moneyDenominations = { 10, 10, 20, 20, 50, 50, 50, 50, 100, 100, 500, 500 };
-    int maxSpawnCount = 5; 
+    int maxSpawnCount = 5;
     private void MoneyDrop()
     {
         for (int i = 0; i < maxSpawnCount; i++)
@@ -277,18 +280,18 @@ public class EnemyController : MonoBehaviour
             int moneyValue = moneyDenominations[randomIndex];
             spawnMoney(moneyValue);
         }
-    }   
+    }
 
 
 
-    
+
     private void spawnMoney(int value)
     {
         GameObject money;
         int wichOne = Random.Range(1, 2);
-        switch(value)
+        switch (value)
         {
-            case 10:                
+            case 10:
                 if (wichOne == 1)
                 {
                     money = Resources.Load("PF_Money_10_01") as GameObject;
@@ -337,7 +340,7 @@ public class EnemyController : MonoBehaviour
                 {
                     money = Resources.Load("PF_Money_500_02") as GameObject;
                 }
-                break; 
+                break;
             default:
                 if (wichOne == 1)
                 {
@@ -347,14 +350,14 @@ public class EnemyController : MonoBehaviour
                 {
                     money = Resources.Load("PF_Money_10_02") as GameObject;
                 }
-                break;               
+                break;
         }
 
         GameObject newMoney = Instantiate(money, transform.position, Quaternion.identity);
         //give random force to money
         newMoney.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f)) * 2, ForceMode.Impulse);
         newMoney.AddComponent<AutoDespawn>().SetTimeToDespawn(40f);
-        
+
     }
 
 

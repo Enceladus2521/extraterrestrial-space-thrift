@@ -349,6 +349,8 @@ public class Weapon : MonoBehaviour
         if (!hit.collider.gameObject.CompareTag("entity")) return;
 
 
+
+return;
         // try to get EntityController
         EntityController entity = hit.collider.gameObject.GetComponent<EntityController>();
         if (entity != null) entity.TakeDamage(damage);
