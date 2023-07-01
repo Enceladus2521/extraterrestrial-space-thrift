@@ -116,7 +116,7 @@ GameObject:
   - component: {fileID: 6797553277119163055}
   m_Layer: 0
   m_Name: PF_Bld_Door_Double_05
-  m_TagString: wall
+  m_TagString: door
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -34,13 +34,8 @@ public class RoomManager : MonoBehaviour
         else
             controller = gameObject.GetComponent<RoomController>();
     }
-
-    void Start()
-    {
-    }
-    
     RoomConfig lastRoomConfig;
-    public void UpdateConfig(RoomConfig config)
+    public void InitRoom(RoomConfig config)
     {
 
         if (lastRoomConfig == roomConfig && lastRoomConfig != null) return;
@@ -71,16 +66,6 @@ public class RoomManager : MonoBehaviour
         bool isInsideWidth = position.y > roomPosition.y - roomHeight / 2 && position.y < roomPosition.y + roomHeight / 2;
         return isInsideHeight && isInsideWidth;
     }
-
-
-    public void UpdateRoomConfig(RoomConfig config)
-    {
-        roomConfig = config;
-    }
-
-    // last entities
-    List<EntityController> lastEntities = new List<EntityController>();
-
 
     public void Update()
     {
@@ -119,10 +104,11 @@ public class RoomManager : MonoBehaviour
 
         // todo: get entities not by tag
         Debug.Log("Heavy load of entity");
-        GameObject[] entities = GameObject.FindGameObjectsWithTag("entity");
-        for (int i = 0; i < entities.Length; i++)
+        List<EntityController> entities = LevelManager.Instance?.GetEntities();
+        for (int i = 0; i < entities.Count; i++)
         {
-            EntityController entity = entities[i].GetComponent<EntityController>();
+            EntityController entity = entities[i];
+            // EntityController entity = entities[i].GetComponent<EntityController>();
             if (IsPositionInRoom(entity.transform.position))
             {
                 watcher.entities.Add(entity);
@@ -147,10 +133,8 @@ public class RoomManager : MonoBehaviour
     }
     private void UpdatePlayers()
     {
-        // List<GameObject> playersGlobal = GameManager.Instance?.GameState?.getPlayers();
         // TODO: get players not by tag
-        Debug.Log("Heavy load of Player");
-        GameObject[] playersGlobal = GameObject.FindGameObjectsWithTag("Player");
+        List<GameObject> playersGlobal = GameManager.Instance?.GameState?.getPlayers();
         watcher.players.Clear();
 
         if (playersGlobal != null)

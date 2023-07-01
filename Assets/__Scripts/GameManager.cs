@@ -22,6 +22,8 @@ public class GameState
 public class GameManager : MonoBehaviour
 {
 
+    LevelController _levelController;
+
     [SerializeField]
     public GameState GameState { get; set; }
     public static GameManager Instance { get; private set; }
@@ -42,7 +44,6 @@ public class GameManager : MonoBehaviour
             GameState.DifficultyLevel = 1;
             DontDestroyOnLoad(gameObject);
         }
-        UpdatePlayers();
     }
 
 
@@ -50,6 +51,13 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Application.targetFrameRate = 144;
+        if (gameObject.GetComponent<LevelController>())
+            _levelController = gameObject.GetComponent<LevelController>();
+        else
+            {
+                Debug.Log("LevelController not found");
+                return;
+            }
         UpdatePlayers();
     }
 
