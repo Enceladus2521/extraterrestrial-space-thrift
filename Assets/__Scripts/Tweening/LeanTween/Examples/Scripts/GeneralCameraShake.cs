@@ -54,6 +54,7 @@ public class GeneralCameraShake : MonoBehaviour {
 				* Shake scene objects
 				********************/
 
+        		Debug.Log("Heavy load of Respawn");
 				// Make the boxes jump from the big stomping
 				GameObject[] boxes = GameObject.FindGameObjectsWithTag("Respawn"); // I just arbitrarily tagged the boxes with this since it was available in the scene
 		        foreach (GameObject box in boxes) {
@@ -61,6 +62,7 @@ public class GeneralCameraShake : MonoBehaviour {
 		        }
 
 		        // Make the lamps spin from the big stomping
+        		Debug.Log("Heavy load of GameController");
 		        GameObject[] lamps = GameObject.FindGameObjectsWithTag("GameController"); // I just arbitrarily tagged the lamps with this since it was available in the scene
 		        foreach (GameObject lamp in lamps) {
 		        	float z = lamp.transform.eulerAngles.z;

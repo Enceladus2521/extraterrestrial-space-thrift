@@ -73,7 +73,8 @@ public class DoorController : MonoBehaviour
     {
 
         // Find closest door by tag "door"
-        GameObject[] doors = GameObject.FindGameObjectsWithTag("wall");
+        Debug.Log("Heavy load of doors");
+        GameObject[] doors = GameObject.FindGameObjectsWithTag("door");
         if (doors.Length == 0)
         {
             Debug.Log("no doors found in game");
