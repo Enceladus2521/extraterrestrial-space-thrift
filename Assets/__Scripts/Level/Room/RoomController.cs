@@ -121,8 +121,8 @@ public class RoomController : MonoBehaviour
             GameObject interactablePrefab = roomConfig.interactableTypes[i];
 
             // Randomly calculate the position within the room
-            float x = Random.Range(1, roomConfig.width - 1) + absOffset.x;
-            float y = Random.Range(1, roomConfig.height - 1) + absOffset.y;
+            float x = Random.Range(1+1, roomConfig.width - 2) + absOffset.x;
+            float y = Random.Range(1+1, roomConfig.height - 2) + absOffset.y;
             Vector3 absPosition = new Vector3(x * roomConfig.gridSize, 0, y * roomConfig.gridSize) + transform.position;
 
             if (gizmos)

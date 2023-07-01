@@ -25,8 +25,23 @@ public class RoomManager : MonoBehaviour
     [SerializeField]
     bool isLocked = true;
 
+    // Singleton pattern: Static instance of RoomManager
+    private static RoomManager instance;
+    public static RoomManager Instance { get { return instance; } }
+
     void Awake()
     {
+        // Singleton pattern: Initialize the static instance on Awake
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+
         watcher = new Watcher();
         voidWatcher = new Watcher();
         if (gameObject.GetComponent<RoomController>() == null)
@@ -34,7 +49,7 @@ public class RoomManager : MonoBehaviour
         else
             controller = gameObject.GetComponent<RoomController>();
     }
-
+    
     void Start()
     {
     }
@@ -119,7 +134,7 @@ public class RoomManager : MonoBehaviour
 
         // todo: get entities not by tag
         Debug.Log("Heavy load of entity");
-        GameObject[] entities = GameObject.FindGameObjectsWithTag("entity");
+        GameObject[] entities = RoomManager.Instance?.GameState?.getEntities();
         for (int i = 0; i < entities.Length; i++)
         {
             EntityController entity = entities[i].GetComponent<EntityController>();
@@ -149,8 +164,7 @@ public class RoomManager : MonoBehaviour
     {
         // List<GameObject> playersGlobal = GameManager.Instance?.GameState?.getPlayers();
         // TODO: get players not by tag
-        Debug.Log("Heavy load of Player");
-        GameObject[] playersGlobal = GameObject.FindGameObjectsWithTag("Player");
+        List<GameObject> playersGlobal = GameManager.Instance?.GameState?.getPlayers();
         watcher.players.Clear();
 
         if (playersGlobal != null)
