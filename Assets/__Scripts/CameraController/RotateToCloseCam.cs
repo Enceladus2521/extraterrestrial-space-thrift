@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// import fort log warn
+
 public class RotateToCloseCam : MonoBehaviour
 {
     
@@ -13,7 +15,8 @@ public class RotateToCloseCam : MonoBehaviour
 
 
     void Update()
-    {
+    {        
+        Debug.Log("Heavy load of Camera");
         GameObject[] cameras = GameObject.FindGameObjectsWithTag("Camera");
 
         

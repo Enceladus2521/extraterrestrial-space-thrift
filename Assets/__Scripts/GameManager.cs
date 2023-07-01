@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public class GameState
@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
     {   
         if(GameState == null) return;
         GameState.Players = new List<GameObject>();
+        Debug.Log("Heavy load of Player");
         GameState.Players = GameObject.FindGameObjectsWithTag("Player").ToList();
    
     }
@@ -75,6 +76,12 @@ public class GameManager : MonoBehaviour
     public void RemovePlayer(GameObject player)
     {
         GameState.Players.Remove(player);
+    }
+
+    void FixedUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Restart();
     }
 
     private void Update()
@@ -102,6 +109,12 @@ public class GameManager : MonoBehaviour
     private void OnDestroy()
     {
         if (this == Instance) { Instance = null; }
+    }
+
+    public void Restart()
+    {
+        Debug.Log("Restarting");
+        SceneManager.LoadScene(0);
     }
 
 

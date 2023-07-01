@@ -116,7 +116,9 @@ public class RoomManager : MonoBehaviour
     {
         // loop over all entities and check in entity state for is alive in health state#
         watcher?.entities.Clear();
+
         // todo: get entities not by tag
+        Debug.Log("Heavy load of entity");
         GameObject[] entities = GameObject.FindGameObjectsWithTag("entity");
         for (int i = 0; i < entities.Length; i++)
         {
@@ -147,6 +149,7 @@ public class RoomManager : MonoBehaviour
     {
         // List<GameObject> playersGlobal = GameManager.Instance?.GameState?.getPlayers();
         // TODO: get players not by tag
+        Debug.Log("Heavy load of Player");
         GameObject[] playersGlobal = GameObject.FindGameObjectsWithTag("Player");
         watcher.players.Clear();
 
