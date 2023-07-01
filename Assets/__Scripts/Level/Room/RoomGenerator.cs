@@ -38,7 +38,7 @@ public class RoomGenerator : MonoBehaviour
         float width = roomConfig.width * roomConfig.gridSize;
         float height = roomConfig.height * roomConfig.gridSize;
         Vector3 size = new Vector3(width, 1, height);
-        Vector3 ceilingOffset = new Vector3(roomConfig.offset.x * roomConfig.gridSize, 3f, roomConfig.offset.y * roomConfig.gridSize);
+        Vector3 ceilingOffset = new Vector3(roomConfig.offset.x * roomConfig.gridSize, 1.5f * roomConfig.gridSize, roomConfig.offset.y * roomConfig.gridSize);
 
         GameObject ceiling = new GameObject("Ceiling");
         ceiling.transform.parent = transform;
@@ -62,8 +62,10 @@ public class RoomGenerator : MonoBehaviour
       
 
                 GameObject entityInstance = Instantiate(entityPrefab, absPosition, Quaternion.identity);
-                EntityController entityController = entityInstance.GetComponent<EntityController>();
-                entityController.ApplyRoomEffect(GenerateRandomEntityState());
+                EnemyController entityController = entityInstance.GetComponent<EnemyController>(); // TODO: Make alter to EntityController
+
+                entityController.GenerateRandom(roomConfig.seed, roomConfig.difficultyLevel);
+
                 LevelManager.Instance.watcher?.entities?.Add(entityController);
 
                 if (entityController == null)
@@ -158,6 +160,8 @@ public class RoomGenerator : MonoBehaviour
                 {
                     GenerateWall(absPosition, wallType.Value, gridPosition);
                 }
+
+                    GenerateWall(absPosition + new Vector3(0, roomConfig.gridSize * 1.5f, 0), wallType.Value, gridPosition, mirror: true);
             }
         }
     }
@@ -185,7 +189,7 @@ public class RoomGenerator : MonoBehaviour
         }
     }
 
-    void GenerateWall(Vector3 absPosition, Wall.WallType wallType, Vector2Int gridPosition)
+    void GenerateWall(Vector3 absPosition, Wall.WallType wallType, Vector2Int gridPosition, bool mirror = false)
     {
             GameObject wallPrefab = roomConfig.wallTypes[Random.Range(0, roomConfig.wallTypes.Count)];
             Vector3 wallPosition = absPosition + Wall.GetOffset(wallType, roomConfig.gridSize);
@@ -193,6 +197,9 @@ public class RoomGenerator : MonoBehaviour
 
             GameObject wallInstance = Instantiate(wallPrefab, wallPosition, wallRotation);
             wallInstance.transform.SetParent(transform);
+            // if mirror flip the wall 
+            if (mirror)
+                wallInstance.transform.localScale = new Vector3(1, -1, 1);
             wallInstance.name = $"Wall_{gridPosition.x}_{gridPosition.y}";
             if (!wallInstance.GetComponent<BoxCollider>())
                 wallInstance.AddComponent<BoxCollider>();
