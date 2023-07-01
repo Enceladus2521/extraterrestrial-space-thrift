@@ -6,7 +6,7 @@ public class Watcher
 {
     public List<DoorController> doors = new List<DoorController>();
     public List<Interacter> interactables = new List<Interacter>();
-    public List<EntityController> entities = new List<EntityController>();
+    public List<EnemyController> entities = new List<EnemyController>();
 
     public List<PlayerStats> players = new List<PlayerStats>();
 }
@@ -47,9 +47,9 @@ public class RoomManager : MonoBehaviour
 
     }
 
-    List<EntityController> GetEnemys()
+    List<EnemyController> GetEnemys()
     {
-        List<EntityController> enemys = new List<EntityController>();
+        List<EnemyController> enemys = new List<EnemyController>();
         for (int i = 0; i < watcher.entities.Count; i++)
         {
             enemys.Add(watcher.entities[i]);
@@ -102,10 +102,10 @@ public class RoomManager : MonoBehaviour
     {
         // loop over all entities and check in entity state for is alive in health state#
         watcher?.entities.Clear();
-        List<EntityController> entities = LevelManager.Instance?.GetEntities();
+        List<EnemyController> entities = LevelManager.Instance?.GetEntities();
         for (int i = 0; i < entities.Count; i++)
         {
-            EntityController entity = entities[i];
+            EnemyController entity = entities[i];
             if (entity == null) continue;
             // EntityController entity = entities[i].GetComponent<EntityController>();
             if (IsPositionInRoom(entity.transform.position) && entity.gameObject.activeInHierarchy)

@@ -45,7 +45,7 @@ public class LevelManager : MonoBehaviour
         controller.Catalog = catalog;
     }
 
-    public List<EntityController> GetEntities()
+    public List<EnemyController> GetEntities()
     {
         return watcher.entities;
     }
