@@ -9,7 +9,7 @@ public class LevelManager : MonoBehaviour
     public static LevelManager Instance { get; private set; }
 
     private LevelController controller;
-    private Watcher watcher;
+    public Watcher watcher;
     private Watcher voidWatcher;
 
     private Vector3 mostLeftPlayerPos = Vector3.zero;
@@ -48,6 +48,47 @@ public class LevelManager : MonoBehaviour
     public List<EntityController> GetEntities()
     {
         return watcher.entities;
+    }
+
+    public DoorController GetClosestDoor(DoorController controller)
+    { 
+        // Find closest door by tag "door"
+        if (watcher.doors.Count == 0)
+        {
+            Debug.Log("no doors found in game");
+            return null;
+        }
+        DoorController closestDoor = null;
+        float closestDistance = Mathf.Infinity;
+        for (int i = 0; i < watcher.doors.Count; i++)
+        {
+            DoorController otherDoor = watcher.doors[i].GetComponent<DoorController>();
+            // check if its not the same door, other door will have the opposite wall type
+            if (otherDoor != null)
+            {
+                if (otherDoor.gameObject == controller.gameObject)
+                {
+                    continue;
+                }
+
+
+                float distance = Vector3.Distance(controller.transform.position, otherDoor.transform.position);
+
+
+                if (distance < closestDistance)
+                {
+                    closestDoor = otherDoor;
+                    closestDistance = distance;
+                }
+            }
+            else
+            {
+                Debug.Log("other door is null");
+            }
+
+        }
+        
+        return closestDoor;
     }
 
     public void Update()

@@ -18,7 +18,7 @@ public class GameState
         return Players;
     }
 
-    // seed 
+    // seed
     public int Seed { get; set; }
 }
 
@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviour
             GameState.Seed = Random.Range(0, 42);
             DontDestroyOnLoad(gameObject);
         }
+        UpdatePlayers();
     }
 
 
@@ -59,18 +60,13 @@ public class GameManager : MonoBehaviour
         UpdatePlayers();
     }
 
-    void OnValidate()
-    {
-        UpdatePlayers();
-    }
 
 
-    // check all players by tag and update 
+    // check all players by tag and update
     public void UpdatePlayers()
     {
         if (GameState == null) return;
         GameState.Players = new List<GameObject>();
-        Debug.Log("Heavy load of Player");
         GameState.Players = GameObject.FindGameObjectsWithTag("Player").ToList();
 
     }
@@ -123,7 +119,7 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(0);
         GameState.Seed = Random.Range(0, 42) + GameState.Seed;
         LevelManager.Instance?.Regenerate();
-    }  
+    }
 
     public void OnPlayerDied(GameObject player)
     {

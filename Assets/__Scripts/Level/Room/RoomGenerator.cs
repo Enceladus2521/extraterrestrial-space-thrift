@@ -64,7 +64,7 @@ public class RoomGenerator : MonoBehaviour
                 GameObject entityInstance = Instantiate(entityPrefab, absPosition, Quaternion.identity);
                 EntityController entityController = entityInstance.GetComponent<EntityController>();
                 entityController.ApplyRoomEffect(GenerateRandomEntityState());
-                // manager?.watcher?.entities?.Add(entityController);
+                LevelManager.Instance.watcher?.entities?.Add(entityController);
 
                 if (entityController == null)
                 {
@@ -237,8 +237,7 @@ public class RoomGenerator : MonoBehaviour
         DoorController doorController = doorInstance.GetComponent<DoorController>();
         doorController.door = door;
         doorController.isLocked = true;
-        // manager.watcher.doors.Add(doorController);
-
+        LevelManager.Instance.watcher?.doors?.Add(doorController);
 
     }
 

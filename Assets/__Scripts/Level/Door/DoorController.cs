@@ -16,6 +16,9 @@ public class DoorController : MonoBehaviour
     public AudioClip openAudio;
     public AudioClip closeAudio;
 
+    private MeshRenderer meshRenderer;
+    private MeshCollider meshCollider;
+
     public string audioMixerGroup = "FX";
 
     private Animation doorAnimation;
@@ -27,11 +30,12 @@ public class DoorController : MonoBehaviour
     public void AssignDoor(DoorController otherOtherDoor)
     {
         otherDoor = otherOtherDoor;
-
     }
 
     private void Awake()
     {
+        meshCollider = GetComponent<MeshCollider>();
+        meshRenderer = GetComponent<MeshRenderer>();
         doorAnimation = GetComponent<Animation>();
 
         // Check if an AudioSource component already exists
@@ -72,49 +76,40 @@ public class DoorController : MonoBehaviour
     public void SetClosestDoor()
     {
 
-        // Find closest door by tag "door"
-        GameObject[] doors = GameObject.FindGameObjectsWithTag("door");
-        if (doors.Length == 0)
+        DoorController closestDoor = LevelManager.Instance?.GetClosestDoor(this);
+
+        if (closestDoor != null)
         {
-            Debug.Log("no doors found in game");
-            return;
+            UpdateRenderer(closestDoor);
+            closestDoor.UpdateRenderer(this);
+            closestDoor.AssignDoor(this);
+            otherDoor = closestDoor;
         }
-        DoorController closestDoor = null;
-        float closestDistance = Mathf.Infinity;
-        for (int i = 0; i < doors.Length; i++)
-        {
-            DoorController otherDoor = doors[i].GetComponent<DoorController>();
-            // check if its not the same door, other door will have the opposite wall type
-            if (otherDoor != null)
+
+
+
+    }
+
+    public void UpdateRenderer(DoorController otherController)
+    {
+        if (otherController == null) return;
+
+        bool isLeft = door.wallType == Wall.WallType.Left;
+        bool isRight = door.wallType == Wall.WallType.Right;
+        if (isLeft)
+            if (openAnimation != null) return;
+            else if (otherController.openAnimation)
             {
-                if (otherDoor.gameObject == gameObject)
-                {
-                    continue;
-                }
-
-
-                float distance = Vector3.Distance(transform.position, otherDoor.transform.position);
-                if (distance < closestDistance)
-                {
-                    closestDoor = otherDoor;
-                    closestDistance = distance;
-                }
+                if (openAnimation == null) return;
+                meshCollider.enabled = false;
+                meshRenderer.enabled = false;
+                isOpen = true;
             }
             else
             {
-                Debug.Log("other door is null");
+                meshCollider.enabled = true;
+                meshRenderer.enabled = true;
             }
-
-        }
-
-        if (closestDoor == null)
-        {
-            Debug.Log("no doors found");
-        }
-
-        closestDoor?.AssignDoor(this);
-
-        otherDoor = closestDoor;
     }
 
     public void OpenDoorForced()

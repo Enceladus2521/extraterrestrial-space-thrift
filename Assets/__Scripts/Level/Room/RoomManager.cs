@@ -102,17 +102,16 @@ public class RoomManager : MonoBehaviour
     {
         // loop over all entities and check in entity state for is alive in health state#
         watcher?.entities.Clear();
-
-        // todo: get entities not by tag
-        Debug.Log("Heavy load of entity");
         List<EntityController> entities = LevelManager.Instance?.GetEntities();
         for (int i = 0; i < entities.Count; i++)
         {
             EntityController entity = entities[i];
+            if (entity == null) continue;
             // EntityController entity = entities[i].GetComponent<EntityController>();
-            if (IsPositionInRoom(entity.transform.position))
+            if (IsPositionInRoom(entity.transform.position) && entity.gameObject.activeInHierarchy)
             {
                 watcher.entities.Add(entity);
+                voidWatcher.entities.Remove(entity);
                 // bool isAlive = entity.state.healthStats.IsAlive;
                 // // if is not alive move to void watcher
                 // if (!isAlive)
@@ -122,6 +121,7 @@ public class RoomManager : MonoBehaviour
                 //     watcher.entities.Remove(entity);
                 // }
             }else{
+                watcher.entities.Remove(entity);
                 voidWatcher.entities.Add(entity);
             }
         }

@@ -30,14 +30,19 @@ public class LevelController : MonoBehaviour
 
         if (previousRoom != null)
         {
-            Debug.Log("New Difficulty Level: " + previousRoom.difficultyLevel);
             newRoomConfig.difficultyLevel = previousRoom.difficultyLevel + 1;
             newRoomConfig.seed = previousRoom.seed + 42; // :D
             Random.InitState(newRoomConfig.seed);
 
             newRoomConfig.width = Random.Range(1, (previousRoom.difficultyLevel) + 1);
-            if (previousRoom.width == 2)
+            
+            if ((newRoomConfig.width % 2 == 0 && previousRoom.width == 1) || (newRoomConfig.width == 1 && previousRoom.width % 2 == 0))
+            {
+                Debug.Log("newRoomConfig.width: " + newRoomConfig.width);
                 newRoomConfig.width += 1;
+            }
+
+
             newRoomConfig.height = Random.Range(1, (previousRoom.difficultyLevel) + 1);
             newRoomConfig.offset = new Vector3(
                 previousRoom.offset.x + previousRoom.width / 2f + newRoomConfig.width / 2f,
