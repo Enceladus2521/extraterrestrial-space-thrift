@@ -112,7 +112,7 @@ public class DoorController : MonoBehaviour
             Debug.Log("no doors found");
         }
 
-        closestDoor.AssignDoor(this);
+        closestDoor?.AssignDoor(this);
 
         otherDoor = closestDoor;
     }

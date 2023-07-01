@@ -14,11 +14,14 @@ public class LevelController : MonoBehaviour
     public Vector3 LastRoomPos { get { return lastRoomPosition; } }
     public int RoomCount { get { return roomConfigs.Count; } }
     public int RoomGeneratedCount { get { return roomsGenerated.Count; } }
+    public List<RoomManager> RoomsGenerated { get { return roomsGenerated; } }
+    
     void Start()
     {
         map = new GameObject("Map");
         roomConfigs.Add(GetRandomRoom(catalog));
     }
+
 
     private RoomConfig GetRandomRoom(RoomInternal catalog, RoomConfig previousRoom = null)
     {
@@ -56,7 +59,7 @@ public class LevelController : MonoBehaviour
         else
         {
             newRoomConfig.difficultyLevel = 1;
-            newRoomConfig.seed = 42;
+            newRoomConfig.seed = GameManager.Instance.Seed;
             Random.InitState(newRoomConfig.seed);
             newRoomConfig.roomType = RoomConfig.RoomType.Start;
             newRoomConfig.offset = Vector3.zero;
@@ -91,8 +94,9 @@ public class LevelController : MonoBehaviour
         // GenerateNewRoom(newRoomConfig);
     }
 
-    private void GenerateNewRoom(RoomConfig newRoomConfig)
+    public void GenerateNewRoom()
     {
+        RoomConfig newRoomConfig = roomConfigs[roomsGenerated.Count];
         GameObject newRoom = new GameObject($"Room_{roomsGenerated.Count}");
         newRoom.transform.parent = map.transform;
         newRoom.transform.position = newRoomConfig.offset * newRoomConfig.gridSize;
@@ -109,23 +113,6 @@ public class LevelController : MonoBehaviour
 
         lastRoomPosition = newRoom.transform.position;
     }
-    public void UpdateMap()
-    {
-
-        if (roomsGenerated.Count < roomConfigs.Count)
-        {
-            GenerateNewRoom(roomConfigs[roomsGenerated.Count]);
-            return;
-        }
-
-        if (roomsGenerated.Count > roomConfigs.Count)
-        {
-            Debug.Log("Regenerating map");
-            Regenerate();
-            return;
-        }
-    }
-
     private void ConnectDoors(RoomManager roomA, RoomManager roomB)
     {
         // inside RoomManager's game object are DoorController , get all door controllers of this room and the previous room
@@ -149,7 +136,7 @@ public class LevelController : MonoBehaviour
     }
 
 
-    public void Regenerate()
+    public void Clear()
     {
         // Remove all previously generated rooms and clear the lists
         foreach (var room in roomsGenerated)
@@ -158,9 +145,6 @@ public class LevelController : MonoBehaviour
         }
         roomsGenerated.Clear();
         roomConfigs.Clear();
-
-        // Generate a new room configuration and start the map generation process again
-        GenerateNewRoomConfig();
     }
 
         void OnDrawGizmos()

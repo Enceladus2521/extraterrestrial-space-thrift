@@ -14,7 +14,8 @@ public class Watcher
 public class RoomManager : MonoBehaviour
 {
     // constructor for Room Watcher is dead true
-    public RoomConfig roomConfig;
+    private RoomConfig roomConfig;
+    public RoomConfig RoomConfig { get { return roomConfig; } }
     RoomController controller;
     [SerializeField]
     public Watcher watcher;

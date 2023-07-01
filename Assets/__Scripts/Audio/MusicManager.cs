@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Audio;
 
-public class MusicController : MonoBehaviour
+public class MusicManager : MonoBehaviour
 {
     private AudioSource audioSource;
     private AudioClip[] musicTracks;

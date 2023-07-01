@@ -17,21 +17,25 @@ public class GameState
     {
         return Players;
     }
+
+    // seed 
+    public int Seed { get; set; }
 }
 
 public class GameManager : MonoBehaviour
 {
 
-    LevelController _levelController;
 
     [SerializeField]
     public GameState GameState { get; set; }
     public static GameManager Instance { get; private set; }
 
+    // get function will get it form game state
+    public int Seed { get { return GameState.Seed; }  }
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
+        if (GameManager.Instance != null && GameManager.Instance != this)
         {
             Destroy(gameObject);
         }
@@ -42,6 +46,7 @@ public class GameManager : MonoBehaviour
             GameState.Players = new List<GameObject>();
             GameState.HighScores = new List<int>();
             GameState.DifficultyLevel = 1;
+            GameState.Seed = Random.Range(0, 42);
             DontDestroyOnLoad(gameObject);
         }
     }
@@ -51,13 +56,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Application.targetFrameRate = 144;
-        if (gameObject.GetComponent<LevelController>())
-            _levelController = gameObject.GetComponent<LevelController>();
-        else
-            {
-                Debug.Log("LevelController not found");
-                return;
-            }
         UpdatePlayers();
     }
 
@@ -69,12 +67,12 @@ public class GameManager : MonoBehaviour
 
     // check all players by tag and update 
     public void UpdatePlayers()
-    {   
-        if(GameState == null) return;
+    {
+        if (GameState == null) return;
         GameState.Players = new List<GameObject>();
         Debug.Log("Heavy load of Player");
         GameState.Players = GameObject.FindGameObjectsWithTag("Player").ToList();
-   
+
     }
     public void AddPlayer(GameObject player)
     {
@@ -123,6 +121,15 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Restarting");
         SceneManager.LoadScene(0);
+        GameState.Seed = Random.Range(0, 42) + GameState.Seed;
+        LevelManager.Instance?.Regenerate();
+    }  
+
+    public void OnPlayerDied(GameObject player)
+    {
+        // move player to last room
+        GameState.Players.Remove(player);
+
     }
 
 

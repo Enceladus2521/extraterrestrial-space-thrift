@@ -117,8 +117,7 @@ public class PlayerStats : MonoBehaviour
     public void Die()
     {
         Debug.Log("Player died");
-        //TODO: respawn
-        Debug.Log("Respawn");
+        GameManager.Instance?.OnPlayerDied(gameObject);
         gameObject.SetActive(false);
 
     }
