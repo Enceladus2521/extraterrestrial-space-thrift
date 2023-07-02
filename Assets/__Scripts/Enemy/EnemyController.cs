@@ -230,9 +230,7 @@ public class EnemyController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-
-
-        health -= damage;
+health -= damage;
         if (health <= 0)
         {
             Destroy(gameObject, 0.1f);
@@ -247,6 +245,26 @@ public class EnemyController : MonoBehaviour
     {
         DropAmmo();
         MoneyDrop();
+        DropXp();
+    }
+
+    private void DropXp()
+    {
+        GameObject variableForPrefab = Resources.Load("PF_XP") as GameObject;
+
+        //drop 1-4
+        int xpAmount = Random.Range(1, 4);
+        for (int i = 0; i < xpAmount; i++)
+        {
+            GameObject xp = Instantiate(variableForPrefab, transform.position, Quaternion.identity);
+            //add rigidbody if not already there
+            if (xp.GetComponent<Rigidbody>() == null)
+            {
+                xp.AddComponent<Rigidbody>();
+            }
+            xp.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f)) * 2, ForceMode.Impulse);
+            xp.GetComponent<XPToken>().SetAmount(Mathf.Pow(difficulty, 2) * 10);
+        }
     }
 
 

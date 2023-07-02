@@ -29,6 +29,8 @@ public class XPToken : MonoBehaviour
         this.amount = amount;
         //set color based on amount
         GetComponent<MeshRenderer>().material.color = colorGradient.Evaluate(amount / maxAmount);
+        StopCoroutine(FlyToClosestPlayer());
+        StartCoroutine(FlyToClosestPlayer());
     }
 
     public float GetAmount()
@@ -38,6 +40,7 @@ public class XPToken : MonoBehaviour
 
     public void FlyToPlayer()
     {
+        StopCoroutine(FlyToClosestPlayer());
         StartCoroutine(FlyToClosestPlayer());
     }
     IEnumerator FlyToClosestPlayer()

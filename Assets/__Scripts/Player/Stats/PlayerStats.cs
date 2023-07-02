@@ -249,6 +249,10 @@ public class PlayerStats : MonoBehaviour
             experience -= currentRequiredExperience;
             level++;
 
+            //regen health and armor
+            health = maxHealth;
+            armor = maxArmor;
+
             UpdateStats();
         }
     }
