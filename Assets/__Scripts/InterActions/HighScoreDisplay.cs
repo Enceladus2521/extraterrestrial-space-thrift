@@ -16,7 +16,7 @@ public class HighScoreDisplay : MonoBehaviour
         if (GameManager.Instance != null)
         {
             int highScore = GameManager.Instance.GetHighestScore();
-            if (highScore == -1) highScoreText.text = "-"; 
+            if (highScore == -1) highScoreText.text = "Welcome!"; 
             else highScoreText.text = "" + highScore.ToString();
         }
         else

@@ -48,7 +48,6 @@ public class RoomGenerator : MonoBehaviour
 
         GenerateFloor();
         GenerateWalls();
-        GenerateCeiling();
     
         GenerateHeavyObjects();
         GenerateInteractables();
@@ -83,20 +82,6 @@ public class RoomGenerator : MonoBehaviour
 
     }
 
-    // Ceiling will be just a box collider
-    void GenerateCeiling()
-    {
-        float width = roomConfig.width * roomConfig.gridSize;
-        float height = roomConfig.height * roomConfig.gridSize;
-        Vector3 size = new Vector3(width, 1, height);
-        Vector3 ceilingOffset = new Vector3(roomConfig.offset.x * roomConfig.gridSize, 1.5f * roomConfig.gridSize, roomConfig.offset.y * roomConfig.gridSize);
-
-        GameObject ceiling = new GameObject("Ceiling");
-        ceiling.transform.parent = transform;
-        ceiling.AddComponent<BoxCollider>();
-        ceiling.transform.localScale = size;
-        ceiling.transform.position = ceilingOffset;
-    }
 
     private Vector3 GetRandomPosition()
     {
