@@ -34,6 +34,8 @@ public class PlayerMovementController : MonoBehaviour
 
     [SerializeField] private float ControllerAimSmoothing = 0.1f;
 
+    [SerializeField] private float stepDistanceThreshold = 0.1f;
+
     private Vector2 moveVector;
     private Vector2 lookVector;
 
@@ -49,19 +51,22 @@ public class PlayerMovementController : MonoBehaviour
 
 
     public bool isContoller;
+    private Vector3 previousPosition;
+
 
     Rigidbody rb;
-
+    PlayerSoundController soundController;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         curentPlayerMovementSpeed = PlayerMovementSpeed;
-
+        soundController = GetComponent<PlayerSoundController>();
         GetComponent<PlayerInput>().onControlsChanged += OnDeviceChange;
         isContoller = GetComponent<PlayerInput>().currentControlScheme == "Controller";
 
         myCam = GetComponent<PlayerInput>().camera;
+        previousPosition = transform.position;
     }
 
     private void LateUpdate()
@@ -92,7 +97,17 @@ public class PlayerMovementController : MonoBehaviour
         if(isGrounded)
         {
             rb.velocity = new Vector3(moveVelocity.x, 0, moveVelocity.z);
-        } 
+        }   
+        
+        // Calculate distance moved
+        float distanceMoved = Vector3.Distance(transform.position, previousPosition);
+        
+        // If the distance moved is greater than a certain threshold, play the step sound
+        if (distanceMoved > stepDistanceThreshold)
+        {
+            soundController.PlayStepSound();
+            previousPosition = transform.position;  // Update the previous position to the current position
+        }
         
                
     }

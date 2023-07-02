@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class RotateToCloseEntity : MonoBehaviour
 {
-
     [SerializeField]
     Vector3 offsetRotation;
 
@@ -16,6 +15,9 @@ public class RotateToCloseEntity : MonoBehaviour
 
     void Update()
     {
+        // Get the player's rotation
+        Quaternion playerRotation = transform.parent.rotation;
+
         // Get all entities in the scene (You may need to modify this based on how entities are represented)
         List<EnemyController> entities = LevelManager.Instance?.Entities;
 
@@ -43,11 +45,17 @@ public class RotateToCloseEntity : MonoBehaviour
 
             if (closestEntity != null)
             {
-                // Rotate the current object to look at the closest entity
+                // Calculate the direction to the closest entity
                 Vector3 directionToClosest = closestEntity.transform.position - transform.position;
                 directionToClosest.y = 0f; // Lock rotation only around the y-axis (horizontal)
                 Quaternion targetRotation = Quaternion.LookRotation(directionToClosest, Vector3.up);
-                transform.rotation = new Quaternion(offsetRotation.x + targetRotation.x, offsetRotation.y + targetRotation.y, offsetRotation.z + targetRotation.z, 1f);
+
+                // Calculate the relative rotation between the player and the child GameObject
+                Quaternion relativeRotation = Quaternion.Inverse(playerRotation) * transform.parent.rotation;
+
+                // Combine the rotations with the offset and apply the relative rotation
+                Quaternion finalRotation = playerRotation * (Quaternion.Euler(offsetRotation) * relativeRotation);
+                transform.rotation = finalRotation;
             }
         }
     }

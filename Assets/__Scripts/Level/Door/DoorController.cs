@@ -18,9 +18,6 @@ public class DoorController : MonoBehaviour
 
     private MeshRenderer meshRenderer;
     private MeshCollider meshCollider;
-
-    public string audioMixerGroup = "FX";
-
     private Animation doorAnimation;
     private AudioSource audioSource;
 
@@ -54,14 +51,14 @@ public class DoorController : MonoBehaviour
             return;
         }
 
-        AudioMixerGroup[] groups = mainMixer.FindMatchingGroups("FX");
+        AudioMixerGroup[] groups = mainMixer.FindMatchingGroups("Doors");
         if (groups.Length > 0)
         {
             audioSource.outputAudioMixerGroup = groups[0];
         }
         else
         {
-            Debug.LogError("Could not find FX group in the main mixer");
+            Debug.LogError("Could not find Doors group in the main mixer");
         }
 
         if (openAnimation != null)

@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 4391078044706941098}
   - component: {fileID: 2052100006}
   - component: {fileID: 2052100005}
+  - component: {fileID: 5233414853242560147}
   m_Layer: 10
   m_Name: PF_Player
   m_TagString: Player
@@ -141,6 +142,7 @@ MonoBehaviour:
   PlayerDashDuration: 0.3
   PlayerDashCooldown: 3
   ControllerAimSmoothing: 0.1
+  stepDistanceThreshold: 0.5
   moveVelocity: {x: 0, y: 0, z: 0}
   isGrounded: 0
   isSprinting: 0
@@ -239,6 +241,18 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &5233414853242560147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3076183660154099313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8bd430cf8421d0e0836af047cdd52bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3076183661408062314
 GameObject:
   m_ObjectHideFlags: 0
@@ -577,7 +591,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2af12f133c98ec492ab044e2540d4aa7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offsetRotation: {x: -90, y: 0, z: 0}
+  offsetRotation: {x: -90, y: 0.4, z: 8.62}
 --- !u!1001 &5757589003282637622
 PrefabInstance:
   m_ObjectHideFlags: 0

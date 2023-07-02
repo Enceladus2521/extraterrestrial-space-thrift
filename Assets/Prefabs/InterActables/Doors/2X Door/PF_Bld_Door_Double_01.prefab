@@ -227,7 +227,7 @@ MonoBehaviour:
   closeAnimation: {fileID: 7400000, guid: c861b2e609e344148a1f3c71e07ccc8b, type: 2}
   openAudio: {fileID: 8300000, guid: 87fd02d4ed69562ffa1003f147816fd0, type: 3}
   closeAudio: {fileID: 8300000, guid: 9f6778e48ba7f24cc81563f533655683, type: 3}
-  audioMixerGroup: FX
+  audioMixerGroup: DOORS
   otherDoor: {fileID: 0}
 --- !u!1 &4806738891971416121
 GameObject:
