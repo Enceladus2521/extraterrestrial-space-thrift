@@ -117,10 +117,7 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
-        Debug.Log("Restarting");
         SceneManager.LoadScene(1);
-
-        Debug.Log("Restarted");
         GameState.Players.Clear();
         GameState.DeadPlayers.Clear();
 
