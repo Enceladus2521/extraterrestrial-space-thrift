@@ -27,7 +27,7 @@ MonoBehaviour:
   autoReload: 0
   weaponFireRate: 0.1
   projectilesPerShot: 1
-  weaponDamage: 20
+  weaponDamage: 100
   weaponRange: 100
   weaponReloadTime: 0.5
   weaponClipSize: 5
@@ -51,7 +51,7 @@ MonoBehaviour:
   burnDuration: 0
   explosionPrefab: {fileID: 283744553014127353, guid: 297b11088e214f2419458a6a66731c00,
     type: 3}
-  explosionRadius: 20
+  explosionRadius: 10
   explosionDamageFallOff: 0.7
   tracerPrefab: {fileID: 0}
   tracerColor: {fileID: 0}

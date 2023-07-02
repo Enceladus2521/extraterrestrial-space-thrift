@@ -18,7 +18,7 @@ public class Explosion : MonoBehaviour
     public bool damagePlayer;
 
     //set data
-    public void SetExplosionData(float damage, float knockbackForce, float burnDps, float burnDuration, float explosionRadius, float explosionDamageFallOff)
+    public void SetExplosionData(float damage, float knockbackForce, float burnDps, float burnDuration, float explosionRadius, float explosionDamageFallOff, bool damagePlayer)
     {
         this.damage = damage;
         this.knockbackForce = knockbackForce;
@@ -26,6 +26,7 @@ public class Explosion : MonoBehaviour
         this.burnDuration = burnDuration;
         this.explosionRadius = explosionRadius;
         this.explosionDamageFallOff = explosionDamageFallOff;
+        this.damagePlayer = damagePlayer;
         StartCoroutine(Explode());
     }
 
@@ -53,7 +54,7 @@ public class Explosion : MonoBehaviour
             }    
             if (collider.CompareTag("Player"))
             {       
-                
+                if(!damagePlayer) continue;
                 float damageAmount = damage * (1 - (Vector3.Distance(transform.position, collider.transform.position)/explosionRadius) * explosionDamageFallOff);
                 collider.gameObject.GetComponent<PlayerStats>().TakeDamage(damageAmount);
             }    

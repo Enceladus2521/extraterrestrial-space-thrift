@@ -217,7 +217,7 @@ public class EnemyController : MonoBehaviour
         GameObject variableForPrefab = Resources.Load("PF_Explosion") as GameObject;
         GameObject explode = Instantiate(variableForPrefab, transform.position, transform.rotation);
         explode.GetComponent<Explosion>().damagePlayer = true;
-        explode.GetComponent<Explosion>().SetExplosionData(attackDamage, knockback, 0, 0, explodeRange, 0.75f);
+        explode.GetComponent<Explosion>().SetExplosionData(attackDamage, knockback, 0, 0, explodeRange, 0.75f,true);
         Destroy(gameObject);
 
     }

@@ -293,6 +293,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AutoTrigger: 0
   InteractOnce: 1
+  interactCost: 0
+  interactDelay: 0
+  Player: {fileID: 0}
   interactRange: 1.5
   interactOffset: {x: 0, y: 0, z: 0}
   events:
@@ -355,4 +358,4 @@ MonoBehaviour:
   LootTarget: {fileID: 1223467487}
   SpawnForce: 10
   RandomRotationAmount: 5
-  lootTableObj: {fileID: 11400000, guid: 039cfa05a3e84ff418a019e7b1f88d6c, type: 2}
+  lootTableObj: {fileID: 11400000, guid: edd24cea669a7a846a16737288619555, type: 2}

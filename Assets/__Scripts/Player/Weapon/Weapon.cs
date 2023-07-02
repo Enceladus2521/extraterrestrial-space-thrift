@@ -101,7 +101,7 @@ public class Weapon : MonoBehaviour
             recoilRecoveryDelay = weaponObj.recoilRecoveryDelay;
 
 
-            //TTODO: FIX: UiController.Instance.UpdateAmmo(player.GetComponent<PlayerInput>().playerIndex , player.GetComponent<PlayerStats>().GetAmmo(), ammoInClip, weaponObj.FullAuto); 
+            UiController.Instance.UpdateAmmo(player.GetComponent<PlayerInput>().playerIndex , player.GetComponent<PlayerStats>().GetAmmo(), ammoInClip, weaponObj.FullAuto); 
         }
     }
 
@@ -199,7 +199,7 @@ public class Weapon : MonoBehaviour
         readyToShoot = CanShoot();
 
         //shoot if ready to shoot and not reloading and has more ammo than ammo cost per shot
-        if (!FullAuto && readyToShoot && hasRelesedTrigger && shooting || FullAuto && readyToShoot && shooting)
+        if (!FullAuto && readyToShoot && hasRelesedTrigger && shooting && !reloading && !isPreloading || FullAuto && readyToShoot && shooting && !reloading && !isPreloading)
         {
             StopCoroutine(Reload());
             Shoot();
@@ -376,7 +376,7 @@ public class Weapon : MonoBehaviour
         if (weaponObj.explosionPrefab == null) return;
         GameObject explosion = Instantiate(weaponObj.explosionPrefab, hit.point, Quaternion.identity);
 
-        explosion.GetComponent<Explosion>().SetExplosionData(damage, weaponObj.knockbackForce, weaponObj.burnDps, weaponObj.burnDuration, weaponObj.explosionRadius, weaponObj.explosionDamageFallOff);
+        explosion.GetComponent<Explosion>().SetExplosionData(damage, weaponObj.knockbackForce, weaponObj.burnDps, weaponObj.burnDuration, weaponObj.explosionRadius, weaponObj.explosionDamageFallOff, false);
     }
     #endregion
 

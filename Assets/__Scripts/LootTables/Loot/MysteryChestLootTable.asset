@@ -13,18 +13,18 @@ MonoBehaviour:
   m_Name: MysteryChestLootTable
   m_EditorClassIdentifier: 
   probabilitys:
-  - name: comon
-    probability: 500
-  - name: Uncommon
-    probability: 300
-  - name: rare
+  - name: Pistol
+    probability: 400
+  - name: Smg
+    probability: 200
+  - name: Assault
     probability: 100
-  - name: epic
-    probability: 60
-  - name: legendary
-    probability: 30
-  - name: mythic
-    probability: 10
+  - name: SchootGun
+    probability: 100
+  - name: Louncher
+    probability: 100
+  - name: Sword
+    probability: 100
   RarityTrails:
   - {fileID: 1962596557147680709, guid: f5eb74f88244c814382eefe9afda6b6a, type: 3}
   - {fileID: 1962596557147680709, guid: 8c706774a7e605746b46f755906062cd, type: 3}
@@ -33,38 +33,103 @@ MonoBehaviour:
   - {fileID: 1962596557147680709, guid: 9ba71c23e49e82f49a762c166cc3b0b4, type: 3}
   - {fileID: 1962596557147680709, guid: 145db5116f9b7004584ae02bdac23483, type: 3}
   LootTables:
-  - name: comon
+  - name: Pistol
     loots:
     - loot: {fileID: 666215353450587718, guid: e7fc9fbf020e3d940a6e784aebe0635a, type: 3}
-      probability: 0
+      probability: 10
+    - loot: {fileID: 5700985994583185423, guid: 7662a8a4bb40f8d4ab8bf1e423daf2c7,
+        type: 3}
+      probability: 10
+    - loot: {fileID: 9016897435212623696, guid: f15ff333c48279844b4151aadc678ce4,
+        type: 3}
+      probability: 10
+    - loot: {fileID: 6593218959285240031, guid: 93fd3896345f8a5469a2377f5faa18c0,
+        type: 3}
+      probability: 10
     - loot: {fileID: 3622148381374028997, guid: 0da6efb6071811e4482db2c270ee79ea,
         type: 3}
-      probability: 0
+      probability: 10
     - loot: {fileID: 1605162731426836534, guid: 07999a32539032e43936423c13a59dcc,
         type: 3}
-      probability: 0
-  - name: uncommon
+      probability: 10
+  - name: Smg
     loots:
+    - loot: {fileID: 2495404428456415227, guid: a806c17e7b400874c9b36202413b2d35,
+        type: 3}
+      probability: 10
+    - loot: {fileID: 3569922702273777825, guid: c025a53572789db40a6b473f76b2cf00,
+        type: 3}
+      probability: 10
+    - loot: {fileID: 406565517389072480, guid: f62446367af269640854e83de69256aa, type: 3}
+      probability: 10
     - loot: {fileID: 8106365701564057132, guid: a246055832045db40b47dcce1c298f31,
         type: 3}
       probability: 10
-  - name: rare
+  - name: Assault
+    loots:
+    - loot: {fileID: 6926556543983871235, guid: fdf81e2bcadd0b246b6254eaa88abdeb,
+        type: 3}
+      probability: 10
+    - loot: {fileID: 3314624177989704153, guid: 5916bba4683cdb148ab990674f5c9d9c,
+        type: 3}
+      probability: 10
+    - loot: {fileID: 5581402239872670406, guid: c728e0edc2b857147aacde4e0db07c08,
+        type: 3}
+      probability: 10
+    - loot: {fileID: 7901565739026946909, guid: d156c6176323b8043be5ae83258ba786,
+        type: 3}
+      probability: 10
+  - name: SchootGun
     loots:
     - loot: {fileID: 7901565739026946909, guid: d156c6176323b8043be5ae83258ba786,
         type: 3}
       probability: 10
-  - name: epic
-    loots:
-    - loot: {fileID: 4834600400692901657, guid: 6194c1d6550d6b0439d97fc691e2a060,
+    - loot: {fileID: 4605900995260088861, guid: 6ef7dffc5cc90a247b0fd81b24354430,
         type: 3}
       probability: 10
-  - name: legendary
+    - loot: {fileID: 4650120136532439609, guid: a1c6dd932fa09184797af5317619df61,
+        type: 3}
+      probability: 10
+    - loot: {fileID: 4309251805766790511, guid: 42bcd4a9573580940b3a98c0227039b1,
+        type: 3}
+      probability: 10
+  - name: Louncher
     loots:
+    - loot: {fileID: 1807093339419523959, guid: ced5a968bb17d9d4785e262337c5ca63,
+        type: 3}
+      probability: 10
+    - loot: {fileID: 2193942967128912420, guid: 4ef5d5123c2a65841b1f20b94aa4c89f,
+        type: 3}
+      probability: 10
     - loot: {fileID: 6137622589621463267, guid: a5b6a8fcc6e298d47a596ddbf06f6008,
         type: 3}
       probability: 10
-  - name: mythic
+    - loot: {fileID: 2360408520502088276, guid: 539089fe0629a414f9d6ba236ee2ef93,
+        type: 3}
+      probability: 10
+    - loot: {fileID: 8904089731125011020, guid: 6c4c3ec1c34638b488aec8e55e93c043,
+        type: 3}
+      probability: 10
+  - name: Swords
     loots:
     - loot: {fileID: 5500702006247532567, guid: 4c72006136388e6469fd6800a85aba96,
+        type: 3}
+      probability: 10
+    - loot: {fileID: 7255054521831093031, guid: e7ee18330eb6a5c4ea1737aa2a3f1952,
+        type: 3}
+      probability: 10
+    - loot: {fileID: 6698055366055003250, guid: f0f2de297193de84889016c5bcc10527,
+        type: 3}
+      probability: 10
+    - loot: {fileID: 4734839771027704176, guid: a215aa640ef3bde479a22e7db8622919,
+        type: 3}
+      probability: 10
+    - loot: {fileID: 7645804946128315807, guid: 40ef98f238c24e4469073d5745c02dec,
+        type: 3}
+      probability: 10
+    - loot: {fileID: 1744923578263500826, guid: b1ba68d822156fb4fa91bc6cb9293a9d,
+        type: 3}
+      probability: 10
+    - loot: {fileID: 4087688458396099231, guid: 5c1a575877e10474a8c3a7479084301e,
         type: 3}
       probability: 10

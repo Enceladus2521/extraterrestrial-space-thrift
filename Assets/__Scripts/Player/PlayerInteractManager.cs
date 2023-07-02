@@ -13,6 +13,15 @@ public class PlayerInteractManager : MonoBehaviour
         GameObject closestInteractable = null;
         float closestDistance = Mathf.Infinity;
 
+        //check if interactable exists
+        foreach (GameObject interactable in interactables)
+        {
+            if (interactable == null)
+            {
+                interactables.Remove(interactable);
+            }
+        }
+
         foreach (GameObject interactable in interactables)
         {
             if (!interactable.GetComponent<Interacter>().AutoTrigger)

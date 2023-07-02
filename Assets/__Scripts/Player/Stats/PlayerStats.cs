@@ -199,6 +199,7 @@ public class PlayerStats : MonoBehaviour
         {
             ammo = maxAmmo;
         }
+        UiController.Instance.UpdateAmmo(GetComponent<PlayerInput>().playerIndex, ammo, maxAmmo, true);
     }
 
     public void TakeAmmo(int amount)
@@ -208,6 +209,7 @@ public class PlayerStats : MonoBehaviour
         {
             ammo = 0;
         }
+        UiController.Instance.UpdateAmmo(GetComponent<PlayerInput>().playerIndex, ammo, maxAmmo, true);
 
     }
 
@@ -255,6 +257,7 @@ public class PlayerStats : MonoBehaviour
 
             UpdateStats();
         }
+        UiController.Instance.UpdateXp(GetComponent<PlayerInput>().playerIndex, currentRequiredExperience, experience, level);
     }
 
     private void CalculateRequiredExperience()

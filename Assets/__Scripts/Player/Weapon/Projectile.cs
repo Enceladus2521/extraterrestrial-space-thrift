@@ -165,7 +165,7 @@ public class Projectile : MonoBehaviour
         if (explosionPrefab != null)
         {
             GameObject explo = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-            explo.GetComponent<Explosion>().SetExplosionData(damage,knockbackForce,burnDps,burnDuration,explosionRadius,explosionDamageFallOff);
+            explo.GetComponent<Explosion>().SetExplosionData(damage,knockbackForce,burnDps,burnDuration,explosionRadius,explosionDamageFallOff, false);
         }
         
 

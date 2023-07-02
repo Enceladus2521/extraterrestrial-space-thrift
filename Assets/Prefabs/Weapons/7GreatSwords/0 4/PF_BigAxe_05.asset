@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47fd8c4480ad2484c87f257d102db949, type: 3}
+  m_Name: PF_BigAxe_05
+  m_EditorClassIdentifier: 
+  weaponType: 6
+  weaponName: GreatAxe_05
+  weaponPrefab: {fileID: 4734839771027704176, guid: a215aa640ef3bde479a22e7db8622919,
+    type: 3}
+  weaponOffset: 0
+  defaultPositionOffset: {x: 0.149, y: 0.035, z: -0.061}
+  defaultRotationOffset: {x: 32.843, y: 107.173, z: -77.405}
+  defaultScaleOffset: {x: 1, y: 1, z: 1}
+  customPositionOffset: {x: 0, y: 0, z: 0}
+  customRotationOffset: {x: 0, y: 0, z: 0}
+  customScaleOffset: {x: 1, y: 1, z: 1}
+  FullAuto: 0
+  autoReload: 1
+  weaponFireRate: 1
+  projectilesPerShot: 1
+  weaponDamage: 100
+  weaponRange: 100
+  weaponReloadTime: 0.71
+  weaponClipSize: 1
+  ammoCostPerShot: 1
+  spreadIncreasePerShot: 0.1
+  minSpread: 0
+  maxSpread: 0
+  recoilRecoveryRate: 0.1
+  recoilRecoveryDelay: 0.3
+  ammoPrefab: {fileID: 0}
+  muzzleFlashPrefab: {fileID: 0}
+  muzzleFlashScale: {x: 1, y: 1, z: 1}
+  hitEffectPrefab: {fileID: 0}
+  hitEffectScale: {x: 1, y: 1, z: 1}
+  shootSound: {fileID: 0}
+  reloadSound: {fileID: 0}
+  emptySound: {fileID: 0}
+  knockbackForce: 20
+  burnDps: 0
+  burnDuration: 0
+  explosionPrefab: {fileID: 0}
+  explosionRadius: 0
+  explosionDamageFallOff: 0.7
+  tracerPrefab: {fileID: 0}
+  tracerColor: {fileID: 0}
+  piercingAmount: 0
+  piercingDamageFallOff: 0.7
+  lifeTime: 5
+  sticky: 0
+  explodeOnImpact: 0
+  bounceAmount: 0
+  trailPrefab: {fileID: 0}
+  projectileMovementType: 0
+  constantForce: 5
+  impulseForce: 5
+  gravityMultiplier: 1

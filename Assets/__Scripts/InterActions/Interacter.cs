@@ -121,6 +121,7 @@ public class Interacter : MonoBehaviour
         {
             other.GetComponent<PlayerInteractManager>().RemoveEvent(this.gameObject);
 
+        if (InteractCanvasInstance != null)
             Destroy(InteractCanvasInstance);
         }
     }
@@ -142,6 +143,7 @@ public class Interacter : MonoBehaviour
         }
 
         //hide interact canvas
+        if (InteractCanvasInstance != null)
         Destroy(InteractCanvasInstance);
 
         //trigger events
@@ -163,6 +165,7 @@ public class Interacter : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (InteractCanvasInstance != null)
         Destroy(InteractCanvasInstance);
     }
 
@@ -183,6 +186,7 @@ public class Interacter : MonoBehaviour
         {
             // TODO Player?
             Player?.GetComponent<PlayerInteractManager>().RemoveEvent(this.gameObject);
+            if (InteractCanvasInstance != null)
             Destroy(InteractCanvasInstance);
         }
     }
