@@ -90,9 +90,12 @@ public class EnemyController : MonoBehaviour
         health = UnityEngine.Random.Range(1, Random.Range(1 + difficulty * 2, 1 + difficulty * 5));
         attackRate = UnityEngine.Random.Range(0.5f * difficulty, 5f);
         attackDamage = UnityEngine.Random.Range(10,  difficulty);
+        if (attackDamage > 30) attackDamage = 100;
         knockback = UnityEngine.Random.Range(10,  difficulty);
+        //cap knockback at 30
+        if (knockback > 30) knockback = 30;
         despawnOnImpact = Random.Range(0, 1) == 0 ? true : false;   
-        projectileForce = UnityEngine.Random.Range(5, 10 + difficulty);
+        projectileForce = UnityEngine.Random.Range(5, 10);
         // cap burstAmount at 5
         burstAmount = UnityEngine.Random.Range(1, 5);
         burstRate = UnityEngine.Random.Range(0.2f, 0.5f);

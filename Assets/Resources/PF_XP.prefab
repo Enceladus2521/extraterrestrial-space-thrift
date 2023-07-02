@@ -114,6 +114,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AutoTrigger: 1
   InteractOnce: 1
+  interactCost: 0
+  interactDelay: 0
   Player: {fileID: 0}
   interactRange: 4
   interactOffset: {x: 0, y: 0, z: 0}
@@ -146,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2e1e2042d9874c4fb5804cc5ac1b657, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amount: 5000
+  amount: 100
   maxAmount: 10000
   flySpeed: 10
   colorGradient:

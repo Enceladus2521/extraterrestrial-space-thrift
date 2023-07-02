@@ -48,7 +48,7 @@ public class PlayerInteractManager : MonoBehaviour
 
     IEnumerator Start()
     {
-        yield return new WaitForSeconds(100f);
+        yield return new WaitForSeconds(10f);
         //clear list
         interactables.Clear();
     }

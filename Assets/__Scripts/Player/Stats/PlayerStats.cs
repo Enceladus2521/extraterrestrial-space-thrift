@@ -5,6 +5,7 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 
+
 public class PlayerStats : MonoBehaviour
 {
 
@@ -22,16 +23,17 @@ public class PlayerStats : MonoBehaviour
     [Header("Stats-------")]
     [Header("Health")]
 
-    [SerializeField] private int health;
-    [SerializeField] private int maxHealth;
+    [SerializeField] private long health;
+    
+    [SerializeField] private long maxHealth;
 
     [SerializeField] private int baseHealth = 100;
     [SerializeField] private float healthMultiplier = 1.1f;
 
 
     [Header("Amor")]
-    [SerializeField] private int armor;
-    [SerializeField] private int maxArmor;
+    [SerializeField] private long armor;
+    [SerializeField] private long maxArmor;
 
     [SerializeField] private int baseArmor = 100;
     [SerializeField] private float armorMultiplier = 1.1f;
@@ -106,7 +108,15 @@ public class PlayerStats : MonoBehaviour
     public void UpdateStats()
     {
         maxHealth = (int)(baseHealth * Mathf.Pow(healthMultiplier, level));
+        if(maxHealth > 9999999 || maxHealth < 0)
+        {
+            maxHealth = 9999999;
+        }
         maxArmor = (int)(baseArmor * Mathf.Pow(armorMultiplier, level));
+        if (maxArmor > 9999999 || maxArmor < 0)
+        {
+            maxArmor = 9999999;
+        }
         maxAmmo = (int)(baseAmmo * Mathf.Pow(ammoMultiplier, level));
         CalculateRequiredExperience();
         UiController.Instance.UpdateXp(GetComponent<PlayerInput>().playerIndex, currentRequiredExperience, experience, level);
