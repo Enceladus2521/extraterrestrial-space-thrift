@@ -81,6 +81,7 @@ public class WeaponObj : ScriptableObject
     public AudioClip shootSound;
     public AudioClip reloadSound;
     public AudioClip emptySound;
+    
 
 
 

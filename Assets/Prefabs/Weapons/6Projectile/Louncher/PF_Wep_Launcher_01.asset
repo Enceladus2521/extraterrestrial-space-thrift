@@ -43,9 +43,9 @@ MonoBehaviour:
   muzzleFlashScale: {x: 1, y: 1, z: 1}
   hitEffectPrefab: {fileID: 0}
   hitEffectScale: {x: 1, y: 1, z: 1}
-  shootSound: {fileID: 0}
-  reloadSound: {fileID: 0}
-  emptySound: {fileID: 0}
+  shootSound: {fileID: 8300000, guid: 33e1f34f543485346a0321848d2e4789, type: 3}
+  reloadSound: {fileID: 8300000, guid: 835650bb09b06a64283da59cab58afde, type: 3}
+  emptySound: {fileID: 8300000, guid: 9807aed188be2a3459ced8e23a168765, type: 3}
   knockbackForce: 500
   burnDps: 0
   burnDuration: 0

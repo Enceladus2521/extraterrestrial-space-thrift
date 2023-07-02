@@ -1,5 +1,24 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!243 &-8650499470900331729
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Guns
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 9c008d583000e8d46aebdb82b2b0de33
+  m_Children: []
+  m_Volume: 8c99a3108f67167429f96cec2cd6fcda
+  m_Pitch: 8b4cb1dde3758184ebd287843d162db2
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -2954003929305869984}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
 --- !u!244 &-6713589872050736424
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
@@ -47,6 +66,20 @@ AudioMixerGroupController:
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
+--- !u!244 &-2954003929305869984
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 76ad98a97c78bc04fa5c99dfca974cd8
+  m_EffectName: Attenuation
+  m_MixLevel: 0b2db1ad210e59d47ad1501d955d84eb
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!243 &-2789117397989841785
 AudioMixerGroupController:
   m_ObjectHideFlags: 0
@@ -91,6 +124,7 @@ AudioMixerController:
     - 47dd4a982d917f995a938a7d4aec0bd8
     - 4f43e6a78efc2fb178f504b49e7cd2de
     - 07d3059800c33294e852c676f371bf55
+    - 9c008d583000e8d46aebdb82b2b0de33
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -139,6 +173,7 @@ AudioMixerSnapshotController:
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: a24aea3c8c85970488e10aa2e52aae03
   m_FloatValues:
+    8c99a3108f67167429f96cec2cd6fcda: -9.833286
     715888b197c85cd898e7856b1f52bde5: -0.7567634
     b1de0522a095843079b2db59ae2137e9: -27.956974
     ce1db12bd3aa9d67dafca9444a23e48e: -20.09816
@@ -240,6 +275,7 @@ AudioMixerGroupController:
   m_Children:
   - {fileID: -4099201298378730229}
   - {fileID: -2789117397989841785}
+  - {fileID: -8650499470900331729}
   m_Volume: 55b0172fd6d3b885f99d78bb701a8141
   m_Pitch: 27b294e6383182f689270eaead6e12b3
   m_Send: 00000000000000000000000000000000

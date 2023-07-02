@@ -197,6 +197,8 @@ public class Weapon : MonoBehaviour
         if (!shooting) hasRelesedTrigger = true;
 
         readyToShoot = CanShoot();
+       
+       
 
         //shoot if ready to shoot and not reloading and has more ammo than ammo cost per shot
         if (!FullAuto && readyToShoot && hasRelesedTrigger && shooting && !reloading && !isPreloading || FullAuto && readyToShoot && shooting && !reloading && !isPreloading)
@@ -232,6 +234,14 @@ public class Weapon : MonoBehaviour
         if ((int)weaponObj.weaponType == 5 || (int)weaponObj.weaponType == 6)
         {
             //-_- dont touch this it works
+
+            //play sound
+            GameObject sound = Resources.Load("PF_gunSound") as GameObject;
+            GameObject newSound = Instantiate(sound, transform.position, Quaternion.identity);
+            newSound.GetComponent<AudioSource>().clip = weaponObj.shootSound;
+            newSound.GetComponent<AudioSource>().Play();
+
+            //play animation
             StartCoroutine(EnableSwordTrigger(weaponFireRate));
         }
         else if (weaponObj.ammoPrefab != null) ShootProjectile();
@@ -247,6 +257,11 @@ public class Weapon : MonoBehaviour
     #region Raycast
     private void ShootRaycast()
     {        
+
+        GameObject sound = Resources.Load("PF_gunSound") as GameObject;
+        GameObject newSound = Instantiate(sound, transform.position, Quaternion.identity);
+        newSound.GetComponent<AudioSource>().clip = weaponObj.shootSound;
+        newSound.GetComponent<AudioSource>().Play();
         //if muzzle flash prefab is not null, instantiate muzzle flash prefab at barrel tip position and rotation and set scale to weapon muzzle flash scale
         if (muzzleFlashPrefab != null) Instantiate(muzzleFlashPrefab, barrelTip.position, barrelTip.rotation).gameObject.transform.localScale = weaponObj.muzzleFlashScale;
 
@@ -383,6 +398,11 @@ public class Weapon : MonoBehaviour
     #region Projectile
     private void ShootProjectile()
     {
+        GameObject sound = Resources.Load("PF_gunSound") as GameObject;
+        GameObject newSound = Instantiate(sound, transform.position, Quaternion.identity);
+        newSound.GetComponent<AudioSource>().clip = weaponObj.shootSound;
+        newSound.GetComponent<AudioSource>().Play();
+        
         //if muzzle flash prefab is not null, instantiate muzzle flash prefab at barrel tip position and rotation and set scale to weapon muzzle flash scale
         if (muzzleFlashPrefab != null) Instantiate(muzzleFlashPrefab, barrelTip.position, barrelTip.rotation).gameObject.transform.localScale = weaponObj.muzzleFlashScale;
         for (int i = 0; i < projectilesPerShot; i++)
@@ -439,7 +459,12 @@ public class Weapon : MonoBehaviour
     public void OnSliceHit(GameObject hitObject)
     {
         //if hit object is player
-        if (hitObject.CompareTag("Player")) return;
+        if (hitObject.CompareTag("Player")) return; 
+
+        GameObject sound = Resources.Load("PF_gunSound") as GameObject;
+        GameObject newSound = Instantiate(sound, transform.position, Quaternion.identity);
+        newSound.GetComponent<AudioSource>().clip = weaponObj.emptySound;
+        newSound.GetComponent<AudioSource>().Play();
 
         //if hit object is entity
         if (hitObject.CompareTag("entity"))
@@ -504,11 +529,21 @@ public class Weapon : MonoBehaviour
         if (player.GetComponent<PlayerStats>().GetAmmo() < weaponClipSize - ammoInClip)
         {
             Debug.Log("Not enough ammo to reload");
-            //Todo: no more ammo on player
+            
+            GameObject sound = Resources.Load("PF_gunSound") as GameObject;
+            GameObject newSound = Instantiate(sound, transform.position, Quaternion.identity);
+            newSound.GetComponent<AudioSource>().clip = weaponObj.emptySound;
+            newSound.GetComponent<AudioSource>().Play();
             yield break;
         }
         isPreloading = true;
         yield return new WaitForSeconds(timeTillAutoReload);
+
+        //play reload sound
+        GameObject sound2 = Resources.Load("PF_gunSound") as GameObject;
+        GameObject newSound2 = Instantiate(sound2, transform.position, Quaternion.identity);
+        newSound2.GetComponent<AudioSource>().clip = weaponObj.reloadSound;
+        newSound2.GetComponent<AudioSource>().Play();
 
         reloading = true;
         yield return new WaitForSeconds(weaponReloadTime);

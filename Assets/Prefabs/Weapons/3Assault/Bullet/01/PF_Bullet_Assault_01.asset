@@ -43,9 +43,9 @@ MonoBehaviour:
   hitEffectPrefab: {fileID: 3357757399141271759, guid: acf6838462ba8944485d3b0312e5c9bc,
     type: 3}
   hitEffectScale: {x: 1, y: 1, z: 1}
-  shootSound: {fileID: 0}
-  reloadSound: {fileID: 0}
-  emptySound: {fileID: 0}
+  shootSound: {fileID: 8300000, guid: 380a61624a607f042ab5e96218f37633, type: 3}
+  reloadSound: {fileID: 8300000, guid: 8ef9910cbbea2eb419a97151cec5d358, type: 3}
+  emptySound: {fileID: 8300000, guid: 9807aed188be2a3459ced8e23a168765, type: 3}
   knockbackForce: 5
   burnDps: 0
   burnDuration: 0

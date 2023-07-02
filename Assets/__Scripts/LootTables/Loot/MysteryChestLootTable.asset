@@ -79,6 +79,9 @@ MonoBehaviour:
     - loot: {fileID: 7901565739026946909, guid: d156c6176323b8043be5ae83258ba786,
         type: 3}
       probability: 10
+    - loot: {fileID: 4834600400692901657, guid: 6194c1d6550d6b0439d97fc691e2a060,
+        type: 3}
+      probability: 10
   - name: SchootGun
     loots:
     - loot: {fileID: 7901565739026946909, guid: d156c6176323b8043be5ae83258ba786,
