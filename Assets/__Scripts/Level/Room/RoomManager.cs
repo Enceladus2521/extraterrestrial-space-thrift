@@ -92,20 +92,11 @@ public class RoomManager : MonoBehaviour
     {
         // if is player than take damge infinity
         if (other.tag == "Player")
-        {
-            Debug.Log("Player");
             other.GetComponent<PlayerStats>().TakeDamage(Mathf.Infinity);
-        }
         else if (other.tag == "Enemy")
-        {
-            Debug.Log("Enemy");
             other.GetComponent<EnemyController>().TakeDamage(Mathf.Infinity);
-        }
         else
-        {
-            Debug.Log("Other");
             Destroy(other.gameObject);
-        }
     }
 
     void Start()
