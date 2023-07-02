@@ -23,7 +23,7 @@ public class LevelController : MonoBehaviour
     {
         RoomInternal catalog = GameManager.Instance?.Catalog;
         RoomConfig newRoomConfig = new RoomConfig();
-        newRoomConfig.interactableTypes = new List<GameObject>();            
+        newRoomConfig.interactableTypes = new List<GameObject>();
         newRoomConfig.entityTypes = new List<GameObject>();
         newRoomConfig.heavyObjects = new List<GameObject>();
 
@@ -66,14 +66,17 @@ public class LevelController : MonoBehaviour
             else
             {
                 int interactablesToAdd = LevelScaler.GetNumberOfInteractablesToAdd(newRoomConfig.difficulty, LevelManager.Instance.GetInteractables().Count);
-                
-                GameObject interactableType = catalog.interactableTypes[Random.Range(0, catalog.interactableTypes.Count)];
+
                 for (int i = 0; i < interactablesToAdd; i++)
+                {
+                    GameObject interactableType = catalog.interactableTypes[Random.Range(0, catalog.interactableTypes.Count)];
                     newRoomConfig.interactableTypes.Add(interactableType);
+                }
 
             }
 
-            if(newRoomConfig.width > 3 && newRoomConfig.height > 3){
+            if (newRoomConfig.width > 3 && newRoomConfig.height > 3)
+            {
                 int entitiesToAdd = LevelScaler.GetNumberOfEnemiesToAdd(newRoomConfig.difficulty, LevelManager.Instance.Entities.Count);
                 GameObject entityType = catalog.entityTypes[Random.Range(0, catalog.entityTypes.Count)];
                 for (int i = 0; i < entitiesToAdd; i++)
