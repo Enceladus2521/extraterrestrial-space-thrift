@@ -15,39 +15,41 @@ public class TestCameraContoller : MonoBehaviour
     Vector3 offset;
     Vector3 velocity = Vector3.zero;
 
-
-
+    private Quaternion initialRotation;
+    [SerializeField] private float maxTiltAngle = 20f;
 
     // Start is called before the first frame update
     void Start()
     {
-        //get target
+        // Get target
         target = transform.parent.GetComponent<Transform>();
 
-        //calculate offset
+        // Calculate offset
         offset = transform.position - target.position;
 
+        // Save the initial rotation
+        initialRotation = transform.rotation;
 
-        
-
-
-        //unparent camera
+        // Unparent camera
         transform.parent = null;
-
-
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if target is further than units away
+        // If target is further than units away
         currentSpeedMulti = Vector3.Distance(transform.position, target.position) > distanceToMultiplySpeed ? speedMultiplier : 1f;
 
-         
+        // This transform stays the same relative position to the target smoothly moves towards it
+        transform.position = Vector3.SmoothDamp(transform.position, target.position + offset, ref velocity, speed * currentSpeedMulti);
 
-        //this transform stays same relative position to the target smoothly moves towards it
-        transform.position = Vector3.SmoothDamp(transform.position, target.position + offset, ref velocity, speed);
+        // Calculate target rotation based on the target transform's z position
+        float tiltAmount = Mathf.Clamp(Mathf.Abs(target.position.z), 0f, maxTiltAngle);
+        float targetRotationX = target.position.z < 0f ? tiltAmount : -tiltAmount;
 
+        Quaternion targetRotation = initialRotation * Quaternion.Euler(targetRotationX, 0f, 0f);
+
+        // Apply the rotation to the camera
+        transform.rotation = targetRotation;
     }
 }

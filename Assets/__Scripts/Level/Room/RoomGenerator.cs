@@ -78,8 +78,8 @@ public class RoomGenerator : MonoBehaviour
 
         GameObject heavyObject = roomConfig.heavyObjects[0];
         GameObject heavyObjectInstance = Instantiate(heavyObject);
+        heavyObjectInstance.transform.position = transform.position;
         heavyObjectInstance.transform.parent = transform;
-        heavyObjectInstance.transform.position = Vector3.zero;
 
     }
 
@@ -118,7 +118,7 @@ public class RoomGenerator : MonoBehaviour
             {
         if (availablePositions.Count == 0) continue;
                 Vector3 randomPos = GetRandomPosition() + new Vector3(absOffset.x, 0, absOffset.y);
-                randomPos = new Vector3(randomPos.x * roomConfig.gridSize, 1.5f, randomPos.y * roomConfig.gridSize);
+                randomPos = new Vector3(randomPos.x * roomConfig.gridSize, 2f, randomPos.y * roomConfig.gridSize);
                 randomPos += new Vector3(- roomConfig.gridSize / 2f , 0, - (roomConfig.gridSize * (roomConfig.height / 2f)));
 
                 GameObject entityInstance = Instantiate(entityPrefab, randomPos, Quaternion.identity);
