@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 [System.Serializable]
 public class Watcher
@@ -15,6 +16,12 @@ public class RoomManager : MonoBehaviour
 {
     // constructor for Room Watcher is dead true
     private RoomConfig roomConfig;
+
+    private AudioClip[] roomFinishedSounds; // Remove the old serialized field
+
+    private AudioSource audioSource;
+
+
     public RoomConfig RoomConfig { get { return roomConfig; } }
     RoomController controller;
     [SerializeField]
@@ -38,8 +45,33 @@ public class RoomManager : MonoBehaviour
         else
             controller = gameObject.GetComponent<RoomController>();
 
+        if (gameObject.GetComponent<AudioSource>() == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
+        else
+            audioSource = GetComponent<AudioSource>();
+
+        // Load all the audio clips from "Resources/Audio/Event/Cleared" folder
+        roomFinishedSounds = Resources.LoadAll<AudioClip>("Audio/Room/Cleared");
+        AudioMixer mainMixer = Resources.Load<AudioMixer>("Audio/Mixer/Main");
+        if (mainMixer == null)
+        {
+            Debug.LogError("Could not load main mixer");
+            return;
+        }
+
+        // Get the "Music" group from the AudioMixer
+        AudioMixerGroup[] groups = mainMixer.FindMatchingGroups("Ambiance");
+        if (groups.Length > 0)
+        {
+            audioSource.outputAudioMixerGroup = groups[0];
+        }
+        else
+        {
+            Debug.LogError("Could not find Music group in the main mixer");
+        }
+
     }
-     private void CreateDeathZone()
+    private void CreateDeathZone()
     {
         // Calculate the size of the box collider based on the room configuration
         float deathZoneWidth = roomConfig.width * roomConfig.gridSize * 5f;
@@ -67,11 +99,14 @@ public class RoomManager : MonoBehaviour
         {
             Debug.Log("Player");
             other.GetComponent<PlayerStats>().TakeDamage(Mathf.Infinity);
-        }else if (other.tag == "Enemy")
+        }
+        else if (other.tag == "Enemy")
         {
             Debug.Log("Enemy");
             other.GetComponent<EnemyController>().TakeDamage(Mathf.Infinity);
-        }else{
+        }
+        else
+        {
             Destroy(other.gameObject);
         }
     }
@@ -81,7 +116,7 @@ public class RoomManager : MonoBehaviour
         // Call the function to create the death zone collider on initialization
         CreateDeathZone();
     }
- 
+
     RoomConfig lastRoomConfig;
     public void InitRoom(RoomConfig config)
     {
@@ -121,7 +156,7 @@ public class RoomManager : MonoBehaviour
 
 
         if (!isActive) return;
-    
+
         UpdateEntities();
         UpdateInteractables();
         UpdateDoors();
@@ -167,7 +202,9 @@ public class RoomManager : MonoBehaviour
                 //     // and remove from list
                 //     watcher.entities.Remove(entity);
                 // }
-            }else{
+            }
+            else
+            {
                 watcher.entities.Remove(entity);
                 voidWatcher.entities.Add(entity);
             }
@@ -175,8 +212,20 @@ public class RoomManager : MonoBehaviour
 
         // if enemies are 0 unlock room
         if (GetEnemys().Count == 0 && isActive)
-        {    
-            GameManager.Instance?.OnRoomFinished(this);
+        {
+            if (isLocked)
+            {
+                GameManager.Instance?.OnRoomFinished(this);
+
+                if (roomConfig.difficulty != 1)
+                    if (roomFinishedSounds.Length > 0)
+                    {
+                        int randomIndex = Random.Range(0, roomFinishedSounds.Length);
+                        audioSource.PlayOneShot(roomFinishedSounds[randomIndex]);
+
+                    }
+
+            }
             isLocked = false;
         }
         else
@@ -238,7 +287,8 @@ public class RoomManager : MonoBehaviour
 
     // on trigger
 
-    public Vector3 GetRoomCenter(){
+    public Vector3 GetRoomCenter()
+    {
         return transform.position;
     }
 }

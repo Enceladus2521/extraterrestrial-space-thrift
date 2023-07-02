@@ -154,7 +154,7 @@ public class RoomGenerator : MonoBehaviour
             if (availablePositions.Count == 0) continue;
             Vector3 randomPos = GetRandomPosition() + new Vector3(absOffset.x, 0, absOffset.y);;
             randomPos = new Vector3(randomPos.x * roomConfig.gridSize, 0, randomPos.y * roomConfig.gridSize) + transform.position;
-            randomPos += new Vector3(- roomConfig.gridSize / 2 , 0,- (roomConfig.gridSize * (roomConfig.height / 2)) );
+            randomPos += new Vector3(- roomConfig.gridSize / 2 , 0.5f,- (roomConfig.gridSize * (roomConfig.height / 2)) );
 
             // Add random offset
             float offsetX = Random.Range(-roomConfig.gridSize/3, roomConfig.gridSize/3);

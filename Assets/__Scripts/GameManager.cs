@@ -134,7 +134,6 @@ public class GameManager : MonoBehaviour
         if (GameState.Players.Count == 0)
         {
             AddHighScore(LevelManager.Instance.GetTopDifficulty());
-
             Restart();
         }
 
