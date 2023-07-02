@@ -146,12 +146,12 @@ public class PlayerStats : MonoBehaviour
     public void TakeDamage(float damage)
     {
         float totalDamage = damage;        
-        if (armor < totalDamage)
+        if (armor < totalDamage && armor > 0)
         {
             Debug.Log("Armor broken");
             totalDamage -= armor;
             armor = 0;
-            health -= (int) totalDamage;
+            
         }
         else
         {

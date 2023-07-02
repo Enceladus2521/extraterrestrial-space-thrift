@@ -80,21 +80,7 @@ public class EnemyController : MonoBehaviour
         if ((EnemyType)enemyType == EnemyType.Eplode) attackRange = 0f;
     }
 
-    public void SetEnemyStats(float health, float attackRate, float attackDamage, float knockback, bool despawnOnImpact,
-        float projectileForce, int burstAmount, float burstRate, Color projectileColor, float explodeRange)
-    {
-        
-        this.health = health;
-        this.attackRate = attackRate;
-        this.attackDamage = attackDamage;
-        this.knockback = knockback;
-        this.despawnOnImpact = despawnOnImpact;
-        this.projectileForce = projectileForce;
-        this.burstAmount = burstAmount;
-        this.burstRate = burstRate;
-        this.projectileColor = projectileColor;
-        this.explodeRange = explodeRange;
-    }
+    
 
     public void GenerateRandom(int difficultySeed, int difficulty)
     {
@@ -103,8 +89,8 @@ public class EnemyController : MonoBehaviour
         if (enemyType == EnemyType.Eplode) attackRange = 0f;
         health = UnityEngine.Random.Range(1, Random.Range(1 + difficulty * 2, 1 + difficulty * 5));
         attackRate = UnityEngine.Random.Range(0.5f * difficulty, 5f);
-        attackDamage = UnityEngine.Random.Range(10, 10 * difficulty);
-        knockback = UnityEngine.Random.Range(10, 10 + difficulty);
+        attackDamage = UnityEngine.Random.Range(10,  difficulty);
+        knockback = UnityEngine.Random.Range(10,  difficulty);
         despawnOnImpact = Random.Range(0, 1) == 0 ? true : false;   
         projectileForce = UnityEngine.Random.Range(5, 10 + difficulty);
         // cap burstAmount at 5
