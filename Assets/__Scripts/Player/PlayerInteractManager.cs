@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class PlayerInteractManager : MonoBehaviour
 {
-    [SerializeField] private List<GameObject> interactables;
+   public List<GameObject> interactables;
 
 
     private void OnInteract()

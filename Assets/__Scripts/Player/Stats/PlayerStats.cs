@@ -107,17 +107,11 @@ public class PlayerStats : MonoBehaviour
     [EButton("Update Stats")]
     public void UpdateStats()
     {
-        maxHealth = (int)(baseHealth * Mathf.Pow(healthMultiplier, level));
-        if(maxHealth > 9999999 || maxHealth < 0)
-        {
-            maxHealth = 9999999;
-        }
-        maxArmor = (int)(baseArmor * Mathf.Pow(armorMultiplier, level));
-        if (maxArmor > 9999999 || maxArmor < 0)
-        {
-            maxArmor = 9999999;
-        }
-        maxAmmo = (int)(baseAmmo * Mathf.Pow(ammoMultiplier, level));
+        maxHealth = (int)(baseHealth  * (level + 1));
+        
+        maxArmor = (int)(baseArmor * (level + 1));
+        
+        maxAmmo = (int)(baseAmmo * ammoMultiplier * (level + 1));
         CalculateRequiredExperience();
         UiController.Instance.UpdateXp(GetComponent<PlayerInput>().playerIndex, currentRequiredExperience, experience, level);
     }

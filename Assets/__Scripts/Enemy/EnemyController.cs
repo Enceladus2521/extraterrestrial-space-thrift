@@ -93,7 +93,7 @@ public class EnemyController : MonoBehaviour
         if (attackDamage > 30) attackDamage = 100;
         knockback = UnityEngine.Random.Range(10,  difficulty);
         //cap knockback at 30
-        if (knockback > 30) knockback = 30;
+        if (knockback > 0) knockback = 0;
         despawnOnImpact = Random.Range(0, 1) == 0 ? true : false;   
         projectileForce = UnityEngine.Random.Range(5, 10);
         // cap burstAmount at 5
@@ -422,7 +422,7 @@ public class EnemyController : MonoBehaviour
         while (true)
         {
             UpdateTarget();
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(5f);
         }
     }
 
