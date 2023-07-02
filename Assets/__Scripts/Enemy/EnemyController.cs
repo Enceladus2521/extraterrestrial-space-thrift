@@ -230,16 +230,16 @@ public class EnemyController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-health -= damage;
+        health -= damage;
         if (health <= 0)
         {
             Destroy(gameObject, 0.1f);
             Die();
-            
+
         }
     }
 
-    
+
 
     private void Die()
     {
@@ -370,14 +370,18 @@ health -= damage;
                 }
                 break;
         }
+        if (money != null)
+        {
+            GameObject newMoney = Instantiate(money, transform.position, Quaternion.identity);
+            //set position +2 on y axis
+            newMoney.transform.position = new Vector3(newMoney.transform.position.x, newMoney.transform.position.y + 2, newMoney.transform.position.z);
 
-        GameObject newMoney = Instantiate(money, transform.position, Quaternion.identity);
-        //set position +2 on y axis
-        newMoney.transform.position = new Vector3(newMoney.transform.position.x, newMoney.transform.position.y + 2, newMoney.transform.position.z);
-        
-        //give random force to money
-        newMoney.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f)) * 2, ForceMode.Impulse);
-        newMoney.AddComponent<AutoDespawn>().SetTimeToDespawn(40f);
+            //give random force to money
+            newMoney.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f)) * 2, ForceMode.Impulse);
+            newMoney.AddComponent<AutoDespawn>().SetTimeToDespawn(40f);
+        }
+
+
 
     }
 

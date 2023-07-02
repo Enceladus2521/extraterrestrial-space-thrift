@@ -58,7 +58,8 @@ public class Interacter : MonoBehaviour
             if(interactCost > 0)
             {
                 if (other.GetComponent<PlayerStats>().GetMoney() < interactCost)
-                {
+                {       
+                    Debug.Log("Not enough money");             
                     return;
                 }
             }
@@ -133,7 +134,12 @@ public class Interacter : MonoBehaviour
         }
 
         Player = player;
+        if(interactCost > 0 && player.GetComponent<PlayerStats>()!= null)
         player.GetComponent<PlayerStats>().TakeMoney(interactCost);
+        else
+        {
+            Debug.Log("No player stats");
+        }
 
         //hide interact canvas
         Destroy(InteractCanvasInstance);

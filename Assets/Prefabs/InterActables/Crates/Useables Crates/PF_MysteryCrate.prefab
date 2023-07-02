@@ -184,7 +184,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AutoTrigger: 0
   InteractOnce: 1
-  interactCost: 0
+  interactCost: 500
   interactDelay: 5
   Player: {fileID: 0}
   interactRange: 2
@@ -192,7 +192,7 @@ MonoBehaviour:
   events:
     m_PersistentCalls:
       m_Calls: []
-  InteractText: Pay 950 to open
+  InteractText: Pay 500
   CanvasOffset: {x: 0, y: 2, z: 0}
 --- !u!114 &3875660710415867804
 MonoBehaviour:
