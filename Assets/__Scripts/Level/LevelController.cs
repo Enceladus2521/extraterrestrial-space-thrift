@@ -43,7 +43,7 @@ public class LevelController : MonoBehaviour
 
             newRoomConfig.height = Random.Range(1, (previousRoom.difficulty) + 1);
             newRoomConfig.offset = new Vector3(
-                previousRoom.offset.x + previousRoom.width / 2f + newRoomConfig.width / 2f + 0.2f,
+                previousRoom.offset.x + previousRoom.width / 2f + newRoomConfig.width / 2f + 0.1f,
                 0,
                 previousRoom.offset.y
             );
