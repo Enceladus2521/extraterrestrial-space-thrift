@@ -7,11 +7,17 @@ public class RotateToCloseEntity : MonoBehaviour
     [SerializeField]
     Vector3 offsetRotation;
 
+
+    GameObject parent;
     List<MeshRenderer> meshRenderers;
 
-    // Get all mesh renderers in the child objects except for the current GameObject
     void Start()
     {
+        Debug.Log(transform.parent.name);
+        // Unchild it
+        parent = transform.parent.gameObject;
+        transform.parent = null;
+
         // Get all mesh renderers in the child objects except for the current GameObject
         meshRenderers = new List<MeshRenderer>(GetComponentsInChildren<MeshRenderer>());
         meshRenderers.Remove(GetComponent<MeshRenderer>());
@@ -21,32 +27,33 @@ public class RotateToCloseEntity : MonoBehaviour
     {
         // Get all entities in the scene (You may need to modify this based on how entities are represented)
         List<EnemyController> entities = LevelManager.Instance?.Entities;
-
+        transform.position = parent.transform.position;
         if (entities != null && entities.Count > 0)
         {
             // Find the closest entity and rotate to look at it
             EnemyController closestEntity = null;
             float closestDistance = Mathf.Infinity;
             Vector3 position = transform.position;
-
-            for (int i = 0; i < entities.Count; i++)
-            {
-                EnemyController entity = entities[i];
-                // Ignore the current GameObject itself
-                if (entity.gameObject != gameObject)
+            if (entities.Count > 0)
+                for (int i = 0; i < entities.Count; i++)
                 {
-                    // Calculate the distance between the current object and the entity
-                    Vector3 diff = entity.transform.position - position;
-                    float curDistance = diff.sqrMagnitude;
-
-                    // Check if this entity is closer than the previous closest one
-                    if (curDistance < closestDistance)
+                    if(entities[i] == null) continue;
+                    EnemyController entity = entities[i];
+                    // Ignore the current GameObject itself
+                    if (entity.gameObject != gameObject)
                     {
-                        closestEntity = entity;
-                        closestDistance = curDistance;
+                        // Calculate the distance between the current object and the entity
+                        Vector3 diff = entity.transform.position - position;
+                        float curDistance = diff.sqrMagnitude;
+
+                        // Check if this entity is closer than the previous closest one
+                        if (curDistance < closestDistance)
+                        {
+                            closestEntity = entity;
+                            closestDistance = curDistance;
+                        }
                     }
                 }
-            }
 
             if (closestEntity != null)
             {

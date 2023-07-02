@@ -124,6 +124,8 @@ public class DoorController : MonoBehaviour
 
     public void OpenDoor(bool silent = false)
     {
+        if(door.isConnected == false) return;
+        
         SetClosestDoor();
         if (isLocked)
             if (otherDoor)
