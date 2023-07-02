@@ -73,10 +73,12 @@ public class LevelController : MonoBehaviour
 
             }
 
-            int entitiesToAdd = LevelScaler.GetNumberOfEnemiesToAdd(newRoomConfig.difficulty, LevelManager.Instance.Entities.Count);
-            GameObject entityType = catalog.entityTypes[Random.Range(0, catalog.entityTypes.Count)];
-            for (int i = 0; i < entitiesToAdd; i++)
-                newRoomConfig.entityTypes.Add(entityType);
+            if(newRoomConfig.width > 3 && newRoomConfig.height > 3){
+                int entitiesToAdd = LevelScaler.GetNumberOfEnemiesToAdd(newRoomConfig.difficulty, LevelManager.Instance.Entities.Count);
+                GameObject entityType = catalog.entityTypes[Random.Range(0, catalog.entityTypes.Count)];
+                for (int i = 0; i < entitiesToAdd; i++)
+                    newRoomConfig.entityTypes.Add(entityType);
+            }
         }
         else
         {
@@ -94,6 +96,7 @@ public class LevelController : MonoBehaviour
             initDoorRight.wallType = Wall.WallType.Right;
             newRoomConfig.doorConfigs.Add(initDoorRight);
             newRoomConfig.heavyObjects = new List<GameObject>() { catalog.heavyObjects[0] };
+            newRoomConfig.interactableTypes = new List<GameObject>() { catalog.interactableTypes[0] };
         }
 
         newRoomConfig.wallTypes = new List<GameObject> { catalog.wallTypes[Random.Range(0, catalog.wallTypes.Count)] };
