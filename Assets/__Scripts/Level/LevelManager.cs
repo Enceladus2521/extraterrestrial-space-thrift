@@ -5,7 +5,7 @@ using System.Linq;
 public class LevelManager : MonoBehaviour
 {
 
-    private float roomGenerationDistance = 15f;
+    private float roomGenerationDistance = 30f;
     public static LevelManager Instance { get; private set; }
 
     private LevelController controller;
@@ -19,6 +19,8 @@ public class LevelManager : MonoBehaviour
 
     // Level = LevelController
     public GameObject Level { get { return controller.gameObject; } }
+
+    
 
     // int TopDifficulty from controller.roomsGenerated which are unlocked
     public int GetTopDifficulty()
@@ -44,16 +46,19 @@ public class LevelManager : MonoBehaviour
         Instance = this;
         watcher = new Watcher();
         voidWatcher = new Watcher();
-        if(gameObject.GetComponent<LevelController>() == null){
+        if (gameObject.GetComponent<LevelController>() == null)
+        {
             controller = gameObject.AddComponent<LevelController>();
-        }else{
+        }
+        else
+        {
             controller = gameObject.GetComponent<LevelController>();
         }
     }
 
     void Start()
     {
-        Regenerate();
+        controller.GenerateNewRoomConfig();
     }
 
 
@@ -107,8 +112,8 @@ public class LevelManager : MonoBehaviour
 
     public void Update()
     {
-        if(controller == null) return;
-        
+        if (controller == null) return;
+
         Vector3 avgPlayerPos = new Vector3(0f, 0f, 0f);
         List<GameObject> players = GameManager.Instance?.Players;
 
@@ -147,14 +152,6 @@ public class LevelManager : MonoBehaviour
 
         UpdateLevel();
     }
-
-    public void Regenerate()
-    {
-        
-        Debug.Log("Generating inital config");
-        controller.GenerateNewRoomConfig();
-    }
-
 
     void OnDrawGizmos()
     {
@@ -220,7 +217,6 @@ public class LevelManager : MonoBehaviour
         float halfRenderWidth = Mathf.Abs(mostRightPlayerPos.x - mostLeftPlayerPos.x) * 0.5f + roomGenerationDistance;
         Vector3 renderCenter = (mostLeftPlayerPos + mostRightPlayerPos) * 0.5f;
         Bounds renderBounds = new Bounds(renderCenter, new Vector3(halfRenderWidth * 2, 1f, 100f)); // Adjust the Z value (100f) to cover the height of the room, assuming it's a 2D game.
-
         // Check if the room's bounds intersect with the rendering bounds
         return roomBounds.Intersects(renderBounds);
     }
