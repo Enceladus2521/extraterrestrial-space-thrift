@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GameState
 {
@@ -32,6 +33,36 @@ public class GameManager : MonoBehaviour
     public int Seed { get { return GameState.Seed; } }
 
     public List<GameObject> Players { get { return GameState.Players; } }
+   
+    private IEnumerator<object> MoveCameraToOriginCoroutine(float duration)
+    {
+        Camera mainCamera = Camera.main;
+        Vector3 origin = new Vector3(0f, 0f, mainCamera.transform.position.z);
+        Vector3 startPosition = mainCamera.transform.position;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            mainCamera.transform.position = Vector3.Lerp(startPosition, origin, elapsedTime / duration);
+            yield return null; // Wait for the next frame
+        }
+
+        mainCamera.transform.position = origin;
+    }
+
+    public void OnPlayerDied(GameObject player)
+    {
+        GameState.DeadPlayers.Add(player);
+        GameState.Players.Remove(player);
+
+        if (GameState.Players.Count == 0)
+        {
+            StartCoroutine(MoveCameraToOriginCoroutine(4f));
+            AddHighScore(LevelManager.Instance.GetTopDifficulty());
+            Restart();
+        }
+    }
 
     private void Awake()
     {
@@ -126,18 +157,6 @@ public class GameManager : MonoBehaviour
         Debug.Log("Seed: " + GameState.Seed);
     }
 
-    public void OnPlayerDied(GameObject player)
-    {
-
-        GameState.DeadPlayers.Add(player);
-        GameState.Players.Remove(player);
-        if (GameState.Players.Count == 0)
-        {
-            AddHighScore(LevelManager.Instance.GetTopDifficulty());
-            Restart();
-        }
-
-    }
 
     public void OnRoomFinished(RoomManager roomManager)
     {
