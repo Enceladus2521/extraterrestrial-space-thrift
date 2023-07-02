@@ -21,73 +21,73 @@ Welcome to the documentation for **Exterrestrial Space Thrift**! Here you will f
 
 ## Audio
 
-- [MusicManager.cs](/Audio/MusicManager.cs): Responsible for managing the game's music.
+- [MusicManager.cs](/Docs/Audio/MusicManager.md): Responsible for managing the game's music.
 
 ## CameraController
 
-- [RotateToCloseCam.cs](/CameraController/RotateToCloseCam.cs): A script that allows the camera to rotate towards a closed space.
-- [RotateToCloseEntity.cs](/CameraController/RotateToCloseEntity.cs): Enables the camera to rotate towards a close entity.
+- [RotateToCloseCam.cs](/Docs/CameraController/RotateToCloseCam.md): A script that allows the camera to rotate towards a closed space.
+- [RotateToCloseEntity.cs](/Docs/CameraController/RotateToCloseEntity.md): Enables the camera to rotate towards a close entity.
 
 ## Enemy
 
-- [EnemyController.cs](/Enemy/EnemyController.cs): Handles enemy behavior and AI.
-- [EnemyProjectile.cs](/Enemy/EnemyProjectile.cs): Controls enemy projectile behavior.
+- [EnemyController.cs](/Docs/Enemy/EnemyController.md): Handles enemy behavior and AI.
+- [EnemyProjectile.cs](/Docs/Enemy/EnemyProjectile.md): Controls enemy projectile behavior.
 
 ## Entity
 
-- [BulletController.cs](/Entity/BulletController.cs): Controls bullet behavior.
-- [EntityCombatController.cs](/Entity/EntityCombatController.cs): Manages entity combat logic.
-- [EntityController.cs](/Entity/EntityController.cs): The main script for controlling entities in the game.
-- [EntityMovementController.cs](/Entity/EntityMovementController.cs): Manages entity movement.
-- [EntityState.cs](/Entity/EntityState.cs): Defines the different states an entity can be in.
+- [BulletController.cs](/Docs/Entity/BulletController.md): Controls bullet behavior.
+- [EntityCombatController.cs](/Docs/Entity/EntityCombatController.md): Manages entity combat logic.
+- [EntityController.cs](/Docs/Entity/EntityController.md): The main script for controlling entities in the game.
+- [EntityMovementController.cs](/Docs/Entity/EntityMovementController.md): Manages entity movement.
+- [EntityState.cs](/Docs/Entity/EntityState.md): Defines the different states an entity can be in.
 
 ## GameManager
 
-- [GameManager.cs](/GameManager.cs): Manages the overall game state and flow.
+- [GameManager.cs](/Docs/GameManager.md): Manages the overall game state and flow.
 
 ## InterActions
 
-- [AnimStarter.cs](/InterActions/AnimStarter.cs): Triggers animations for specific events.
-- [HighScoreDisplay.cs](/InterActions/HighScoreDisplay.cs): Displays the high score on the UI.
-- [Interacter.cs](/InterActions/Interacter.cs): Allows interaction with objects and entities.
-- [PickUpInteraction.cs](/InterActions/PickUpInteraction.cs): Handles interactions for picking up objects.
-- [XPToken.cs](/InterActions/XPToken.cs): Represents experience points as a collectible token.
+- [AnimStarter.cs](/Docs/InterActions/AnimStarter.md): Triggers animations for specific events.
+- [HighScoreDisplay.cs](/Docs/InterActions/HighScoreDisplay.md): Displays the high score on the UI.
+- [Interacter.cs](/Docs/InterActions/Interacter.md): Allows interaction with objects and entities.
+- [PickUpInteraction.cs](/Docs/InterActions/PickUpInteraction.md): Handles interactions for picking up objects.
+- [XPToken.cs](/Docs/InterActions/XPToken.md): Represents experience points as a collectible token.
 
 ## Level
 
-- [LevelController.cs](/Level/LevelController.cs): Manages the current level's logic and events.
-- [LevelManager.cs](/Level/LevelManager.cs): Handles the level management system.
-- [LevelScaler.cs](/Level/LevelScaler.cs): Scales the level dynamically based on player progress.
-- [Wall.cs](/Level/Wall.cs): Controls the behavior of walls in the level.
+- [LevelController.cs](/Docs/Level/LevelController.md): Manages the current level's logic and events.
+- [LevelManager.cs](/Docs/Level/LevelManager.md): Handles the level management system.
+- [LevelScaler.cs](/Docs/Level/LevelScaler.md): Scales the level dynamically based on player progress.
+- [Wall.cs](/Docs/Level/Wall.md): Controls the behavior of walls in the level.
 
 ## LootTables
 
-- [LootTable.cs](/LootTables/LootTable.cs): Defines the loot table logic.
-- [LootTableObj.cs](/LootTables/LootTableObj.cs): Represents an individual object in the loot table.
+- [LootTable.cs](/Docs/LootTables/LootTable.md): Defines the loot table logic.
+- [LootTableObj.cs](/Docs/LootTables/LootTableObj.md): Represents an individual object in the loot table.
 
 ## Player
 
-- [PlayerActions.inputactions](/Player/PlayerActions.inputactions): Input actions for the player.
-- [PlayerAnimationController.cs](/Player/PlayerAnimationController.cs): Manages the player's animations.
-- [PlayerInputManager.cs](/Player/PlayerInputManager.cs): Handles player input.
-- [PlayerInteractManager.cs](/Player/PlayerInteractManager.cs): Manages player interactions with objects and entities.
-- [PlayerMovementController.cs](/Player/PlayerMovementController.cs): Controls player movement.
-- [PlayerSoundController.cs](/Player/PlayerSoundController.cs): Manages player sound effects.
-- [PlayerSpawnManager.cs](/Player/PlayerSpawnManager.cs): Handles player spawning logic.
-- [UiCamScaler.cs](/Player/UiCamScaler.cs): Scales the UI camera based on player distance.
-- [UiController.cs](/Player/UiController.cs): Controls the user interface.
-- [Weapon](/Player/Weapon): Directory for player weapon-related scripts.
+- [PlayerActions.inputactions](/Docs/Player/PlayerActions.inputactions): Input actions for the player.
+- [PlayerAnimationController.cs](/Docs/Player/PlayerAnimationController.md): Manages the player's animations.
+- [PlayerInputManager.cs](/Docs/Player/PlayerInputManager.md): Handles player input.
+- [PlayerInteractManager.cs](/Docs/Player/PlayerInteractManager.md): Manages player interactions with objects and entities.
+- [PlayerMovementController.cs](/Docs/Player/PlayerMovementController.md): Controls player movement.
+- [PlayerSoundController.cs](/Docs/Player/PlayerSoundController.md): Manages player sound effects.
+- [PlayerSpawnManager.cs](/Docs/Player/PlayerSpawnManager.md): Handles player spawning logic.
+- [UiCamScaler.cs](/Docs/Player/UiCamScaler.md): Scales the UI camera based on player distance.
+- [UiController.cs](/Docs/Player/UiController.md): Controls the user interface.
+- [Weapon](/Docs/Player/Weapon): Directory for player weapon-related scripts.
 
 ## Stats
 
-- [InventoryStats.cs](/Stats/InventoryStats.cs): Manages the player's inventory stats.
+- [InventoryStats.cs](/Docs/Stats/InventoryStats.md): Manages the player's inventory stats.
 
 ## Temporary
 
-- [TestCameraContoller.cs](/Temporary/TestCameraContoller.cs): A temporary script for testing camera functionality.
-- [UiRotater.cs](/Temporary/UiRotater.cs): A temporary script for UI rotation.
+- [TestCameraContoller.cs](/Docs/Temporary/TestCameraContoller.md): A temporary script for testing camera functionality.
+- [UiRotater.cs](/Docs/Temporary/UiRotater.md): A temporary script for UI rotation.
 
 ## Tweening
 
-- [LeanTween](/Tweening/LeanTween): Directory for tweening scripts using LeanTween.
+- [LeanTween](/Docs/Tweening/LeanTween): Directory for tweening scripts using LeanTween.
 

@@ -205,13 +205,13 @@ public class LevelManager : MonoBehaviour
     }
     private bool IsRoomInRenderingBounds(RoomManager roomManager)
     {
-        if (roomManager == null) return false;
-        if (roomManager.RoomConfig == null) return false;
+        if (roomManager == null) return true;
+        if (roomManager.RoomConfig == null) return true;
         // Calculate the room's bounds
         float halfRoomWidth = roomManager.RoomConfig.width * roomManager.RoomConfig.gridSize * 0.5f;
         float halfRoomHeight = roomManager.RoomConfig.height * roomManager.RoomConfig.gridSize * 0.5f;
         Vector3 roomCenter = roomManager.transform.position;
-        Bounds roomBounds = new Bounds(roomCenter, new Vector3(halfRoomWidth * 2, 1f, halfRoomHeight * 2));
+        Bounds roomBounds = new Bounds(roomCenter, new Vector3(halfRoomWidth * 2, 5f, halfRoomHeight * 2));
 
         // Calculate the bounds of the rendering area with an offset of 42 units on both sides
         float halfRenderWidth = Mathf.Abs(mostRightPlayerPos.x - mostLeftPlayerPos.x) * 0.5f + roomGenerationDistance;

@@ -40,10 +40,6 @@ public class RoomManager : MonoBehaviour
     {
         watcher = new Watcher();
         voidWatcher = new Watcher();
-        if (gameObject.GetComponent<RoomController>() == null)
-            controller = gameObject.AddComponent<RoomController>();
-        else
-            controller = gameObject.GetComponent<RoomController>();
 
         if (gameObject.GetComponent<AudioSource>() == null)
             audioSource = gameObject.AddComponent<AudioSource>();
@@ -74,13 +70,13 @@ public class RoomManager : MonoBehaviour
     private void CreateDeathZone()
     {
         // Calculate the size of the box collider based on the room configuration
-        float deathZoneWidth = roomConfig.width * roomConfig.gridSize * 5f;
-        float deathZoneHeight = roomConfig.height * roomConfig.gridSize * 5f;
-        float deathZoneDepth = 10f; // The thickness of the death zone collider
+        float deathZoneWidth = roomConfig.width * roomConfig.gridSize * 10f;
+        float deathZoneHeight = roomConfig.height * roomConfig.gridSize * 10f;
+        float deathZoneDepth = 20f; // The thickness of the death zone collider
 
         // Calculate the position of the center of the death zone collider
         Vector3 deathZoneCenter = Vector3.zero;
-        deathZoneCenter.y -= (roomConfig.gridSize * 3f) + (deathZoneDepth / 2f);
+        deathZoneCenter.y -= (roomConfig.gridSize * 1f) + (deathZoneDepth / 2f);
 
         // Create the death zone box collider
         BoxCollider deathZoneCollider = gameObject.AddComponent<BoxCollider>();
@@ -107,6 +103,7 @@ public class RoomManager : MonoBehaviour
         }
         else
         {
+            Debug.Log("Other");
             Destroy(other.gameObject);
         }
     }
@@ -125,6 +122,10 @@ public class RoomManager : MonoBehaviour
 
         lastRoomConfig = roomConfig;
         roomConfig = config;
+        if (gameObject.GetComponent<RoomController>() == null)
+            controller = gameObject.AddComponent<RoomController>();
+        else
+            controller = gameObject.GetComponent<RoomController>();
         controller.UpdateConfig(config);
 
     }
@@ -146,7 +147,7 @@ public class RoomManager : MonoBehaviour
         float roomHeight = roomConfig.height * roomConfig.gridSize;
         Vector3 roomPosition = new Vector3(roomConfig.offset.x * roomConfig.gridSize, 0, roomConfig.offset.y * roomConfig.gridSize);
         bool isInsideHeight = position.x > roomPosition.x - roomWidth / 2 && position.x < roomPosition.x + roomWidth / 2;
-        bool isInsideWidth = position.y > roomPosition.y - roomHeight / 2 && position.y < roomPosition.y + roomHeight / 2;
+        bool isInsideWidth = position.y > roomPosition.z - roomHeight / 2 && position.y < roomPosition.z + roomHeight / 2;
         return isInsideHeight && isInsideWidth;
     }
 
