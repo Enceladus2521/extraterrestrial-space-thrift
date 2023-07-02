@@ -19,9 +19,14 @@ public class LevelController : MonoBehaviour
     }
 
 
-    private RoomConfig GetRandomRoom(RoomInternal catalog, RoomConfig previousRoom = null)
+    private RoomConfig GetRandomRoom(RoomConfig previousRoom = null)
     {
+        RoomInternal catalog = GameManager.Instance?.Catalog;
         RoomConfig newRoomConfig = new RoomConfig();
+        newRoomConfig.interactableTypes = new List<GameObject>();            
+        newRoomConfig.entityTypes = new List<GameObject>();
+        newRoomConfig.heavyObjects = new List<GameObject>();
+
         newRoomConfig.gridSize = 5;
 
         if (previousRoom != null)
@@ -30,7 +35,7 @@ public class LevelController : MonoBehaviour
             newRoomConfig.seed = previousRoom.seed + 42; // :D
             Random.InitState(newRoomConfig.seed);
 
-            newRoomConfig.width = Random.Range(1, (previousRoom.difficulty) + 1);
+            newRoomConfig.width = Random.Range(1, (previousRoom.difficulty) + 1) + 1;
 
             if ((newRoomConfig.width % 2 == 0 && previousRoom.width == 1) || (newRoomConfig.width == 1 && previousRoom.width % 2 == 0))
                 newRoomConfig.width += 1;
@@ -38,7 +43,7 @@ public class LevelController : MonoBehaviour
 
             newRoomConfig.height = Random.Range(1, (previousRoom.difficulty) + 1);
             newRoomConfig.offset = new Vector3(
-                previousRoom.offset.x + previousRoom.width / 2f + newRoomConfig.width / 2f,
+                previousRoom.offset.x + previousRoom.width / 2f + newRoomConfig.width / 2f + 0.2f,
                 0,
                 previousRoom.offset.y
             );
@@ -53,6 +58,25 @@ public class LevelController : MonoBehaviour
             doorRight.isConnected = false;
             doorRight.wallType = Wall.WallType.Right;
             newRoomConfig.doorConfigs.Add(doorRight);
+
+            if (newRoomConfig.width > 4 && newRoomConfig.height > 4 && !(previousRoom.width > 4 && previousRoom.height > 4))
+            {
+                newRoomConfig.heavyObjects = new List<GameObject>() { catalog.heavyObjects[Random.Range(0, catalog.heavyObjects.Count)] };
+            }
+            else
+            {
+                int interactablesToAdd = LevelScaler.GetNumberOfInteractablesToAdd(newRoomConfig.difficulty, LevelManager.Instance.GetInteractables().Count);
+                
+                GameObject interactableType = catalog.interactableTypes[Random.Range(0, catalog.interactableTypes.Count)];
+                for (int i = 0; i < interactablesToAdd; i++)
+                    newRoomConfig.interactableTypes.Add(interactableType);
+
+            }
+
+            int entitiesToAdd = LevelScaler.GetNumberOfEnemiesToAdd(newRoomConfig.difficulty, LevelManager.Instance.Entities.Count);
+            GameObject entityType = catalog.entityTypes[Random.Range(0, catalog.entityTypes.Count)];
+            for (int i = 0; i < entitiesToAdd; i++)
+                newRoomConfig.entityTypes.Add(entityType);
         }
         else
         {
@@ -69,6 +93,7 @@ public class LevelController : MonoBehaviour
             initDoorRight.isConnected = false;
             initDoorRight.wallType = Wall.WallType.Right;
             newRoomConfig.doorConfigs.Add(initDoorRight);
+            newRoomConfig.heavyObjects = new List<GameObject>() { catalog.heavyObjects[0] };
         }
 
         newRoomConfig.wallTypes = new List<GameObject> { catalog.wallTypes[Random.Range(0, catalog.wallTypes.Count)] };
@@ -77,27 +102,12 @@ public class LevelController : MonoBehaviour
         newRoomConfig.doubleDoorTypes = new List<GameObject> { catalog.doubleDoorTypes[Random.Range(0, catalog.doubleDoorTypes.Count)] };
 
 
-        newRoomConfig.entityTypes = new List<GameObject>();
-        if (previousRoom != null)
-        {
-            int entitiesToAdd = LevelScaler.GetNumberOfEnemiesToAdd(newRoomConfig.difficulty, LevelManager.Instance.Entities.Count);
-            GameObject entityType = catalog.entityTypes[Random.Range(0, catalog.entityTypes.Count)];
-            for (int i = 0; i < entitiesToAdd; i++)
-                newRoomConfig.entityTypes.Add(entityType);
-        }
-
-        int interactablesToAdd = LevelScaler.GetNumberOfInteractablesToAdd(newRoomConfig.difficulty, LevelManager.Instance.GetInteractables().Count);
-        newRoomConfig.interactableTypes = new List<GameObject>();
-        GameObject interactableType = catalog.interactableTypes[Random.Range(0, catalog.interactableTypes.Count)];
-        for (int i = 0; i < interactablesToAdd; i++)
-            newRoomConfig.interactableTypes.Add(interactableType);
-
         return newRoomConfig;
     }
 
     public void GenerateNewRoomConfig()
     {
-        RoomConfig newRoomConfig = GetRandomRoom(GameManager.Instance?.Catalog, roomConfigs?.Count > 0 ? roomConfigs[roomConfigs.Count - 1] : null);
+        RoomConfig newRoomConfig = GetRandomRoom(roomConfigs?.Count > 0 ? roomConfigs[roomConfigs.Count - 1] : null);
         roomConfigs.Add(newRoomConfig);
         // GenerateNewRoom(newRoomConfig);
     }

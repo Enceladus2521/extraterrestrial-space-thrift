@@ -72,3 +72,5 @@ MonoBehaviour:
   - {fileID: 1279695228130819119, guid: da38b87db9994b34198e6d59a661d1cb, type: 3}
   - {fileID: 3206684956669692837, guid: d99d3376baab22341996118378ab4116, type: 3}
   - {fileID: 2469710284225422756, guid: 793f03d6304efc1408905c880fa17e47, type: 3}
+  heavyObjects:
+  - {fileID: 2826536259983033564, guid: 89995f44c18fec74b8aab5f9b213a450, type: 3}

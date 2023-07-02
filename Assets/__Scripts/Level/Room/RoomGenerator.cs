@@ -49,8 +49,38 @@ public class RoomGenerator : MonoBehaviour
         GenerateFloor();
         GenerateWalls();
         GenerateCeiling();
+    
+        GenerateHeavyObjects();
         GenerateInteractables();
         GenerateEnemies();
+    }
+
+    bool IsInCenterBox(Vector2 position, float boxSize)
+    {
+        return position.x >= -boxSize / 2 && position.x <= boxSize / 2 && position.y >= -boxSize / 2 && position.y <= boxSize / 2;
+    }
+
+    // a function to remove the middle 3x3 field from availablePositions
+    void RemoveMiddleField()
+    {
+        for (int i = 0; i < roomConfig.width; i++)
+            for (int j = 0; j < roomConfig.height; j++)
+                if (IsInCenterBox(new Vector2(i, j), 1.5f))
+                    availablePositions.Remove(new Vector2(i, j));
+    }
+
+    void GenerateHeavyObjects() {
+        // it will place heavy object in center of room
+
+        if(availablePositions.Count == 0) return;
+        if(roomConfig.heavyObjects.Count == 0) return;
+        RemoveMiddleField();
+
+        GameObject heavyObject = roomConfig.heavyObjects[0];
+        GameObject heavyObjectInstance = Instantiate(heavyObject);
+        heavyObjectInstance.transform.parent = transform;
+        heavyObjectInstance.transform.position = Vector3.zero;
+
     }
 
     // Ceiling will be just a box collider
@@ -88,8 +118,8 @@ public class RoomGenerator : MonoBehaviour
             {
         if (availablePositions.Count == 0) continue;
                 Vector3 randomPos = GetRandomPosition() + new Vector3(absOffset.x, 0, absOffset.y);
-                randomPos = new Vector3(randomPos.x * roomConfig.gridSize, 3, randomPos.y * roomConfig.gridSize);
-                randomPos += new Vector3(- roomConfig.gridSize / 2 , 0, - (roomConfig.gridSize * (roomConfig.height / 2)) + roomConfig.gridSize / 2);
+                randomPos = new Vector3(randomPos.x * roomConfig.gridSize, 1.5f, randomPos.y * roomConfig.gridSize);
+                randomPos += new Vector3(- roomConfig.gridSize / 2f , 0, - (roomConfig.gridSize * (roomConfig.height / 2f)));
 
                 GameObject entityInstance = Instantiate(entityPrefab, randomPos, Quaternion.identity);
                 EnemyController entityController = entityInstance.GetComponent<EnemyController>(); // TODO: Make alter to EntityController
@@ -139,7 +169,7 @@ public class RoomGenerator : MonoBehaviour
             if (availablePositions.Count == 0) continue;
             Vector3 randomPos = GetRandomPosition() + new Vector3(absOffset.x, 0, absOffset.y);;
             randomPos = new Vector3(randomPos.x * roomConfig.gridSize, 0, randomPos.y * roomConfig.gridSize) + transform.position;
-            randomPos += new Vector3(- roomConfig.gridSize / 2 , 0,- (roomConfig.gridSize * (roomConfig.height / 2)) + roomConfig.gridSize / 2);
+            randomPos += new Vector3(- roomConfig.gridSize / 2 , 0,- (roomConfig.gridSize * (roomConfig.height / 2)) );
 
             // Add random offset
             float offsetX = Random.Range(-roomConfig.gridSize/3, roomConfig.gridSize/3);

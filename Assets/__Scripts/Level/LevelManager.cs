@@ -20,6 +20,20 @@ public class LevelManager : MonoBehaviour
     // Level = LevelController
     public GameObject Level { get { return controller.gameObject; } }
 
+    // int TopDifficulty from controller.roomsGenerated which are unlocked
+    public int GetTopDifficulty()
+    {
+        int topDifficulty = 0;
+        for (int i = 0; i < controller.RoomsGenerated.Count; i++)
+        {
+            RoomManager room = controller.RoomsGenerated[i];
+            if (!room.IsLocked)
+                if (room.Difficulty > topDifficulty)
+                    topDifficulty = room.Difficulty;
+        }
+        return topDifficulty;
+    }
+
     void Awake()
     {
         if (LevelManager.Instance != null && LevelManager.Instance != this)

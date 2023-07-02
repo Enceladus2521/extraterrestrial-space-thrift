@@ -10,7 +10,7 @@ public class GameState
     public List<GameObject> DeadPlayers { get; set; }
 
     public int Difficulty { get; set; }
-    
+
     public List<int> HighScores { get; set; }
 
     public int Seed { get; set; }
@@ -29,20 +29,20 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     // get function will get it form game state
-    public int Seed { get { return GameState.Seed; }  }
+    public int Seed { get { return GameState.Seed; } }
 
     public List<GameObject> Players { get { return GameState.Players; } }
 
     private void Awake()
     {
-      
+
         if (GameManager.Instance != null && GameManager.Instance != this)
         {
             Destroy(gameObject);
         }
         else
         {
-            Instance = this;  
+            Instance = this;
             gameState = new GameState();
             gameState.Players = new List<GameObject>();
             gameState.DeadPlayers = new List<GameObject>();
@@ -58,7 +58,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Application.targetFrameRate = 144;
-        
         Restart();
     }
 
@@ -74,7 +73,10 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            AddHighScore(LevelManager.Instance.GetTopDifficulty());
             Restart();
+        }
     }
 
     public void AddHighScore(int score)
@@ -89,9 +91,24 @@ public class GameManager : MonoBehaviour
     {
         string highScoresString = PlayerPrefs.GetString("highScores");
         GameState.HighScores = highScoresString.Split(',').Select(int.Parse).ToList();
+
     }
 
-    
+
+    public int GetHighestScore()
+    {
+        int max = -1;
+        for (int i = 0; i < GameState.HighScores.Count; i++)
+        {
+            if (GameState.HighScores[i] > max)
+            {
+                max = GameState.HighScores[i];
+            }
+        }
+
+        return max;
+    }
+
 
     private void OnDestroy()
     {
@@ -99,7 +116,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void Restart()
-    {   
+    {
         Debug.Log("Restarting");
         SceneManager.LoadScene(1);
 
@@ -114,10 +131,13 @@ public class GameManager : MonoBehaviour
 
     public void OnPlayerDied(GameObject player)
     {
+
         GameState.DeadPlayers.Add(player);
         GameState.Players.Remove(player);
-        if(GameState.Players.Count == 0)
+        if (GameState.Players.Count == 0)
         {
+            AddHighScore(LevelManager.Instance.GetTopDifficulty());
+
             Restart();
         }
 
@@ -138,7 +158,5 @@ public class GameManager : MonoBehaviour
         }
 
     }
-
-
 
 }

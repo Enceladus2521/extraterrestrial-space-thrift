@@ -19,6 +19,7 @@ public class RoomConfig
     public List<GameObject> doubleDoorTypes;
     public List<GameObject> interactableTypes;
     public List<GameObject> entityTypes;
+    public List<GameObject> heavyObjects;
 
      
     public void Connect(Door door)

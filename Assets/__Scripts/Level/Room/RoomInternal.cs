@@ -12,4 +12,6 @@ public class RoomInternal : ScriptableObject
     public List<GameObject> interactableTypes;
     public List<GameObject> entityTypes;
 
+    public List<GameObject> heavyObjects;
+
 }

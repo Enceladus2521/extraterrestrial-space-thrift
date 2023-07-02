@@ -26,6 +26,9 @@ public class RoomManager : MonoBehaviour
     [SerializeField]
     bool isLocked = true;
 
+    public int Difficulty { get { return roomConfig.difficulty; } }
+    public bool IsLocked { get { return isLocked; } }
+
     void Awake()
     {
         watcher = new Watcher();
@@ -34,7 +37,51 @@ public class RoomManager : MonoBehaviour
             controller = gameObject.AddComponent<RoomController>();
         else
             controller = gameObject.GetComponent<RoomController>();
+
     }
+     private void CreateDeathZone()
+    {
+        // Calculate the size of the box collider based on the room configuration
+        float deathZoneWidth = roomConfig.width * roomConfig.gridSize * 5f;
+        float deathZoneHeight = roomConfig.height * roomConfig.gridSize * 5f;
+        float deathZoneDepth = 10f; // The thickness of the death zone collider
+
+        // Calculate the position of the center of the death zone collider
+        Vector3 deathZoneCenter = Vector3.zero;
+        deathZoneCenter.y -= (roomConfig.gridSize * 3f) + (deathZoneDepth / 2f);
+
+        // Create the death zone box collider
+        BoxCollider deathZoneCollider = gameObject.AddComponent<BoxCollider>();
+        deathZoneCollider.size = new Vector3(deathZoneWidth, deathZoneDepth, deathZoneHeight);
+        deathZoneCollider.center = deathZoneCenter;
+
+        // Add a trigger to the collider so that it doesn't physically interact with objects
+        deathZoneCollider.isTrigger = true;
+    }
+
+    // on trigger enter, create the death zone
+    private void OnTriggerEnter(Collider other)
+    {
+        // if is player than take damge infinity
+        if (other.tag == "Player")
+        {
+            Debug.Log("Player");
+            other.GetComponent<PlayerStats>().TakeDamage(Mathf.Infinity);
+        }else if (other.tag == "Enemy")
+        {
+            Debug.Log("Enemy");
+            other.GetComponent<EnemyController>().TakeDamage(Mathf.Infinity);
+        }else{
+            Destroy(other.gameObject);
+        }
+    }
+
+    void Start()
+    {
+        // Call the function to create the death zone collider on initialization
+        CreateDeathZone();
+    }
+ 
     RoomConfig lastRoomConfig;
     public void InitRoom(RoomConfig config)
     {
@@ -189,6 +236,7 @@ public class RoomManager : MonoBehaviour
         Gizmos.DrawSphere(pos, 5);
     }
 
+    // on trigger
 
     public Vector3 GetRoomCenter(){
         return transform.position;
