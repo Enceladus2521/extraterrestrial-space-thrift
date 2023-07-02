@@ -80,10 +80,10 @@ public class EnemyController : MonoBehaviour
         if ((EnemyType)enemyType == EnemyType.Eplode) attackRange = 0f;
     }
 
-    public void SetEnemyStats(int enemyType, float health, float attackRate, float attackDamage, float knockback, bool despawnOnImpact,
+    public void SetEnemyStats(float health, float attackRate, float attackDamage, float knockback, bool despawnOnImpact,
         float projectileForce, int burstAmount, float burstRate, Color projectileColor, float explodeRange)
     {
-        if ((EnemyType)enemyType == EnemyType.Eplode) attackRange = 0f;
+        
         this.health = health;
         this.attackRate = attackRate;
         this.attackDamage = attackDamage;
@@ -99,7 +99,7 @@ public class EnemyController : MonoBehaviour
     public void GenerateRandom(int difficultySeed, int difficulty)
     {
         UnityEngine.Random.InitState(difficultySeed);
-        enemyType = (EnemyType)UnityEngine.Random.Range(0, 1);
+        
         if (enemyType == EnemyType.Eplode) attackRange = 0f;
         health = UnityEngine.Random.Range(1, Random.Range(1 + difficulty * 2, 1 + difficulty * 5));
         attackRate = UnityEngine.Random.Range(0.5f * difficulty, 5f);
