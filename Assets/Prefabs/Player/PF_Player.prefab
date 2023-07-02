@@ -102,20 +102,14 @@ MonoBehaviour:
   level: 0
   experience: 0
   experienceMultiplier: 1.5
-  health: 0
-  maxHealth: 0
-  baseHealth: 100
-  healthMultiplier: 1.9
-  armor: 0
-  maxArmor: 0
-  baseArmor: 100
-  armorMultiplier: 1.9
-  ammo: 0
-  maxAmmo: 0
-  baseAmmo: 100
+  health: 100
+  maxHealth: 100
+  armor: 100
+  maxArmor: 100
+  ammo: 100
+  maxAmmo: 100
   ammoMultiplier: 1.1
-  damageMultiplier: 1.5
-  money: 0
+  money: 500
   materials:
   - {fileID: 2100000, guid: ead0389afd33b3f45820f67d2e286420, type: 2}
   - {fileID: 2100000, guid: a17f283fd995cc6489984ba4a4be19e0, type: 2}
@@ -140,7 +134,7 @@ MonoBehaviour:
   isDashEnabled: 1
   PlayerDashSpeed: 5
   PlayerDashDuration: 0.3
-  PlayerDashCooldown: 3
+  PlayerDashCooldown: 1
   ControllerAimSmoothing: 0.1
   stepDistanceThreshold: 0.5
   moveVelocity: {x: 0, y: 0, z: 0}

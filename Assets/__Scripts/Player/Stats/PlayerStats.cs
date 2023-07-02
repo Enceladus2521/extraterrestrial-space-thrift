@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// This script handles the player stats
+/// level, experience, health, armor, ammo,  money
+/// </summary>
 
 
 public class PlayerStats : MonoBehaviour
@@ -13,7 +17,6 @@ public class PlayerStats : MonoBehaviour
     [Header("Leveling")]
     [SerializeField] private int level = 0;
     [SerializeField] private float experience = 0;
-
     private float currentRequiredExperience = 0;
     private float baseRequiredExperience = 100;
 
@@ -23,34 +26,28 @@ public class PlayerStats : MonoBehaviour
     [Header("Stats-------")]
     [Header("Health")]
 
-    [SerializeField] private long health;
-    
+    [SerializeField] private long health;    
     [SerializeField] private long maxHealth;
-
-    [SerializeField] private int baseHealth = 100;
-    [SerializeField] private float healthMultiplier = 1.1f;
+    
+    
 
 
     [Header("Amor")]
     [SerializeField] private long armor;
     [SerializeField] private long maxArmor;
-
-    [SerializeField] private int baseArmor = 100;
-    [SerializeField] private float armorMultiplier = 1.1f;
+    
+   
 
 
 
 
     [Header("Ammo")]
-    [SerializeField] private int ammo = 0;
-    [SerializeField] private int maxAmmo;
-
-    [SerializeField] private int baseAmmo = 100;
+    [SerializeField] private int ammo = 100;
+    [SerializeField] private int maxAmmo = 100;    
     [SerializeField] private float ammoMultiplier = 1.2f;
 
 
-    [Header("Damage")]
-    [SerializeField] private float damageMultiplier = 1.5f;
+    
 
     [Header("Money")]
     [SerializeField] private int money = 0;
@@ -70,19 +67,23 @@ public class PlayerStats : MonoBehaviour
         
 
         CalculateRequiredExperience();
-        UpdateStats();
+        
         SetStats();
+        UpdateStats();
 
     }
 
-
+    /// <summary>
+    /// This function is called in the start function to set initial required experience and stats
+    /// </summary>
     private void SetStats()
     {
+        //set stats
         health = maxHealth;
         armor = maxArmor;
         ammo = maxAmmo;
     
-        Debug.Log("Set stats");
+        //set UI
         UiController.Instance.DisplayPlayerStats(GetComponent<PlayerInput>().playerIndex, true);
         UiController.Instance.UpdateHealth(GetComponent<PlayerInput>().playerIndex, maxHealth, health);
         UiController.Instance.UpdateArmor(GetComponent<PlayerInput>().playerIndex, maxArmor, armor);
@@ -104,16 +105,17 @@ public class PlayerStats : MonoBehaviour
 
 
 
-    [EButton("Update Stats")]
+
+    /// <summary>
+    /// This function is called when the player levels up
+    /// </summary>
     public void UpdateStats()
     {
-        maxHealth = (int)(baseHealth  * (level + 1));
-        
-        maxArmor = (int)(baseArmor * (level + 1));
-        
-        maxAmmo = (int)(baseAmmo * ammoMultiplier * (level + 1));
+        maxHealth = 100;
+        maxArmor = 100;
+        maxAmmo = (int) (100 * (ammoMultiplier * (level + 1))); //ammoMultiplier * (level + 1) is the formula for ammo
         CalculateRequiredExperience();
-        UiController.Instance.UpdateXp(GetComponent<PlayerInput>().playerIndex, currentRequiredExperience, experience, level);
+        UiController.Instance.UpdateXp(GetComponent<PlayerInput>().playerIndex, currentRequiredExperience, experience, level); //update xp ui
     }
 
 
@@ -127,6 +129,9 @@ public class PlayerStats : MonoBehaviour
     }
 
     //Health------------------------
+    /// <summary>
+    /// This function is called when the player Picks up a health pack
+    /// </summary>
     public void AddHealth(int amount)
     {
         health += amount;
@@ -136,25 +141,23 @@ public class PlayerStats : MonoBehaviour
         }
         UiController.Instance.UpdateHealth(GetComponent<PlayerInput>().playerIndex, maxHealth, health);
     }
+   
 
-    public float GetHealth()
-    {
-        return health;
-    }
-
-    public float GetMaxHealth()
-    {
-        return maxHealth;
-    }
-
+    
+/// <summary>
+/// This function is called when the player takes damage
+/// This function checks if the armor is broken or not and then applies the damage
+/// </summary>
     public void TakeDamage(float damage)
     {
         float totalDamage = damage;        
-        if (armor < totalDamage && armor > 0)
+        if (armor < totalDamage)
         {
             Debug.Log("Armor broken");
             totalDamage -= armor;
             armor = 0;
+
+            health -= (int) totalDamage;
             
         }
         else
@@ -165,13 +168,19 @@ public class PlayerStats : MonoBehaviour
 
         if (health <= 0)
         {
-            Die();
+            Die(); //die if health is 0
         }
+
+        //update UI
         UiController.Instance.UpdateArmor(GetComponent<PlayerInput>().playerIndex, maxArmor, armor);
         UiController.Instance.UpdateHealth(GetComponent<PlayerInput>().playerIndex, maxHealth, health);
 
     }
     //Armor-------------------------
+
+    /// <summary>
+    /// This function is called when the player picks up an armor pack
+    /// </summary>
     public void AddArmor(int amount)
     {
         armor += amount;
@@ -183,19 +192,14 @@ public class PlayerStats : MonoBehaviour
 
     }
 
-    public float GetAmor()
-    {
-        return armor;
-    }
-
-    public float GetMaxAmor()
-    {
-        return maxArmor;
-    }
+    
 
 
     //Ammo--------------------------
 
+    /// <summary>
+    /// This function is called when the player picks up an ammo pack
+    /// </summary>
     public void AddAmmo(int amount)
     {
         ammo += amount;
@@ -203,9 +207,12 @@ public class PlayerStats : MonoBehaviour
         {
             ammo = maxAmmo;
         }
-        UiController.Instance.UpdateAmmo(GetComponent<PlayerInput>().playerIndex, ammo, maxAmmo, true);
+        UiController.Instance.UpdateAmmo(GetComponent<PlayerInput>().playerIndex, ammo, maxAmmo, true); //update ammo ui
     }
 
+    /// <summary>
+    /// This function is called when the player shoots
+    /// </summary>
     public void TakeAmmo(int amount)
     {
         ammo -= amount;
@@ -213,19 +220,17 @@ public class PlayerStats : MonoBehaviour
         {
             ammo = 0;
         }
-        UiController.Instance.UpdateAmmo(GetComponent<PlayerInput>().playerIndex, ammo, maxAmmo, true);
+        UiController.Instance.UpdateAmmo(GetComponent<PlayerInput>().playerIndex, ammo, maxAmmo, true);//update ammo ui
 
     }
+
 
     public int GetAmmo()
     {
         return ammo;
     }
 
-    public float GetDamage()
-    {
-        return damageMultiplier;
-    }
+   
 
 
     //Level-------------------------
@@ -240,10 +245,10 @@ public class PlayerStats : MonoBehaviour
         return experience;
     }
 
-    public float GetRequiredExperience()
-    {
-        return currentRequiredExperience;
-    }
+   
+    /// <summary>
+    /// This function is called when the player gets experience added to them
+    /// </summary>
 
     public void AddExperience(float amount)
     {
@@ -255,18 +260,16 @@ public class PlayerStats : MonoBehaviour
             experience -= currentRequiredExperience;
             level++;
 
-            //regen health and armor
-            health = maxHealth;
-            armor = maxArmor;
+            
 
             UpdateStats();
         }
-        UiController.Instance.UpdateXp(GetComponent<PlayerInput>().playerIndex, currentRequiredExperience, experience, level);
+        UiController.Instance.UpdateXp(GetComponent<PlayerInput>().playerIndex, currentRequiredExperience, experience, level); //update xp ui
     }
 
     private void CalculateRequiredExperience()
     {
-        currentRequiredExperience = baseRequiredExperience * experienceMultiplier * level;
+        currentRequiredExperience = baseRequiredExperience * experienceMultiplier * level; //formula for required experience
     }
 
 
@@ -276,12 +279,18 @@ public class PlayerStats : MonoBehaviour
         return money;
     }
 
+    /// <summary> 
+    /// This function is called when the player picks up money
+    /// </summary>
     public void AddMoney(int amount)
     {
         money += amount;
         UiController.Instance.UpdateMoney(GetComponent<PlayerInput>().playerIndex, money);
     }
 
+    /// <summary>
+    /// This function is called when the player buys something
+    /// </summary>
     public void TakeMoney(int amount)
     {
         money -= amount;

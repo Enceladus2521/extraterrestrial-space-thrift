@@ -2,18 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// import fort log warn
+/// <summary>
+/// This script is used to rotate A canvas to the closest camera
+/// </summary>
 
 public class RotateToCloseCam : MonoBehaviour
 {
-    
-
-
-
-    
-    
-
-
+   
     void Update()
     {        
         //Debug.Log("Heavy load of Camera");

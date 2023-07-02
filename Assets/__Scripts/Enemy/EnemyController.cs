@@ -5,10 +5,14 @@ using UnityEngine;
 
 [RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(Rigidbody))]
+
+/// <summary>
+/// This script handles the enemy stats movement and attack
+/// </summary>
 public class EnemyController : MonoBehaviour
 {
 
-
+    #region Variables
     private GameObject closestPlayer;
     private Rigidbody rb;
     private int attackPointIndex = 0;
@@ -70,8 +74,12 @@ public class EnemyController : MonoBehaviour
     [SerializeField] List<Transform> attackPoints;
 
 
+    #endregion
 
 
+    /// <summary>
+    /// This function is used setup the enemys components
+    /// </summary>
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -80,45 +88,55 @@ public class EnemyController : MonoBehaviour
         if ((EnemyType)enemyType == EnemyType.Eplode) attackRange = 0f;
     }
 
-    
 
+    /// <summary>
+    /// This function is used to generate a random some random stats for the enemy based on the difficulty and seed
+    /// </summary>
     public void GenerateRandom(int difficultySeed, int difficulty)
     {
-        UnityEngine.Random.InitState(difficultySeed);
-        
-        if (enemyType == EnemyType.Eplode) attackRange = 0f;
-        health = UnityEngine.Random.Range(1, Random.Range(1 + difficulty * 2, 1 + difficulty * 5));
-        attackRate = UnityEngine.Random.Range(0.5f * difficulty, 5f);
-        attackDamage = UnityEngine.Random.Range(10,  difficulty);
-        if (attackDamage > 30) attackDamage = 100;
-        knockback = UnityEngine.Random.Range(10,  difficulty);
-        //cap knockback at 30
-        if (knockback > 0) knockback = 0;
-        despawnOnImpact = Random.Range(0, 1) == 0 ? true : false;   
-        projectileForce = UnityEngine.Random.Range(5, 10);
-        // cap burstAmount at 5
-        burstAmount = UnityEngine.Random.Range(1, 5);
-        burstRate = UnityEngine.Random.Range(0.2f, 0.5f);
-        projectileColor = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0, 1f));
-        explodeRange = UnityEngine.Random.Range(3, 5);
+        UnityEngine.Random.InitState(difficultySeed); //set seed for randomizer
 
-        this.difficulty = difficulty;
+        if (enemyType == EnemyType.Eplode) attackRange = 0f; //if enemy is explode set attack range to 0
+        health = UnityEngine.Random.Range(1, Random.Range(1 + difficulty * 2, 1 + difficulty * 5)); //set health based on difficulty
+        attackRate = UnityEngine.Random.Range(0.5f * (difficulty + 1), 3f); //set attack rate based on difficulty
+        int mindamage = (int)(difficulty * 1.01f * 10); //set min damage based on difficulty
+        int maxdamage = (int)(difficulty * 1.02f * 10); //set max damage based on difficulty
+        //clamp damage between 10 and 30
+        if (mindamage < 10) mindamage = 5;
+        if (maxdamage > 100) maxdamage = 30;
+        attackDamage = UnityEngine.Random.Range(mindamage, maxdamage);
+
+        knockback = UnityEngine.Random.Range(10, difficulty);
+        //cap knockback at 0 because it causes bugs
+        if (knockback > 0) knockback = 0;
+        despawnOnImpact = Random.Range(0, 1) == 0 ? true : false; //set despawn on impact based on random
+        projectileForce = UnityEngine.Random.Range(10, difficulty * 1.5f); //set projectile force based on difficulty
+        // cap burstAmount at 5
+        burstAmount = UnityEngine.Random.Range(1, 5); //set burst amount based on random
+        burstRate = UnityEngine.Random.Range(0.1f, 0.3f); //set burst rate based on random
+        projectileColor = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0, 1f)); //set projectile color based on random
+        explodeRange = UnityEngine.Random.Range(3, 5); //set explode range based on random
+
+        this.difficulty = difficulty; //set difficulty
     }
 
+    /// <summary>
+    /// in The update function the enemy will check if there is a player in range and if so it will attack or follow the player
+    /// </summary>
     private void Update()
     {
         if (closestPlayer != null)
         {
             float distance = Vector3.Distance(transform.position, closestPlayer.transform.position);
 
-            if (distance < folowRange && distance > attackRange)
+            if (distance < folowRange && distance > attackRange) //pursue player state
             {
                 Rotate();
                 Move(closestPlayer);
 
                 currentState = EnemyState.Walking;
             }
-            else if (distance < attackRange)
+            else if (distance < attackRange) //attack player state
             {
                 Rotate();
 
@@ -126,26 +144,29 @@ public class EnemyController : MonoBehaviour
 
                 currentState = EnemyState.Attacking;
             }
-            else
+            else // idle state
             {
                 currentState = EnemyState.Idle;
             }
         }
     }
 
-
+    /// <summary>
+    /// This function is used to Attack the player
+    /// </summary>
     private void Attack()
     {
-        StartCoroutine(AttackCoolDown());
-        if (enemyType == EnemyType.Projectile) StartCoroutine(SpawnBurst());
+        StartCoroutine(AttackCoolDown()); //start attack cooldown
+        if (enemyType == EnemyType.Projectile) StartCoroutine(SpawnBurst()); //if enemy is projectile spawn a burst of projectiles
+        else if (enemyType == EnemyType.Eplode) Explode(); //if enemy is explode explode
 
-        else if (enemyType == EnemyType.Eplode) Explode();
+
     }
 
     IEnumerator AttackCoolDown()
     {
         canAttack = false;
-        yield return new WaitForSeconds(attackRate);
+        yield return new WaitForSeconds(attackRate); //wait for attack rate
         canAttack = true;
     }
 
@@ -155,13 +176,13 @@ public class EnemyController : MonoBehaviour
 
     private void SpawnProjectile()
     {
-        GameObject variableForPrefab = Resources.Load("PF_Projectile") as GameObject;
+        GameObject variableForPrefab = Resources.Load("PF_Projectile") as GameObject; //load projectile prefab
 
-        GameObject projectile = Instantiate(variableForPrefab, attackPoints[attackPointIndex].position, attackPoints[attackPointIndex].rotation);
-        projectile.GetComponent<Renderer>().material.color = projectileColor;
-        projectile.GetComponent<Renderer>().material.SetColor("_EmissionColor", projectileColor);
-        projectile.transform.GetChild(0).GetComponent<TrailRenderer>().startColor = projectileColor;
-        projectile.transform.GetChild(0).GetComponent<TrailRenderer>().endColor = projectileColor;
+        GameObject projectile = Instantiate(variableForPrefab, attackPoints[attackPointIndex].position, attackPoints[attackPointIndex].rotation); //spawn projectile
+        projectile.GetComponent<Renderer>().material.color = projectileColor; //set projectile color
+        projectile.GetComponent<Renderer>().material.SetColor("_EmissionColor", projectileColor); //set projectile color
+        projectile.transform.GetChild(0).GetComponent<TrailRenderer>().startColor = projectileColor; //set projectile color
+        projectile.transform.GetChild(0).GetComponent<TrailRenderer>().endColor = projectileColor; // set projectile color
 
 
         projectile.GetComponent<EnemyProjectile>().SetProjectileData(attackDamage, timeToLive, despawnOnImpact, projectileForce, knockback);
@@ -206,7 +227,7 @@ public class EnemyController : MonoBehaviour
         GameObject variableForPrefab = Resources.Load("PF_Explosion") as GameObject;
         GameObject explode = Instantiate(variableForPrefab, transform.position, transform.rotation);
         explode.GetComponent<Explosion>().damagePlayer = true;
-        explode.GetComponent<Explosion>().SetExplosionData(attackDamage, knockback, 0, 0, explodeRange, 0.75f,true);
+        explode.GetComponent<Explosion>().SetExplosionData(attackDamage, knockback, 0, 0, explodeRange, 0.75f, true);
         Destroy(gameObject);
 
     }

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6683505696316142704}
   - component: {fileID: 6683505696316142705}
   - component: {fileID: 6683505696316142706}
+  - component: {fileID: 3240037657081029060}
   m_Layer: 16
   m_Name: PF_XP
   m_TagString: Untagged
@@ -288,3 +289,15 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &3240037657081029060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6683505696316142707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa58e094c2203c9498d1cf776df89047, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
