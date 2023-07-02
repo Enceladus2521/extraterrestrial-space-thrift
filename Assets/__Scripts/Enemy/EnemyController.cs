@@ -354,6 +354,9 @@ public class EnemyController : MonoBehaviour
         }
 
         GameObject newMoney = Instantiate(money, transform.position, Quaternion.identity);
+        //set position +2 on y axis
+        newMoney.transform.position = new Vector3(newMoney.transform.position.x, newMoney.transform.position.y + 2, newMoney.transform.position.z);
+        
         //give random force to money
         newMoney.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f)) * 2, ForceMode.Impulse);
         newMoney.AddComponent<AutoDespawn>().SetTimeToDespawn(40f);

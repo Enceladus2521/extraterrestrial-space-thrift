@@ -350,7 +350,6 @@ public class Weapon : MonoBehaviour
 
 
 
-return;// TODO this make  entity.TakeDamage(damage);  Unreachable
         // try to get EntityController
 
         // EntityController entity = hit.collider.gameObject.GetComponent<EntityController>();
@@ -449,6 +448,12 @@ return;// TODO this make  entity.TakeDamage(damage);  Unreachable
             entity.TakeDamage(weaponObj.weaponDamage);
 
             //Todo: add burn to entity spawn burn effect Prefab and child it to entity set data for burn effect
+        }
+
+        if(hitObject.CompareTag("Enemy"))
+        {
+            EnemyController enemy = hitObject.GetComponent<EnemyController>();
+            enemy.TakeDamage(weaponObj.weaponDamage);
         }
 
         if (hitEffectPrefab != null) Instantiate(hitEffectPrefab, hitObject.transform.position, Quaternion.LookRotation(hitObject.transform.forward));

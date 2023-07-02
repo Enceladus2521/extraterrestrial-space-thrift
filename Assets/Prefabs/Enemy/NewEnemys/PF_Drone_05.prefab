@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 2469710284225422757}
   m_Layer: 0
   m_Name: PF_Drone_05
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -112,6 +112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 1
   currentState: 0
+  health: 100
   speed: 70
   rotationSpeed: 150
   folowRange: 100
