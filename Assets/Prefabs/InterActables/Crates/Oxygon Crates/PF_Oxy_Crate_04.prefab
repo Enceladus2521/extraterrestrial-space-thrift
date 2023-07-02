@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 7413649516011252249}
   - component: {fileID: 7413649516011252244}
   - component: {fileID: 7413649516011252250}
+  - component: {fileID: 6715435340596246585}
   m_Layer: 0
   m_Name: PF_Oxy_Crate_04
   m_TagString: Untagged
@@ -146,6 +147,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AutoTrigger: 0
   InteractOnce: 1
+  interactCost: 0
+  interactDelay: 0
+  Player: {fileID: 0}
   interactRange: 1.5
   interactOffset: {x: 0, y: 0, z: 0}
   events:
@@ -177,6 +181,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 531317b1ceba7524d9ff8075fc52b09f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &6715435340596246585
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7414160256498179673}
+  serializedVersion: 2
+  m_Mass: 5
+  m_Drag: 1
+  m_AngularDrag: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &7415097766899536475
 GameObject:
   m_ObjectHideFlags: 0

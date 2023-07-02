@@ -16,15 +16,15 @@ MonoBehaviour:
   - name: comon
     probability: 500
   - name: Uncommon
-    probability: 300
+    probability: 200
   - name: rare
-    probability: 100
+    probability: 200
   - name: epic
-    probability: 60
+    probability: 200
   - name: legendary
-    probability: 30
+    probability: 200
   - name: mythic
-    probability: 10
+    probability: 2000
   RarityTrails:
   - {fileID: 1962596557147680709, guid: f5eb74f88244c814382eefe9afda6b6a, type: 3}
   - {fileID: 1962596557147680709, guid: 8c706774a7e605746b46f755906062cd, type: 3}
@@ -46,26 +46,35 @@ MonoBehaviour:
       probability: 10
   - name: uncommon
     loots:
-    - loot: {fileID: 6137622589621463267, guid: a5b6a8fcc6e298d47a596ddbf06f6008,
+    - loot: {fileID: 2070782661175019558, guid: 21231e0e18fdd964285cc4e3139b3fd7,
+        type: 3}
+      probability: 10
+    - loot: {fileID: 7704753072391660529, guid: a3ba82760f58917469e701a2ee235e2b,
         type: 3}
       probability: 10
   - name: rare
     loots:
-    - loot: {fileID: 3622148381374028997, guid: 0da6efb6071811e4482db2c270ee79ea,
+    - loot: {fileID: 4725294091677565542, guid: 986855cd32e2d0243bb3e2710b34995f,
+        type: 3}
+      probability: 10
+    - loot: {fileID: 3344530322125736000, guid: fe6a7abda7d1a0d44af58ca2f74823a4,
         type: 3}
       probability: 10
   - name: epic
     loots:
-    - loot: {fileID: 6137622589621463267, guid: a5b6a8fcc6e298d47a596ddbf06f6008,
+    - loot: {fileID: 5437428282435791315, guid: 7a8ce365c653235428be98f5f254f853,
+        type: 3}
+      probability: 10
+    - loot: {fileID: 8905932738818362927, guid: 1b71b73ae434e3f4ea5b94b2a2ec9b98,
         type: 3}
       probability: 10
   - name: legendary
     loots:
-    - loot: {fileID: 3622148381374028997, guid: 0da6efb6071811e4482db2c270ee79ea,
+    - loot: {fileID: 8905932738818362927, guid: 1b71b73ae434e3f4ea5b94b2a2ec9b98,
         type: 3}
       probability: 10
   - name: mythic
     loots:
-    - loot: {fileID: 6137622589621463267, guid: a5b6a8fcc6e298d47a596ddbf06f6008,
+    - loot: {fileID: 8905932738818362927, guid: 1b71b73ae434e3f4ea5b94b2a2ec9b98,
         type: 3}
       probability: 10

@@ -162,6 +162,7 @@ GameObject:
   - component: {fileID: 2026678590763416611}
   - component: {fileID: 2026678590763416622}
   - component: {fileID: 1677842729}
+  - component: {fileID: 253062229773061865}
   m_Layer: 0
   m_Name: PF_Usable_Crate_02
   m_TagString: Untagged
@@ -294,6 +295,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AutoTrigger: 0
   InteractOnce: 1
+  interactCost: 0
+  interactDelay: 0
   Player: {fileID: 0}
   interactRange: 1.5
   interactOffset: {x: 0, y: 0, z: 0}
@@ -358,3 +361,19 @@ MonoBehaviour:
   SpawnForce: 10
   RandomRotationAmount: 5
   lootTableObj: {fileID: 11400000, guid: edd24cea669a7a846a16737288619555, type: 2}
+--- !u!54 &253062229773061865
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2027810769087856068}
+  serializedVersion: 2
+  m_Mass: 5
+  m_Drag: 1
+  m_AngularDrag: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

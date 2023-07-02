@@ -7,6 +7,7 @@ public class PlayerInteractManager : MonoBehaviour
 {
     [SerializeField] private List<GameObject> interactables;
 
+
     private void OnInteract()
     {
         //find closest interactable that is not AutoTrigger
@@ -43,6 +44,13 @@ public class PlayerInteractManager : MonoBehaviour
 
         //remove closest interactable from list
         interactables.Remove(closestInteractable);
+    }
+
+    IEnumerator Start()
+    {
+        yield return new WaitForSeconds(100f);
+        //clear list
+        interactables.Clear();
     }
 
     public void AddEvent(GameObject e)

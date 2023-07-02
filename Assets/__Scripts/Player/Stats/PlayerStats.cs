@@ -26,7 +26,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private int maxHealth;
 
     [SerializeField] private int baseHealth = 100;
-    [SerializeField] private float healthMultiplier = 1.9f;
+    [SerializeField] private float healthMultiplier = 1.1f;
 
 
     [Header("Amor")]
@@ -34,7 +34,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private int maxArmor;
 
     [SerializeField] private int baseArmor = 100;
-    [SerializeField] private float armorMultiplier = 1.9f;
+    [SerializeField] private float armorMultiplier = 1.1f;
 
 
 

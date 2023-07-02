@@ -79,6 +79,7 @@ GameObject:
   - component: {fileID: 8093498175839236265}
   - component: {fileID: 8093498175839236271}
   - component: {fileID: 1891467206}
+  - component: {fileID: -9027670042651938505}
   m_Layer: 0
   m_Name: PF_LongWeapon_Crate_03
   m_TagString: Untagged
@@ -276,6 +277,22 @@ MonoBehaviour:
   SpawnForce: 10
   RandomRotationAmount: 5
   lootTableObj: {fileID: 11400000, guid: edd24cea669a7a846a16737288619555, type: 2}
+--- !u!54 &-9027670042651938505
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8094214111539782524}
+  serializedVersion: 2
+  m_Mass: 5
+  m_Drag: 1
+  m_AngularDrag: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &8094608435433670998
 GameObject:
   m_ObjectHideFlags: 0
