@@ -7,16 +7,25 @@ public class RotateToCloseEntity : MonoBehaviour
     [SerializeField]
     Vector3 offsetRotation;
 
+    Transform parent;
+    List<MeshRenderer> meshRenderers;
+
     // Debug log the name of parent on start
     void Start()
     {
         Debug.Log(gameObject.name);
+        // Unchild it
+        parent = transform.parent;
+        transform.parent = null;
+
+        // Get all mesh renderers in the child objects
+        meshRenderers = new List<MeshRenderer>(GetComponentsInChildren<MeshRenderer>());
     }
 
     void Update()
     {
         // Get the player's rotation
-        Quaternion playerRotation = transform.parent.rotation;
+        transform.position = parent.transform.position;
 
         // Get all entities in the scene (You may need to modify this based on how entities are represented)
         List<EnemyController> entities = LevelManager.Instance?.Entities;
@@ -50,13 +59,26 @@ public class RotateToCloseEntity : MonoBehaviour
                 directionToClosest.y = 0f; // Lock rotation only around the y-axis (horizontal)
                 Quaternion targetRotation = Quaternion.LookRotation(directionToClosest, Vector3.up);
 
-                // Calculate the relative rotation between the player and the child GameObject
-                Quaternion relativeRotation = Quaternion.Inverse(playerRotation) * transform.parent.rotation;
-
                 // Combine the rotations with the offset and apply the relative rotation
-                Quaternion finalRotation = playerRotation * (Quaternion.Euler(offsetRotation) * relativeRotation);
+                Quaternion finalRotation = targetRotation * Quaternion.Euler(offsetRotation);
                 transform.rotation = finalRotation;
+
+                // Activate mesh renderers
+                SetMeshRenderersActive(true);
             }
+            else
+            {
+                // No entity found, deactivate mesh renderers
+                SetMeshRenderersActive(false);
+            }
+        }
+    }
+
+    void SetMeshRenderersActive(bool active)
+    {
+        foreach (var meshRenderer in meshRenderers)
+        {
+            meshRenderer.enabled = active;
         }
     }
 }

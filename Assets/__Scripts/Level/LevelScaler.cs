@@ -14,8 +14,7 @@ public static int GetNumberOfEnemiesToAdd(int difficulty, int currentEnemies)
     // Increase enemy count if the current number of enemies is low
     int enemiesToAdd = Mathf.Max(scaledEnemies, currentEnemies / 2);
 
-    Debug.Log("enemiesToAdd: " + enemiesToAdd + " (d: " + difficulty + ", c: " + currentEnemies + ")");
-    return enemiesToAdd + 2;
+    return enemiesToAdd;
 }
 
 
@@ -34,8 +33,7 @@ public static int GetNumberOfInteractablesToAdd(float difficulty, int currentInt
     if (interactablesToAdd < 1)
         interactablesToAdd = 1;
 
-    Debug.Log("interactablesToAdd: " + interactablesToAdd + " (d: " + difficulty + ", c: " + currentInteractables + ")");
-    return interactablesToAdd + 1;
+    return interactablesToAdd;
 }
 
 }

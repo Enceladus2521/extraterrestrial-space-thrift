@@ -34,9 +34,9 @@ public class RoomGenerator : MonoBehaviour
         spawnedPositions.Clear();
 
         // Refill the availablePositions list
-        for (int x = 0; x < roomConfig.width - 1; x++)
+        for (int x = 0; x < roomConfig.width; x++)
         {
-            for (int y = 0; y < roomConfig.height - 1; y++)
+            for (int y = 0; y < roomConfig.height; y++)
             {
                 if (!spawnedPositions.Contains(new Vector2(x, y)))
                     availablePositions.Add(new Vector2(x, y));
@@ -87,9 +87,9 @@ public class RoomGenerator : MonoBehaviour
             if (entityPrefab != null)
             {
         if (availablePositions.Count == 0) continue;
-                Vector3 randomPos = GetRandomPosition();
+                Vector3 randomPos = GetRandomPosition() + new Vector3(absOffset.x, 0, absOffset.y);
                 randomPos = new Vector3(randomPos.x * roomConfig.gridSize, 3, randomPos.y * roomConfig.gridSize);
-      
+                randomPos += new Vector3(- roomConfig.gridSize / 2 , 0, - (roomConfig.gridSize * (roomConfig.height / 2)) + roomConfig.gridSize / 2);
 
                 GameObject entityInstance = Instantiate(entityPrefab, randomPos, Quaternion.identity);
                 EnemyController entityController = entityInstance.GetComponent<EnemyController>(); // TODO: Make alter to EntityController
@@ -137,16 +137,26 @@ public class RoomGenerator : MonoBehaviour
 
             // Randomly calculate the position within the room
             if (availablePositions.Count == 0) continue;
-            Vector3 randomPos = GetRandomPosition()+ new Vector3(roomConfig.offset.x * roomConfig.gridSize, 0, roomConfig.offset.y* roomConfig.gridSize);
+            Vector3 randomPos = GetRandomPosition() + new Vector3(absOffset.x, 0, absOffset.y);;
             randomPos = new Vector3(randomPos.x * roomConfig.gridSize, 0, randomPos.y * roomConfig.gridSize) + transform.position;
+            randomPos += new Vector3(- roomConfig.gridSize / 2 , 0,- (roomConfig.gridSize * (roomConfig.height / 2)) + roomConfig.gridSize / 2);
+
+            // Add random offset
+            float offsetX = Random.Range(-roomConfig.gridSize/3, roomConfig.gridSize/3);
+            float offsetZ = Random.Range(-roomConfig.gridSize/3, roomConfig.gridSize/3);
+            randomPos += new Vector3(offsetX, 0, offsetZ);
 
             // Instantiate and place the interactable prefab
             GameObject interactableInstance = Instantiate(interactablePrefab, randomPos, Quaternion.identity);
+
+            // Add random rotation
+            float randomRotation = Random.Range(0, 360);
+            interactableInstance.transform.rotation = Quaternion.Euler(0, randomRotation, 0);
+
             interactableInstance.transform.SetParent(transform);
             interactableInstance.name = $"Interactable_{randomPos.x}_{randomPos.z}";
             Interacter interactable = interactableInstance.GetComponent<Interacter>();
             LevelManager.Instance?.watcher?.interactables?.Add(interactable);
-
         }
     }
 

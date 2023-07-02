@@ -90,6 +90,9 @@ public class GameManager : MonoBehaviour
         string highScoresString = PlayerPrefs.GetString("highScores");
         GameState.HighScores = highScoresString.Split(',').Select(int.Parse).ToList();
     }
+
+    
+
     private void OnDestroy()
     {
         if (this == Instance) { Instance = null; }

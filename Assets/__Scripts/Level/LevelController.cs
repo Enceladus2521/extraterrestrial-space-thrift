@@ -15,7 +15,7 @@ public class LevelController : MonoBehaviour
 
     void Start()
     {
-        roomConfigs.Add(GetRandomRoom(GameManager.Instance.Catalog));
+        // roomConfigs.Add(GetRandomRoom(GameManager.Instance.Catalog));
     }
 
 

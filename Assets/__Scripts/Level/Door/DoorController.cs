@@ -26,6 +26,7 @@ public class DoorController : MonoBehaviour
 
     public void AssignDoor(DoorController otherOtherDoor)
     {
+        door.isConnected = true;
         otherDoor = otherOtherDoor;
     }
 
@@ -132,9 +133,12 @@ public class DoorController : MonoBehaviour
                     return;
             else
                 return;
+        
 
         if (otherDoor)
             otherDoor.OpenDoorForced();
+        else
+            return;
 
         if (openAudio != null && !silent)
         {
