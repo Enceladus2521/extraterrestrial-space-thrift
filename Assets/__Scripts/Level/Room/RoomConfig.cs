@@ -10,7 +10,7 @@ public class RoomConfig
     public int width;
     public int height;
     public int seed;
-    public int difficultyLevel;
+    public int difficulty;
     public List<Door> doorConfigs;
 
     public List<GameObject> wallTypes;

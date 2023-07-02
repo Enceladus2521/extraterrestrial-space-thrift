@@ -175,7 +175,8 @@ public class Interacter : MonoBehaviour
 
         if(InteractCanvasInstance != null)
         {
-            Player.GetComponent<PlayerInteractManager>().RemoveEvent(this.gameObject);
+            // TODO Player?
+            Player?.GetComponent<PlayerInteractManager>().RemoveEvent(this.gameObject);
             Destroy(InteractCanvasInstance);
         }
     }

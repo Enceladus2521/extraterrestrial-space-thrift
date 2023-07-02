@@ -3,53 +3,54 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.SceneManagement;
 
-[System.Serializable]
 public class GameState
 {
-    [SerializeField]
     public List<GameObject> Players { get; set; }
-    [SerializeField]
-    public int DifficultyLevel { get; set; }
-    [SerializeField]
+
+    public List<GameObject> DeadPlayers { get; set; }
+
+    public int Difficulty { get; set; }
+    
     public List<int> HighScores { get; set; }
 
-    public List<GameObject> getPlayers()
-    {
-        return Players;
-    }
-
-    // seed
     public int Seed { get; set; }
 }
 
 public class GameManager : MonoBehaviour
 {
 
+    [SerializeField]
+    private RoomInternal catalog;
+    public RoomInternal Catalog { get { return catalog; } }
 
     [SerializeField]
-    public GameState GameState { get; set; }
+    private GameState gameState;
+    public GameState GameState { get { return gameState; } }
     public static GameManager Instance { get; private set; }
 
     // get function will get it form game state
     public int Seed { get { return GameState.Seed; }  }
 
+    public List<GameObject> Players { get { return GameState.Players; } }
+
     private void Awake()
     {
+      
         if (GameManager.Instance != null && GameManager.Instance != this)
         {
             Destroy(gameObject);
         }
         else
         {
-            Instance = this;
-            GameState = new GameState();
-            GameState.Players = new List<GameObject>();
-            GameState.HighScores = new List<int>();
-            GameState.DifficultyLevel = 1;
-            GameState.Seed = Random.Range(0, 42);
+            Instance = this;  
+            gameState = new GameState();
+            gameState.Players = new List<GameObject>();
+            gameState.DeadPlayers = new List<GameObject>();
+            gameState.HighScores = new List<int>();
+            gameState.Difficulty = 1;
+            gameState.Seed = Random.Range(0, 42);
             DontDestroyOnLoad(gameObject);
         }
-        UpdatePlayers();
     }
 
 
@@ -57,7 +58,8 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Application.targetFrameRate = 144;
-        UpdatePlayers();
+        
+        Restart();
     }
 
 
@@ -66,35 +68,15 @@ public class GameManager : MonoBehaviour
     public void UpdatePlayers()
     {
         if (GameState == null) return;
-        GameState.Players = new List<GameObject>();
         GameState.Players = GameObject.FindGameObjectsWithTag("Player").ToList();
-
-    }
-    public void AddPlayer(GameObject player)
-    {
-        GameState.Players.Add(player);
     }
 
-    public void RemovePlayer(GameObject player)
-    {
-        GameState.Players.Remove(player);
-    }
-
-    void FixedUpdate()
+    void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
             Restart();
     }
 
-    private void Update()
-    {
-        //if Escape is pressed, quit the game
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
-        }
-
-    }
     public void AddHighScore(int score)
     {
         GameState.HighScores.Add(score);
@@ -114,19 +96,46 @@ public class GameManager : MonoBehaviour
     }
 
     public void Restart()
-    {
+    {   
         Debug.Log("Restarting");
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
+
+        Debug.Log("Restarted");
+        GameState.Players.Clear();
+        GameState.DeadPlayers.Clear();
+
         GameState.Seed = Random.Range(0, 42) + GameState.Seed;
-        LevelManager.Instance?.Regenerate();
+
+        Debug.Log("Seed: " + GameState.Seed);
     }
 
     public void OnPlayerDied(GameObject player)
     {
-        // move player to last room
+        GameState.DeadPlayers.Add(player);
         GameState.Players.Remove(player);
+        if(GameState.Players.Count == 0)
+        {
+            Restart();
+        }
 
     }
+
+    public void OnRoomFinished(RoomManager roomManager)
+    {
+        Vector3 roomCenter = roomManager.GetRoomCenter();
+        for (int i = 0; i < GameState.DeadPlayers.Count; i++)
+        {
+            GameObject player = GameState.DeadPlayers[i];
+            player.transform.position = roomCenter;
+            GameState.Players.Add(player);
+            GameState.DeadPlayers.Remove(player);
+            player.SetActive(true);
+            // player.GetComponent<PlayerStats>().SetStats();
+
+        }
+
+    }
+
 
 
 }

@@ -48,7 +48,7 @@ public class EntityController : MonoBehaviour
 
     public void UpdateTarget()
     {
-        List<GameObject> players = GameManager.Instance?.GameState?.getPlayers();
+        List<GameObject> players = GameManager.Instance?.Players;
         if (players != null && players.Count > 0)
         {
             float closestDistance = Mathf.Infinity;

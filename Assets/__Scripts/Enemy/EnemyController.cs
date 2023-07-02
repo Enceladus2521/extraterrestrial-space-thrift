@@ -12,7 +12,7 @@ public class EnemyController : MonoBehaviour
     private GameObject closestPlayer;
     private Rigidbody rb;
     private int attackPointIndex = 0;
-    private int difficultyLevel = 0;
+    private int difficulty = 0;
 
 
 
@@ -96,24 +96,24 @@ public class EnemyController : MonoBehaviour
         this.explodeRange = explodeRange;
     }
 
-    public void GenerateRandom(int difficultySeed, int difficultyLevel)
+    public void GenerateRandom(int difficultySeed, int difficulty)
     {
         UnityEngine.Random.InitState(difficultySeed);
         enemyType = (EnemyType)UnityEngine.Random.Range(0, 1);
         if (enemyType == EnemyType.Eplode) attackRange = 0f;
-        health = UnityEngine.Random.Range(1, Random.Range(1 + difficultyLevel * 2, 1 + difficultyLevel * 5));
-        attackRate = UnityEngine.Random.Range(0.5f * difficultyLevel, 5f);
-        attackDamage = UnityEngine.Random.Range(10, 10 + difficultyLevel * 2);
-        knockback = UnityEngine.Random.Range(10, 10 + difficultyLevel * 2);
+        health = UnityEngine.Random.Range(1, Random.Range(1 + difficulty * 2, 1 + difficulty * 5));
+        attackRate = UnityEngine.Random.Range(0.5f * difficulty, 5f);
+        attackDamage = UnityEngine.Random.Range(10, 10 + difficulty * 2);
+        knockback = UnityEngine.Random.Range(10, 10 + difficulty * 2);
         despawnOnImpact = Random.Range(0, 1) == 0 ? true : false;
-        projectileForce = UnityEngine.Random.Range(5, 10 + difficultyLevel * 2);
+        projectileForce = UnityEngine.Random.Range(5, 10 + difficulty * 2);
         // cap burstAmount at 5
         burstAmount = UnityEngine.Random.Range(1, 5);
         burstRate = UnityEngine.Random.Range(0.2f, 0.5f);
         projectileColor = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0, 1f));
         explodeRange = UnityEngine.Random.Range(3, 5);
 
-        this.difficultyLevel = difficultyLevel;
+        this.difficulty = difficulty;
     }
 
     private void Update()
@@ -266,7 +266,7 @@ public class EnemyController : MonoBehaviour
                 ammo.AddComponent<Rigidbody>();
             }
             ammo.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f)) * 2, ForceMode.Impulse);
-            ammo.GetComponent<PickUpInteraction>().SetAmount(difficultyLevel + 1 * 10, 0, 0, 0, 1.5f);
+            ammo.GetComponent<PickUpInteraction>().SetAmount(difficulty + 1 * 10, 0, 0, 0, 1.5f);
         }
     }
 
@@ -414,7 +414,7 @@ public class EnemyController : MonoBehaviour
 
     private void UpdateTarget()
     {
-        List<GameObject> players = GameManager.Instance?.GameState?.getPlayers();
+        List<GameObject> players = GameManager.Instance?.Players;
         if (players != null && players.Count > 0)
         {
             float closestDistance = Mathf.Infinity;

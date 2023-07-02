@@ -116,18 +116,18 @@ public class MovementStats
 
     public bool isBouncy;
 
-    public void GenerateRandom(int difficultySeed, int difficultyLevel)
+    public void GenerateRandom(int difficultySeed, int difficulty)
     {
         UnityEngine.Random.InitState(difficultySeed);
-        maxSpeed = UnityEngine.Random.Range(1, difficultyLevel) ;
-        speed = UnityEngine.Random.Range(1, difficultyLevel) ;
+        maxSpeed = UnityEngine.Random.Range(1, difficulty) ;
+        speed = UnityEngine.Random.Range(1, difficulty) ;
         flyingAltitude = UnityEngine.Random.Range(1, 1) ;
-        maintainDistance = UnityEngine.Random.Range(1, difficultyLevel);
+        maintainDistance = UnityEngine.Random.Range(1, difficulty);
         viewAngle = UnityEngine.Random.Range(1, 361);
-        turnSpeed = UnityEngine.Random.Range(1, difficultyLevel);
-        viewRange = UnityEngine.Random.Range(1, difficultyLevel);
+        turnSpeed = UnityEngine.Random.Range(1, difficulty);
+        viewRange = UnityEngine.Random.Range(1, difficulty);
         isStunned = UnityEngine.Random.value > 0.5f;
-        accelerationMultiplier = UnityEngine.Random.Range(1, difficultyLevel);
+        accelerationMultiplier = UnityEngine.Random.Range(1, difficulty);
         isBouncy = UnityEngine.Random.value > 0.5f;
     }
 
@@ -151,21 +151,21 @@ public class CombatStats
     public bool canSpecialAttack;
 
 
-    public void GenerateRandom(int difficultySeed, int difficultyLevel)
+    public void GenerateRandom(int difficultySeed, int difficulty)
     {
         UnityEngine.Random.InitState(difficultySeed);
         canShoot = UnityEngine.Random.value > 0.5f;
-        shootingDamage = UnityEngine.Random.Range(1, 11) * difficultyLevel;
+        shootingDamage = UnityEngine.Random.Range(1, 11) * difficulty;
         canMelee = UnityEngine.Random.value > 0.5f;
-        meleeDamage = UnityEngine.Random.Range(1, 11) * difficultyLevel;
-        attackRange = UnityEngine.Random.Range(1, 11) * difficultyLevel;
+        meleeDamage = UnityEngine.Random.Range(1, 11) * difficulty;
+        attackRange = UnityEngine.Random.Range(1, 11) * difficulty;
         // Assuming projectile is one of several possible GameObjects
         canExplode = UnityEngine.Random.value > 0.5f;
-        explosionRadius = UnityEngine.Random.Range(1, 11) * difficultyLevel;
-        explosionDamage = UnityEngine.Random.Range(1, 11) * difficultyLevel;
+        explosionRadius = UnityEngine.Random.Range(1, 11) * difficulty;
+        explosionDamage = UnityEngine.Random.Range(1, 11) * difficulty;
         canSummonMinions = UnityEngine.Random.value > 0.5f;
-        maxMinions = UnityEngine.Random.Range(1, 11) * difficultyLevel;
-        summonCooldown = UnityEngine.Random.Range(1, 11) / difficultyLevel;
+        maxMinions = UnityEngine.Random.Range(1, 11) * difficulty;
+        summonCooldown = UnityEngine.Random.Range(1, 11) / difficulty;
         canSpecialAttack = UnityEngine.Random.value > 0.5f;
     }
 }
@@ -207,15 +207,15 @@ public class HealthStats
     public bool canRegenerateHealth;
     
    
-    public void GenerateRandom(int difficultySeed, int difficultyLevel)
+    public void GenerateRandom(int difficultySeed, int difficulty)
     {
         UnityEngine.Random.InitState(difficultySeed);
-        maxArmor = UnityEngine.Random.Range(1, 11) / difficultyLevel;
-        maxHealth = UnityEngine.Random.Range(1, 11) / difficultyLevel;
+        maxArmor = UnityEngine.Random.Range(1, 11) / difficulty;
+        maxHealth = UnityEngine.Random.Range(1, 11) / difficulty;
         isAlive = true; // Assuming the entity is alive when stats are generated
         health = maxHealth; // Assuming health is full when stats are generated
         armor = maxArmor; // Assuming armor is full when stats are generated
-        healthRegenerationRate = UnityEngine.Random.Range(1, 11) / difficultyLevel;
+        healthRegenerationRate = UnityEngine.Random.Range(1, 11) / difficulty;
         canRegenerateHealth = UnityEngine.Random.value > 0.5f;
     }
 

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1961571266449391221
+--- !u!1 &2974805436291472558
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,10 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1961571266449391222}
-  - component: {fileID: 1961571266449391223}
-  - component: {fileID: 4095226469751585599}
-  - component: {fileID: 4095226469751585570}
+  - component: {fileID: 2974805436291472556}
+  - component: {fileID: 2974805436291472559}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -19,13 +17,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1961571266449391222
+--- !u!4 &2974805436291472556
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1961571266449391221}
+  m_GameObject: {fileID: 2974805436291472558}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -34,59 +32,15 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1961571266449391223
+--- !u!114 &2974805436291472559
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1961571266449391221}
+  m_GameObject: {fileID: 2974805436291472558}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9c4235298fffe176eab1d5fd1e062470, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4095226469751585599
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1961571266449391221}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df02db4aecb2466ad913c336ca067f3b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4095226469751585570
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1961571266449391221}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2f389b4384544e2d9742dfc86311840, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomGenerationDistance: 42
-  mapConfig:
-    initialRoom:
-      internalConfig: {fileID: 11400000, guid: 42ac15deb5480875583603d1e56ce9ab, type: 2}
-      gridSize: 5
-      roomType: 0
-      offset: {x: 0, y: 0}
-      width: 5
-      height: 5
-      seed: 42
-      doorConfigs:
-      - wallType: 1
-        isConnected: 0
-        gridPosition: {x: 0, y: 0}
-        absPosition: {x: 0, y: 0, z: 0}
-    maxHeight: 8
-    maxWidth: 8
-    seed: 42
-  roomConfigs: []
-  roomsGenerated: []

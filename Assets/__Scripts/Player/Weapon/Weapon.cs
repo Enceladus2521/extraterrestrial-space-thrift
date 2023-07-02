@@ -350,10 +350,11 @@ public class Weapon : MonoBehaviour
 
 
 
-return;
+return;// TODO this make  entity.TakeDamage(damage);  Unreachable
         // try to get EntityController
-        EntityController entity = hit.collider.gameObject.GetComponent<EntityController>();
-        if (entity != null) entity.TakeDamage(damage);
+
+        // EntityController entity = hit.collider.gameObject.GetComponent<EntityController>();
+        // if (entity != null) entity.TakeDamage(damage); 
 
         
 

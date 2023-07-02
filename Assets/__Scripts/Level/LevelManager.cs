@@ -5,7 +5,7 @@ using System.Linq;
 public class LevelManager : MonoBehaviour
 {
 
-    [SerializeField] private float roomGenerationDistance = 42f;
+    private float roomGenerationDistance = 15f;
     public static LevelManager Instance { get; private set; }
 
     private LevelController controller;
@@ -17,41 +17,41 @@ public class LevelManager : MonoBehaviour
     public Vector3 MostLeftPlayerPos { get { return mostLeftPlayerPos; } }
     public Vector3 MostRightPlayerPos { get { return mostRightPlayerPos; } }
 
+    // Level = LevelController
+    public GameObject Level { get { return controller.gameObject; } }
+
     void Awake()
     {
-        // Singleton pattern: Initialize the static instance on Awake
         if (LevelManager.Instance != null && LevelManager.Instance != this)
         {
             Destroy(this.gameObject);
         }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(this.gameObject);
-        }
 
+        Instance = this;
         watcher = new Watcher();
         voidWatcher = new Watcher();
-        if (gameObject.GetComponent<LevelController>() == null)
+        if(gameObject.GetComponent<LevelController>() == null){
             controller = gameObject.AddComponent<LevelController>();
-        else
+        }else{
             controller = gameObject.GetComponent<LevelController>();
+        }
     }
 
-    public RoomInternal catalog;
-
-    private void Start()
+    void Start()
     {
-        controller.Catalog = catalog;
+        Regenerate();
     }
 
-    public List<EnemyController> GetEntities()
+
+    public List<EnemyController> Entities { get { return watcher.entities; } }
+
+    public List<Interacter> GetInteractables()
     {
-        return watcher.entities;
+        return watcher.interactables;
     }
 
     public DoorController GetClosestDoor(DoorController controller)
-    { 
+    {
         // Find closest door by tag "door"
         if (watcher.doors.Count == 0)
         {
@@ -87,14 +87,16 @@ public class LevelManager : MonoBehaviour
             }
 
         }
-        
+
         return closestDoor;
     }
 
     public void Update()
     {
+        if(controller == null) return;
+        
         Vector3 avgPlayerPos = new Vector3(0f, 0f, 0f);
-        List<GameObject> players = GameManager.Instance?.GameState?.getPlayers();
+        List<GameObject> players = GameManager.Instance?.Players;
 
         if (players != null && players.Count > 0)
         {
@@ -129,19 +131,16 @@ public class LevelManager : MonoBehaviour
             controller.GenerateNewRoomConfig();
         }
 
-        UpdateMap();
+        UpdateLevel();
     }
-
 
     public void Regenerate()
     {
-        controller.Clear();
-        Destroy(controller.gameObject);
-        controller = gameObject.AddComponent<LevelController>();
-        controller.Catalog = catalog;
-        // controller.Clear();
+        
+        Debug.Log("Generating inital config");
         controller.GenerateNewRoomConfig();
     }
+
 
     void OnDrawGizmos()
     {
@@ -157,7 +156,7 @@ public class LevelManager : MonoBehaviour
 
 
 
-    public void UpdateMap()
+    public void UpdateLevel()
     {
 
         // Loop through all generated rooms to activate/deactivate based on rendering
@@ -182,9 +181,12 @@ public class LevelManager : MonoBehaviour
             return;
         }
 
+        if (controller.RoomGeneratedCount < controller.RoomCount - 6)
+            return;
+
         if (controller.RoomGeneratedCount > controller.RoomCount)
         {
-            Debug.Log("Regenerating map");
+            Debug.Log("Regenerating level");
             controller.Clear();
             controller.GenerateNewRoomConfig();
             return;

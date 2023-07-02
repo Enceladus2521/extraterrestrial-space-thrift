@@ -102,7 +102,7 @@ public class RoomManager : MonoBehaviour
     {
         // loop over all entities and check in entity state for is alive in health state#
         watcher?.entities.Clear();
-        List<EnemyController> entities = LevelManager.Instance?.GetEntities();
+        List<EnemyController> entities = LevelManager.Instance?.Entities;
         for (int i = 0; i < entities.Count; i++)
         {
             EnemyController entity = entities[i];
@@ -128,14 +128,17 @@ public class RoomManager : MonoBehaviour
 
         // if enemies are 0 unlock room
         if (GetEnemys().Count == 0 && isActive)
+        {    
+            GameManager.Instance?.OnRoomFinished(this);
             isLocked = false;
+        }
         else
             isLocked = true;
     }
     private void UpdatePlayers()
     {
         // TODO: get players not by tag
-        List<GameObject> playersGlobal = GameManager.Instance?.GameState?.getPlayers();
+        List<GameObject> playersGlobal = GameManager.Instance?.Players;
         watcher.players.Clear();
 
         if (playersGlobal != null)
@@ -184,5 +187,10 @@ public class RoomManager : MonoBehaviour
         pos.y -= 42;
 
         Gizmos.DrawSphere(pos, 5);
+    }
+
+
+    public Vector3 GetRoomCenter(){
+        return transform.position;
     }
 }

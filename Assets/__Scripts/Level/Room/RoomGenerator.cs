@@ -11,17 +11,38 @@ public class RoomGenerator : MonoBehaviour
 
 
 
-    public void UpdateConfig(RoomConfig configuration){
+    public void UpdateConfig(RoomConfig configuration)
+    {
         roomConfig = configuration;
     }
 
+    List<Vector2> availablePositions = new List<Vector2>();
+    List<Vector2> spawnedPositions = new List<Vector2>();
+
     public void GenerateRoom()
-    {   
-        
+    {
+
         absOffset = new Vector2(
             -(roomConfig.width - 2) / 2f,
             -roomConfig.height / 2f
         );
+
+
+
+        // create a list of positions with room witdh and higth
+        availablePositions.Clear();
+        spawnedPositions.Clear();
+
+        // Refill the availablePositions list
+        for (int x = 0; x < roomConfig.width - 1; x++)
+        {
+            for (int y = 0; y < roomConfig.height - 1; y++)
+            {
+                if (!spawnedPositions.Contains(new Vector2(x, y)))
+                    availablePositions.Add(new Vector2(x, y));
+                else break;
+            }
+        }
 
         Random.InitState(roomConfig.seed);
 
@@ -45,9 +66,18 @@ public class RoomGenerator : MonoBehaviour
         ceiling.AddComponent<BoxCollider>();
         ceiling.transform.localScale = size;
         ceiling.transform.position = ceilingOffset;
-
-
     }
+
+    private Vector3 GetRandomPosition()
+    {
+ 
+        int randomIndex = Random.Range(0, availablePositions.Count);
+        Vector2 randomPosition = availablePositions[randomIndex];
+        availablePositions.RemoveAt(randomIndex);
+        spawnedPositions.Add(randomPosition);
+        return randomPosition;
+    }
+
 
     void GenerateEnemies()
     {
@@ -56,27 +86,28 @@ public class RoomGenerator : MonoBehaviour
             GameObject entityPrefab = roomConfig.entityTypes[i];
             if (entityPrefab != null)
             {
-                float x = Random.Range(2, roomConfig.width - 2) + absOffset.x;
-                float y = Random.Range(2, roomConfig.height - 2) + absOffset.y;
-                Vector3 absPosition = new Vector3(x * roomConfig.gridSize, 1, y * roomConfig.gridSize) + transform.position;
+        if (availablePositions.Count == 0) continue;
+                Vector3 randomPos = GetRandomPosition();
+                randomPos = new Vector3(randomPos.x * roomConfig.gridSize, 3, randomPos.y * roomConfig.gridSize);
       
 
-                GameObject entityInstance = Instantiate(entityPrefab, absPosition, Quaternion.identity);
+                GameObject entityInstance = Instantiate(entityPrefab, randomPos, Quaternion.identity);
                 EnemyController entityController = entityInstance.GetComponent<EnemyController>(); // TODO: Make alter to EntityController
 
-                entityController.GenerateRandom(roomConfig.seed, roomConfig.difficultyLevel);
+                entityController.GenerateRandom(roomConfig.seed, roomConfig.difficulty);
 
-                LevelManager.Instance.watcher?.entities?.Add(entityController);
 
                 if (entityController == null)
                 {
                     Debug.LogError("EntityController is null");
                     continue;
                 }
+                
+                LevelManager.Instance?.watcher?.entities?.Add(entityController);
 
                 entityInstance.transform.parent = transform;
-                entityInstance.name = $"Enemy_{x}_{y}";
-                entityInstance.transform.localPosition = new Vector3(x * roomConfig.gridSize, 0, y * roomConfig.gridSize);
+                entityInstance.name = $"Enemy_{randomPos.x}_{randomPos.z}";
+                entityInstance.transform.localPosition = randomPos;
                 entityInstance.transform.localRotation = Quaternion.identity;
                 entityInstance.transform.localScale = Vector3.one;
             }
@@ -85,7 +116,7 @@ public class RoomGenerator : MonoBehaviour
 
     private EntityState GenerateRandomEntityState()
     {
-        int difficulty = roomConfig.difficultyLevel;
+        int difficulty = roomConfig.difficulty;
         EntityState entityState = new EntityState();
         entityState.healthStats = new HealthStats();
         entityState.movementStats = new MovementStats();
@@ -105,14 +136,17 @@ public class RoomGenerator : MonoBehaviour
             GameObject interactablePrefab = roomConfig.interactableTypes[i];
 
             // Randomly calculate the position within the room
-            float x = Random.Range(1+1, roomConfig.width - 2) + absOffset.x;
-            float y = Random.Range(1+1, roomConfig.height - 2) + absOffset.y;
-            Vector3 absPosition = new Vector3(x * roomConfig.gridSize, 0, y * roomConfig.gridSize) + transform.position;
+            if (availablePositions.Count == 0) continue;
+            Vector3 randomPos = GetRandomPosition()+ new Vector3(roomConfig.offset.x * roomConfig.gridSize, 0, roomConfig.offset.y* roomConfig.gridSize);
+            randomPos = new Vector3(randomPos.x * roomConfig.gridSize, 0, randomPos.y * roomConfig.gridSize) + transform.position;
 
-                // Instantiate and place the interactable prefab
-                GameObject interactableInstance = Instantiate(interactablePrefab, absPosition, Quaternion.identity);
-                interactableInstance.transform.SetParent(transform);
-                interactableInstance.name = $"Interactable_{x}_{y}";
+            // Instantiate and place the interactable prefab
+            GameObject interactableInstance = Instantiate(interactablePrefab, randomPos, Quaternion.identity);
+            interactableInstance.transform.SetParent(transform);
+            interactableInstance.name = $"Interactable_{randomPos.x}_{randomPos.z}";
+            Interacter interactable = interactableInstance.GetComponent<Interacter>();
+            LevelManager.Instance?.watcher?.interactables?.Add(interactable);
+
         }
     }
 
@@ -161,7 +195,11 @@ public class RoomGenerator : MonoBehaviour
                     GenerateWall(absPosition, wallType.Value, gridPosition);
                 }
 
+                if (roomConfig.height > 2)
+                {
                     GenerateWall(absPosition + new Vector3(0, roomConfig.gridSize * 1.5f, 0), wallType.Value, gridPosition, mirror: true);
+                    GenerateWall(absPosition + new Vector3(0, roomConfig.gridSize * 1.9f, 0), wallType.Value, gridPosition, mirror: false);
+                }
             }
         }
     }
@@ -191,17 +229,25 @@ public class RoomGenerator : MonoBehaviour
 
     void GenerateWall(Vector3 absPosition, Wall.WallType wallType, Vector2Int gridPosition, bool mirror = false)
     {
-            GameObject wallPrefab = roomConfig.wallTypes[Random.Range(0, roomConfig.wallTypes.Count)];
-            Vector3 wallPosition = absPosition + Wall.GetOffset(wallType, roomConfig.gridSize);
-            Quaternion wallRotation = Wall.GetRotation(wallType);
+        GameObject wallPrefab = roomConfig.wallTypes[Random.Range(0, roomConfig.wallTypes.Count)];
+        Vector3 wallPosition = absPosition + Wall.GetOffset(wallType, roomConfig.gridSize);
+        Quaternion wallRotation = Wall.GetRotation(wallType);
 
-            GameObject wallInstance = Instantiate(wallPrefab, wallPosition, wallRotation);
-            wallInstance.transform.SetParent(transform);
-            // if mirror flip the wall 
-            if (mirror)
-                wallInstance.transform.localScale = new Vector3(1, -1, 1);
-            wallInstance.name = $"Wall_{gridPosition.x}_{gridPosition.y}";
-            if (!wallInstance.GetComponent<BoxCollider>())
+        GameObject wallInstance = Instantiate(wallPrefab, wallPosition, wallRotation);
+        wallInstance.transform.SetParent(transform);
+        // if mirror flip the wall 
+        if (mirror)
+        {
+            if (wallInstance.GetComponent<BoxCollider>())
+                Destroy(wallInstance.GetComponent<BoxCollider>());
+            if (wallInstance.GetComponent<MeshCollider>())
+                Destroy(wallInstance.GetComponent<MeshCollider>());
+            wallInstance.transform.localScale = new Vector3(1, -1, 1);
+
+        }
+        wallInstance.name = $"Wall_{gridPosition.x}_{gridPosition.y}";
+        if (!mirror)
+            if (!wallInstance.GetComponent<BoxCollider>() || !wallInstance.GetComponent<MeshCollider>())
                 wallInstance.AddComponent<BoxCollider>();
 
     }
@@ -244,7 +290,7 @@ public class RoomGenerator : MonoBehaviour
         DoorController doorController = doorInstance.GetComponent<DoorController>();
         doorController.door = door;
         doorController.isLocked = true;
-        LevelManager.Instance.watcher?.doors?.Add(doorController);
+        LevelManager.Instance?.watcher?.doors?.Add(doorController);
 
     }
 
