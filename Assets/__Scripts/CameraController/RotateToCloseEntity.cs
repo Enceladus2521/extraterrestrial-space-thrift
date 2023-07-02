@@ -74,6 +74,9 @@ public class RotateToCloseEntity : MonoBehaviour
                 // No entity found, deactivate mesh renderers
                 SetMeshRenderersActive(false);
             }
+        }else {
+
+                SetMeshRenderersActive(false);
         }
     }
 
